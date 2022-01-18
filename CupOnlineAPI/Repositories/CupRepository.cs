@@ -52,7 +52,7 @@ namespace CupOnlineAPI.Repositories
         //    }
         //}
 
-        public async Task<IEnumerable<Cup>> GetCups(int nrOfCups)
+        public async Task<IEnumerable<Cup>> GetCups(int? nrOfCups)
         {
             var query = @"SET ROWCOUNT @nrOfCups
                           SELECT cup_id AS id, cup_name AS name, cup_players_age AS players_age,
@@ -65,7 +65,7 @@ namespace CupOnlineAPI.Repositories
             }
         }
 
-        public async Task<IEnumerable<Cup>> GetComing(int nrOfCups)
+        public async Task<IEnumerable<Cup>> GetComing(int? nrOfCups)
         {
             var query = @"SET ROWCOUNT @nrOfCups
                         SELECT cup_id AS id,cup_date AS date, cup_name AS name, cup_startdate, cup_enddate, sport_name
@@ -85,7 +85,7 @@ namespace CupOnlineAPI.Repositories
             }
         }
 
-        public async Task<IEnumerable<Cup>> GetOngoing(int nrOfCups)
+        public async Task<IEnumerable<Cup>> GetOngoing(int? nrOfCups)
         {
             var query = @"SET ROWCOUNT @nrOfCups
                         SELECT cup_id AS id,cup_date AS date, cup_name AS name, cup_startdate, cup_enddate, sport_name
@@ -105,7 +105,7 @@ namespace CupOnlineAPI.Repositories
             }
         }
 
-        public async Task<IEnumerable<Cup>> GetFinished(int nrOfCups)
+        public async Task<IEnumerable<Cup>> GetFinished(int? nrOfCups)
         {
             var query = @"SET ROWCOUNT @nrOfCups
                         SELECT cup_id AS id,cup_date AS date, cup_name AS name, cup_startdate, cup_enddate, sport_name
@@ -125,7 +125,7 @@ namespace CupOnlineAPI.Repositories
             }
         }
 
-        public async Task<IEnumerable<Cup>> Search(int nrOfCups, string name, string year, string organizer, string place,
+        public async Task<IEnumerable<Cup>> Search(int? nrOfCups, string name, string year, string organizer, string place,
                                                     string sport, string age)
         {
             var query = @"SET ROWCOUNT @nrOfCups

@@ -13,7 +13,7 @@ namespace CupOnlineAPI.Repositories
         {
             _context = context;
         }
-        public CupById GetCupById(int id)
+        public CupById GetCupById(int? id)
         {
             using (var connection = _context.CreateConnection())
             {

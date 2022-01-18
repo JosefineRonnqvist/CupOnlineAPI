@@ -4,6 +4,6 @@ namespace CupOnlineAPI.Interfaces
 {
     public interface ICupByIdRepository
     {
-        CupById GetCupById(int id);
+        CupById GetCupById(int? id);
     }
 }
