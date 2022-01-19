@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 
 namespace CupOnlineAPI.Repositories
 {
-    public class CupRepository : ICupRepository
+    public class CupRepository
     {
         private readonly DapperContext _context;
 

@@ -9,9 +9,9 @@ namespace CupOnlineAPI.Controllers
     [ApiController]
     public class SportController : ControllerBase
     {
-        private readonly ISportRepository _sportRepo;
+        private readonly SportRepository _sportRepo;
 
-        public SportController(ISportRepository sportRepo)
+        public SportController(SportRepository sportRepo)
         {
             _sportRepo = sportRepo;
         }

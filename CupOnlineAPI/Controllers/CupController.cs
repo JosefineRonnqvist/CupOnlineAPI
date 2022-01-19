@@ -12,9 +12,9 @@ namespace CupOnlineAPI.Controllers
     [ApiController]
     public class CupController : ControllerBase
     {
-        private readonly ICupRepository _cupRepo;
+        private readonly CupRepository _cupRepo;
 
-        public CupController(ICupRepository cupRepo)
+        public CupController(CupRepository cupRepo)
         {
             _cupRepo = cupRepo;
         }

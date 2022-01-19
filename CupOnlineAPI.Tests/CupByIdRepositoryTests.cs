@@ -12,7 +12,7 @@ namespace CupOnlineAPI.Tests
     [TestClass]
     public class CupByIdRepositoryTests
     {
-        private readonly DapperContext? context;
+        private readonly DapperContext context;
 
         [TestMethod]
         public void GetCupsTestAsync_returnCups()

@@ -4,7 +4,7 @@ using Dapper.Contrib.Extensions;
 
 namespace CupOnlineAPI.Repositories
 {
-    public class SportRepository : ISportRepository
+    public class SportRepository
     {
         private readonly DapperContext _context;
 
