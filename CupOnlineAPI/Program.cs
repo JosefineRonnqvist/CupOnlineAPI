@@ -14,6 +14,18 @@ builder.Services.AddScoped<CupRepository>();
 builder.Services.AddScoped<SportRepository>();
 builder.Services.AddScoped<CupByIdRepository>();
 builder.Services.AddControllers();
+builder.Services.AddCors(setup =>
+{
+    setup.AddDefaultPolicy(p =>
+    {
+        //p.AllowAnyOrigin();
+        p.AllowAnyHeader();
+        p.AllowAnyMethod();
+        p.SetIsOriginAllowed(origin => true); // allow any origin, kanske inte denna
+                                              //p.AllowCredentials();
+    });
+});
+
 
 var app = builder.Build();
 
@@ -32,5 +44,6 @@ app.UseStaticFiles();
 app.UseAuthorization();
 
 app.MapControllers();
+app.UseCors();
 
 app.Run();

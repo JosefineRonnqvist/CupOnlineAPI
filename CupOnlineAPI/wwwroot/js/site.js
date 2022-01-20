@@ -1,4 +1,4 @@
-﻿const url = 'api/cup/coming?nrOfCups=15'
+﻿const url = 'https://localhost:7172/api/cup/coming?nrOfCups=15'
 
 function GetComing() {  
 fetch(url)
