@@ -52,22 +52,22 @@ namespace CupOnlineAPI.Repositories
         //    }
         //}
 
-        public async Task<IEnumerable<Cup>> GetCups(int? nrOfCups)
+        public async Task<IEnumerable<Cup>> GetCups(int? noOfCups)
         {
-            var query = @"SET ROWCOUNT @nrOfCups
+            var query = @"SET ROWCOUNT @noOfCups
                           SELECT cup_id AS id, cup_name AS name, cup_players_age AS players_age,
                           cup_play_place AS play_place
                           FROM td_cups";
             using (var connection = _context.CreateConnection())
             {
-                var cups = await connection.QueryAsync<Cup>(query, new { nrOfCups = nrOfCups });
+                var cups = await connection.QueryAsync<Cup>(query, new { noOfCups = noOfCups });
                 return cups.ToList();
             }
         }
 
-        public async Task<IEnumerable<Cup>> GetComing(int? nrOfCups)
+        public async Task<IEnumerable<Cup>> GetComing(int? noOfCups)
         {
-            var query = @"SET ROWCOUNT @nrOfCups
+            var query = @"SET ROWCOUNT @noOfCups
                         SELECT cup_id AS id,cup_date AS date, cup_name AS name, cup_startdate, cup_enddate, sport_name
                         FROM td_cups
                         INNER JOIN td_sports ON cup_sport_id=sport_id
@@ -79,15 +79,15 @@ namespace CupOnlineAPI.Repositories
                 {
                     today = DateTime.Now.ToString("yyyy-MM-dd"),
                     today_plus30 = DateTime.Now.AddDays(30).ToString("yyyy-MM-dd"),
-                    nrOfCups = nrOfCups
+                    noOfCups = noOfCups
                 });
                 return cups.ToList();
             }
         }
 
-        public async Task<IEnumerable<Cup>> GetOngoing(int? nrOfCups)
+        public async Task<IEnumerable<Cup>> GetOngoing(int? noOfCups)
         {
-            var query = @"SET ROWCOUNT @nrOfCups
+            var query = @"SET ROWCOUNT @noOfCups
                         SELECT cup_id AS id,cup_date AS date, cup_name AS name, cup_startdate, cup_enddate, sport_name
                         FROM td_cups
                         INNER JOIN td_sports ON cup_sport_id=sport_id
@@ -99,15 +99,15 @@ namespace CupOnlineAPI.Repositories
                 var cups = await connection.QueryAsync<Cup>(query, new
                 {
                     today = DateTime.Now.ToString("yyyy-MM-dd"),
-                    nrOfCups = nrOfCups
+                    noOfCups = noOfCups
                 });
                 return cups.ToList();
             }
         }
 
-        public async Task<IEnumerable<Cup>> GetFinished(int? nrOfCups)
+        public async Task<IEnumerable<Cup>> GetFinished(int? noOfCups)
         {
-            var query = @"SET ROWCOUNT @nrOfCups
+            var query = @"SET ROWCOUNT @noOfCups
                         SELECT cup_id AS id,cup_date AS date, cup_name AS name, cup_startdate, cup_enddate, sport_name
                         FROM td_cups
                         INNER JOIN td_sports ON cup_sport_id=sport_id
@@ -119,16 +119,16 @@ namespace CupOnlineAPI.Repositories
                 {
                     today = DateTime.Now.ToString("yyyy-MM-dd"),
                     today_minus30 = DateTime.Now.AddDays(-30).ToString("yyyy-MM-dd"),
-                    nrOfCups = nrOfCups
+                    noOfCups = noOfCups
                 }); ;
                 return cups.ToList();
             }
         }
 
-        public async Task<IEnumerable<Cup>> Search(int? nrOfCups, string name, string year, string organizer, string place,
+        public async Task<IEnumerable<Cup>> Search(int? noOfCups, string name, string year, string organizer, string place,
                                                     string sport, string age)
         {
-            var query = @"SET ROWCOUNT @nrOfCups
+            var query = @"SET ROWCOUNT @noOfCups
                         SELECT cup_id AS id, cup_name AS name, cup_players_age AS age, 
                         cup_date AS date, cup_startdate, cup_enddate,
                         club_name, sport_name, cup_play_place AS place
@@ -152,7 +152,7 @@ namespace CupOnlineAPI.Repositories
                     organizer = "%" + organizer + "%",
                     sport = "%" + sport + "%",
                     place = "%" + place + "%",
-                    nrOfCups = nrOfCups
+                    noOfCups = noOfCups
                 });
                 return cups.ToList();
             }

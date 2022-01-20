@@ -20,11 +20,11 @@ namespace CupOnlineAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Cups(int nrOfCups=100)
+        public async Task<IActionResult> Cups(int noOfCups=100)
         {
             try
             {
-                var cups=await _cupRepo.GetCups(nrOfCups);
+                var cups=await _cupRepo.GetCups(noOfCups);
                 return Ok(cups);
             }
             catch (Exception ex)
@@ -34,26 +34,11 @@ namespace CupOnlineAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Coming(int nrOfCups=15)
+        public async Task<IActionResult> Coming(int noOfCups=15)
         {
             try
             {
-                var cups = await _cupRepo.GetComing(nrOfCups);
-                return Ok(cups);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
-        }
-
-
-        [HttpGet]
-        public async Task<IActionResult> Ongoing(int nrOfCups=15)
-        {
-            try
-            {
-                var cups = await _cupRepo.GetOngoing(nrOfCups);
+                var cups = await _cupRepo.GetComing(noOfCups);
                 return Ok(cups);
             }
             catch (Exception ex)
@@ -64,11 +49,26 @@ namespace CupOnlineAPI.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> Finished(int nrOfCups=15)
+        public async Task<IActionResult> Ongoing(int noOfCups=15)
         {
             try
             {
-                var cups = await _cupRepo.GetFinished(nrOfCups);
+                var cups = await _cupRepo.GetOngoing(noOfCups);
+                return Ok(cups);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> Finished(int noOfCups=15)
+        {
+            try
+            {
+                var cups = await _cupRepo.GetFinished(noOfCups);
                 return Ok(cups);
             }
             catch (Exception ex)
@@ -78,12 +78,12 @@ namespace CupOnlineAPI.Controllers
         }
         
         [HttpGet]
-        public async Task<IActionResult> Search(int nrOfCups=100, string name="", string year="", string organizer = "", string place = "",
+        public async Task<IActionResult> Search(int noOfCups=200, string name="", string year="", string organizer = "", string place = "",
                                                       string sport = "", string age = "")
         {
             try
             {
-                var cups = await _cupRepo.Search(nrOfCups,name, year, organizer, place, sport, age);
+                var cups = await _cupRepo.Search(noOfCups,name, year, organizer, place, sport, age);
                 return Ok(cups);
             }
             catch (Exception ex)
