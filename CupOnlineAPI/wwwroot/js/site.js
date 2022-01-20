@@ -47,26 +47,31 @@ function displayCups(data,active) {
         table.appendChild(tr);
 
         if (i%2===1) {
-            tr.setAttribute("class", "odd");
+            tr.className= "odd";
         }
 
         else {
-            tr.setAttribute("class", "even");
+            tr.className = "even";
         }
 
         var tdName = document.createElement('td');
-        tdName.textContent = data[i].name;
-        tdName.setAttribute("id", "cupName");
+        tdName.id = 'cupName';
+        var link = document.createElement('a');
+        var name = document.createTextNode(data[i].name);
+        link.href= data[i].cup_url;
+        link.className = 'link';
+        link.appendChild(name);
+        tdName.appendChild(link);
         tr.appendChild(tdName);
 
         var tdDate = document.createElement('td');
         tdDate.textContent = data[i].date;
-        tdDate.setAttribute("id", "cupDate");
+        tdDate.id= "cupDate";
         tr.appendChild(tdDate);
 
         var tdSportName = document.createElement('td');
         tdSportName.textContent = data[i].sport_name;
-        tdSportName.setAttribute("id", "cupSportName");
+        tdSportName.id= "cupSportName";
         tr.appendChild(tdSportName);
     }
     container.appendChild(table);
@@ -92,33 +97,43 @@ function displaySearchedCups(data) {
         }
 
         var tdName = document.createElement('td');
-        tdName.textContent = data[i].name;
-        tdName.setAttribute("id", "searchedCupName");
+        tdName.id = 'searchedCupName';
+        var link = document.createElement('a');
+        var name = document.createTextNode(data[i].name);
+        link.href = data[i].cup_url;
+        link.className = 'link';
+        link.appendChild(name);
+        tdName.appendChild(link);
         tr.appendChild(tdName);
 
         var tdAge = document.createElement('td');
         tdAge.textContent = data[i].age;
-        tdAge.setAttribute("id", "searchedCupAge");
+        tdAge.id= "searchedCupAge";
         tr.appendChild(tdAge);
 
         var tdDate = document.createElement('td');
         tdDate.textContent = data[i].date;
-        tdDate.setAttribute("id", "searchedCupDate");
+        tdDate.id= "searchedCupDate";
         tr.appendChild(tdDate);
 
         var tdClubName = document.createElement('td');
-        tdClubName.textContent = data[i].club_name;
-        tdClubName.setAttribute("id", "searchedCupClubName");
+        tdClubName.id = "searchedCupClubName";
+        var clubLink = document.createElement('a');
+        var clubName = document.createTextNode(data[i].club_name);
+        clubLink.href = data[i].club_url;
+        clubLink.className = 'clubLink';
+        clubLink.appendChild(clubName);
+        tdClubName.appendChild(clubLink);        
         tr.appendChild(tdClubName);
 
         var tdSportName = document.createElement('td');
         tdSportName.textContent = data[i].sport_name;
-        tdSportName.setAttribute("id", "cupSportName");
+        tdSportName.id= "cupSportName";
         tr.appendChild(tdSportName);
 
         var tdPlace = document.createElement('td');
         tdPlace.textContent = data[i].place;
-        tdPlace.setAttribute("id", "searchedCupPlace");
+        tdPlace.id= "searchedCupPlace";
         tr.appendChild(tdPlace);
     }
     container.appendChild(table);

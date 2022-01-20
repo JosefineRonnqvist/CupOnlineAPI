@@ -55,7 +55,7 @@ namespace CupOnlineAPI.Repositories
         public async Task<IEnumerable<Cup>> GetCups(int? noOfCups)
         {
             var query = @"SET ROWCOUNT @noOfCups
-                          SELECT cup_id AS id, cup_name AS name, cup_players_age AS players_age,
+                          SELECT cup_id AS id, cup_name AS name, cup_players_age AS players_age, cup_url,
                           cup_play_place AS play_place
                           FROM td_cups";
             using (var connection = _context.CreateConnection())
@@ -68,7 +68,7 @@ namespace CupOnlineAPI.Repositories
         public async Task<IEnumerable<Cup>> GetComing(int? noOfCups)
         {
             var query = @"SET ROWCOUNT @noOfCups
-                        SELECT cup_id AS id,cup_date AS date, cup_name AS name, cup_startdate, cup_enddate, sport_name
+                        SELECT cup_id AS id,cup_date AS date, cup_name AS name, cup_startdate, cup_enddate, sport_name, cup_url
                         FROM td_cups
                         INNER JOIN td_sports ON cup_sport_id=sport_id
                         WHERE cup_startdate BETWEEN @today AND @today_plus30
@@ -88,7 +88,7 @@ namespace CupOnlineAPI.Repositories
         public async Task<IEnumerable<Cup>> GetOngoing(int? noOfCups)
         {
             var query = @"SET ROWCOUNT @noOfCups
-                        SELECT cup_id AS id,cup_date AS date, cup_name AS name, cup_startdate, cup_enddate, sport_name
+                        SELECT cup_id AS id,cup_date AS date, cup_name AS name, cup_startdate, cup_enddate, sport_name, cup_url
                         FROM td_cups
                         INNER JOIN td_sports ON cup_sport_id=sport_id
                         WHERE cup_startdate < @today 
@@ -108,7 +108,7 @@ namespace CupOnlineAPI.Repositories
         public async Task<IEnumerable<Cup>> GetFinished(int? noOfCups)
         {
             var query = @"SET ROWCOUNT @noOfCups
-                        SELECT cup_id AS id,cup_date AS date, cup_name AS name, cup_startdate, cup_enddate, sport_name
+                        SELECT cup_id AS id,cup_date AS date, cup_name AS name, cup_startdate, cup_enddate, sport_name, cup_url
                         FROM td_cups
                         INNER JOIN td_sports ON cup_sport_id=sport_id
                         WHERE cup_enddate BETWEEN @today_minus30 AND @today
@@ -130,7 +130,7 @@ namespace CupOnlineAPI.Repositories
         {
             var query = @"SET ROWCOUNT @noOfCups
                         SELECT cup_id AS id, cup_name AS name, cup_players_age AS age, 
-                        cup_date AS date, cup_startdate, cup_enddate,
+                        cup_date AS date, cup_startdate, cup_enddate, cup_url, club_url,
                         club_name, sport_name, cup_play_place AS place
                         FROM td_cups
                         INNER JOIN td_sports ON cup_sport_id=sport_id
