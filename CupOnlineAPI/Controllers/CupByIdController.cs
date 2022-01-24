@@ -18,7 +18,7 @@ namespace CupOnlineAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        public CupById CupById(int id)
+        public CupById Find(int id)
         {
             try
             {

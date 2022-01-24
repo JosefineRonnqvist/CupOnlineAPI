@@ -1,4 +1,4 @@
-﻿const url = 'https://localhost:7172'
+﻿const url = 'http://localhost:7172'
 const urlComing = url + '/api/cup/coming?noOfCups=15'
 const urlOngoing = url +'/api/Cup/Ongoing?noOfCups=15'
 const urlFinished = url + '/api/Cup/Finished?noOfCups=15'
@@ -44,35 +44,41 @@ function displayCups(data,active) {
     for (var i = 0; i < data.length; i++) {
        
         var tr = document.createElement('tr');
-        table.appendChild(tr);
+       
+        var trCup = document.createElement('tr');
+        
 
         if (i%2===1) {
-            tr.className= "odd";
+            tr.className = "odd";
+            trCup.className = "odd";
         }
 
         else {
             tr.className = "even";
+            trCup.className = "even";
         }
-
-        var tdName = document.createElement('td');
-        tdName.id = 'cupName';
-        var link = document.createElement('a');
-        var name = document.createTextNode(data[i].name);
-        link.href= data[i].cup_url;
-        link.className = 'link';
-        link.appendChild(name);
-        tdName.appendChild(link);
-        tr.appendChild(tdName);
 
         var tdDate = document.createElement('td');
         tdDate.textContent = data[i].date;
         tdDate.id= "cupDate";
         tr.appendChild(tdDate);
 
-        var tdSportName = document.createElement('td');
-        tdSportName.textContent = data[i].sport_name;
-        tdSportName.id= "cupSportName";
-        tr.appendChild(tdSportName);
+        //var tdSportName = document.createElement('td');
+        //tdSportName.textContent = data[i].sport_name;
+        //tdSportName.id= "cupSportName";
+        //tr.appendChild(tdSportName);
+        //table.appendChild(tr);
+
+        ////var tdName = document.createElement('td');
+        //trCup.id = 'cupName';
+        //var link = document.createElement('a');
+        //var name = document.createTextNode(data[i].name);
+        //link.href= data[i].cup_url;
+        //link.className = 'link';
+        //link.appendChild(name);
+        //tdName.appendChild(link);
+        ////trCup.appendChild(tdName); 
+        //table.appendChild(trCup);
     }
     container.appendChild(table);
 }

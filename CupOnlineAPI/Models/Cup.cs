@@ -22,7 +22,7 @@ namespace CupOnlineAPI.Models
                 try
                 {
                     CultureInfo provider = CultureInfo.InvariantCulture;
-                    startdate = DateTime.ParseExact(value, "yyyy-MM-dd", provider);
+                    startdate = DateTime.ParseExact(value, "yyyy-MM-dd", provider).Date;
                 }
                 catch(FormatException)
                 {
@@ -41,7 +41,7 @@ namespace CupOnlineAPI.Models
                 try
                 {
                     CultureInfo provider = CultureInfo.InvariantCulture;
-                    enddate = DateTime.ParseExact(value, "yyyy-MM-dd", provider);
+                    enddate = DateTime.ParseExact(value, "yyyy-MM-dd", provider).Date;
                 }
                 catch(FormatException)
                 {

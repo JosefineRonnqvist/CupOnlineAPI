@@ -18,7 +18,7 @@ builder.Services.AddCors(setup =>
 {
     setup.AddDefaultPolicy(p =>
     {
-        //p.AllowAnyOrigin();
+        p.AllowAnyOrigin();
         p.AllowAnyHeader();
         p.AllowAnyMethod();
         p.SetIsOriginAllowed(origin => true); // allow any origin, kanske inte denna

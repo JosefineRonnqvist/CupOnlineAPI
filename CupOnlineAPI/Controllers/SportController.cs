@@ -28,5 +28,19 @@ namespace CupOnlineAPI.Controllers
                 throw new Exception(ex.Message);
             }
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Sports()
+        {
+            try
+            {
+                var sports = await _sportRepo.GetSports();
+                return Ok(sports);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
     }
 }

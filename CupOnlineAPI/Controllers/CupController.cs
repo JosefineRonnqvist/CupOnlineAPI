@@ -19,6 +19,11 @@ namespace CupOnlineAPI.Controllers
             _cupRepo = cupRepo;
         }
 
+        /// <summary>
+        /// Finds cups from Cuponline
+        /// </summary>
+        /// <param name="noOfCups">Number of found cups</param>
+        /// <returns>Cups</returns>
         [HttpGet]
         public async Task<IActionResult> Cups(int noOfCups=100)
         {
@@ -33,6 +38,11 @@ namespace CupOnlineAPI.Controllers
             }
         }
 
+        /// <summary>
+        /// Finds cups that start the coming 30 days
+        /// </summary>
+        /// <param name="noOfCups">Number of cups wanted in searchresult</param>
+        /// <returns>Cups</returns>
         [HttpGet]
         public async Task<IActionResult> Coming(int noOfCups=15)
         {
@@ -47,7 +57,11 @@ namespace CupOnlineAPI.Controllers
             }
         }
 
-
+        /// <summary>
+        /// Finds cups that is active now
+        /// </summary>
+        /// <param name="noOfCups">Number of cups wanted in searchresult</param>
+        /// <returns>Cups</returns>
         [HttpGet]
         public async Task<IActionResult> Ongoing(int noOfCups=15)
         {
@@ -62,7 +76,11 @@ namespace CupOnlineAPI.Controllers
             }
         }
 
-
+        /// <summary>
+        /// Finds cups that ended the last 30 days
+        /// </summary>
+        /// <param name="noOfCups">Number of cups wanted in searchresult</param>
+        /// <returns>Cups</returns>
         [HttpGet]
         public async Task<IActionResult> Finished(int noOfCups=15)
         {
@@ -76,7 +94,18 @@ namespace CupOnlineAPI.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
-        
+
+        /// <summary>
+        /// Finds cups that matches search
+        /// </summary>
+        /// <param name="noOfCups">Number of cups wanted in searchresult</param>
+        /// <param name="name">Name of cup</param>
+        /// <param name="year">Year when cup is played</param>
+        /// <param name="organizer">The sport club that organize the cup</param>
+        /// <param name="place">Place where cup is</param>
+        /// <param name="sport">Sport</param>
+        /// <param name="age">Age</param>
+        /// <returns>Cups</returns>
         [HttpGet]
         public async Task<IActionResult> Search(int noOfCups=200, string name="", string year="", string organizer = "", string place = "",
                                                       string sport = "", string age = "")
