@@ -68,20 +68,20 @@ namespace CupOnlineAPI.Repositories
             }
         }
 
-        public async Task<IEnumerable<Cup>> GetComing(int? noOfCups)
+        public async Task<IEnumerable<Cup>> GetComing(int? noOfCups, int daysFromToday)
         {
             var query = @"SET ROWCOUNT @noOfCups
                         SELECT cup_id AS id,cup_date AS date, cup_name AS name, cup_startdate, cup_enddate, sport_name, cup_url
                         FROM td_cups
                         INNER JOIN td_sports ON cup_sport_id=sport_id
-                        WHERE cup_startdate BETWEEN @today AND @today_plus30
+                        WHERE cup_startdate BETWEEN @today AND @today_plus
                         ORDER BY cup_startdate ASC";
             using (var connection = _context.CreateConnection())
             {
                 var cups = await connection.QueryAsync<Cup>(query, new
                 {
                     today = DateTime.Now.ToString("yyyy-MM-dd"),
-                    today_plus30 = DateTime.Now.AddDays(30).ToString("yyyy-MM-dd"),
+                    today_plus = DateTime.Now.AddDays(daysFromToday).ToString("yyyy-MM-dd"),
                     noOfCups = noOfCups
                 });
                 return cups.ToList();
@@ -108,20 +108,20 @@ namespace CupOnlineAPI.Repositories
             }
         }
 
-        public async Task<IEnumerable<Cup>> GetFinished(int? noOfCups)
+        public async Task<IEnumerable<Cup>> GetFinished(int? noOfCups, int daysFromToday)
         {
             var query = @"SET ROWCOUNT @noOfCups
                         SELECT cup_id AS id,cup_date AS date, cup_name AS name, cup_startdate, cup_enddate, sport_name, cup_url
                         FROM td_cups
                         INNER JOIN td_sports ON cup_sport_id=sport_id
-                        WHERE cup_enddate BETWEEN @today_minus30 AND @today
+                        WHERE cup_enddate BETWEEN @today_minus AND @today
                         ORDER BY cup_enddate DESC";
             using (var connection = _context.CreateConnection())
             {
                 var cups = await connection.QueryAsync<Cup>(query, new
                 {
                     today = DateTime.Now.ToString("yyyy-MM-dd"),
-                    today_minus30 = DateTime.Now.AddDays(-30).ToString("yyyy-MM-dd"),
+                    today_minus = DateTime.Now.AddDays(-daysFromToday).ToString("yyyy-MM-dd"),
                     noOfCups = noOfCups
                 }); ;
                 return cups.ToList();
@@ -160,6 +160,5 @@ namespace CupOnlineAPI.Repositories
                 return cups.ToList();
             }
         }
-
     }
 }

@@ -8,6 +8,7 @@ namespace CupOnlineAPI.Models
     {
         private string _startdate;
         private string _enddate;
+
         [Key]
         public int id { get; set; }
         public string name { get; set; }
@@ -53,10 +54,8 @@ namespace CupOnlineAPI.Models
         public DateTime enddate { get; set; }
         public string date { get; set; }
         public string sport_name { get; set; }
-
         public string club_name { get; set; } 
         public string cup_url { get; set; }
-
-        public string club_url { get; set; }
+        public string club_url { get; set; }     
     }
 }

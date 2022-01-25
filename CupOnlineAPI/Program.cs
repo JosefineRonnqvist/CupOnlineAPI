@@ -11,7 +11,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<DapperContext>();
 builder.Services.AddScoped<CupRepository>();
-builder.Services.AddScoped<SportRepository>();
+builder.Services.AddScoped<SearchParamRepository>();
 builder.Services.AddScoped<CupByIdRepository>();
 builder.Services.AddControllers();
 builder.Services.AddCors(setup =>

@@ -1,30 +1,30 @@
-﻿const url = 'http://localhost:7172'
-const urlComing = url + '/api/cup/coming?noOfCups=15'
+﻿const url = 'https://localhost:7172'
+const urlComing = url + '/api/cup/coming?noOfCups=15&daysFromToday=30'
 const urlOngoing = url +'/api/Cup/Ongoing?noOfCups=15'
-const urlFinished = url + '/api/Cup/Finished?noOfCups=15'
+const urlFinished = url + '/api/Cup/Finished?noOfCups=15&daysFromToday=30'
 const urlSearched = url + '/api/Cup/Search?noOfCups=200&name=cup&year=2005&organizer=mo&place=vik&sport=is&age=u'
-const coming = "coming"
-const ongoing = "ongoing"
-const finished = "finished"
+const urlSports = url + '/api/SearchParam/Sports'
+const urlYears = url + '/api/SearchParam/Years'
+const urlAges = url + '/api/SearchParam/Ages'
 
 function GetComing() {  
 fetch(urlComing)
     .then(response => response.json())
-    .then(data => displayCups(data,coming))
+    .then(data => displayCups(data,"coming"))
     .catch(error => console.error('Unable to get cup.', error));
 }
 
 function GetOngoing() {
     fetch(urlOngoing)
         .then(response => response.json())
-        .then(data => displayCups(data,ongoing))
+        .then(data => displayCups(data,"ongoing"))
         .catch(error => console.error('Unable to get cup.', error));
 }
 
 function GetFinished() {
     fetch(urlFinished)
         .then(response => response.json())
-        .then(data => displayCups(data, finished))
+        .then(data => displayCups(data, "finished"))
         .catch(error => console.error('Unable to get cup.', error));
 }
 
@@ -33,6 +33,27 @@ function GetSearchedCups() {
         .then(response => response.json())
         .then(data => displaySearchedCups(data))
         .catch(error => console.error('Unable to get cup.', error));
+}
+
+function GetSports() {
+    fetch(urlSports)
+        .then(response => response.json())
+        .then(data => sportForm(data))
+        .catch(error => console.error('Unable to get sport.', error));
+}
+
+function GetYears() {
+    fetch(urlYears)
+        .then(response => response.json())
+        .then(data => yearForm(data))
+        .catch(error => console.error('Unable to get year.', error));
+}
+
+function GetAges() {
+    fetch(urlAges)
+        .then(response => response.json())
+        .then(data => AgeForm(data))
+        .catch(error => console.error('Unable to get age.', error));
 }
 
 function displayCups(data,active) {
@@ -63,22 +84,22 @@ function displayCups(data,active) {
         tdDate.id= "cupDate";
         tr.appendChild(tdDate);
 
-        //var tdSportName = document.createElement('td');
-        //tdSportName.textContent = data[i].sport_name;
-        //tdSportName.id= "cupSportName";
-        //tr.appendChild(tdSportName);
-        //table.appendChild(tr);
+        var tdSportName = document.createElement('td');
+        tdSportName.textContent = data[i].sport_name;
+        tdSportName.id= "cupSportName";
+        tr.appendChild(tdSportName);
+        table.appendChild(tr);
 
-        ////var tdName = document.createElement('td');
-        //trCup.id = 'cupName';
-        //var link = document.createElement('a');
-        //var name = document.createTextNode(data[i].name);
-        //link.href= data[i].cup_url;
-        //link.className = 'link';
-        //link.appendChild(name);
-        //tdName.appendChild(link);
-        ////trCup.appendChild(tdName); 
-        //table.appendChild(trCup);
+        var tdName = document.createElement('td');
+        trCup.id = 'cupName';
+        var link = document.createElement('a');
+        var name = document.createTextNode(data[i].name);
+        link.href= data[i].cup_url;
+        link.className = 'link';
+        link.appendChild(name);
+        tdName.appendChild(link);
+        trCup.appendChild(tdName); 
+        table.appendChild(trCup);
     }
     container.appendChild(table);
 }
@@ -143,4 +164,21 @@ function displaySearchedCups(data) {
         tr.appendChild(tdPlace);
     }
     container.appendChild(table);
+
+    function sportForm(sport) {
+        var container = document.getElementById("searchedForm")
+        let select = document.createElement("select");
+        for (var i = 0; i < sport.length, i++;) {
+            let option = document.createElement("option");
+            option.setAttribute("value", sport[i].sport_name);
+            select.appendChild(option);           
+        }
+        container.appendChild(select);
+    }
+
+    //function searchForm() {
+    //    var container = document.getElementById("searchedForm");
+    //    var form = document.createElement("form")
+    //    sportForm()
+    //}
 }

@@ -42,13 +42,14 @@ namespace CupOnlineAPI.Controllers
         /// Finds cups that start the coming 30 days
         /// </summary>
         /// <param name="noOfCups">Number of cups wanted in searchresult</param>
-        /// <returns>Cups</returns>
+        /// <param name="daysFromToday">Days from today wanted in searchresult</param>
+        /// <returns>cups</returns>
         [HttpGet]
-        public async Task<IActionResult> Coming(int noOfCups=15)
+        public async Task<IActionResult> Coming(int noOfCups=15, int daysFromToday = 30)
         {
             try
             {
-                var cups = await _cupRepo.GetComing(noOfCups);
+                var cups = await _cupRepo.GetComing(noOfCups, daysFromToday);
                 return Ok(cups);
             }
             catch (Exception ex)
@@ -80,13 +81,14 @@ namespace CupOnlineAPI.Controllers
         /// Finds cups that ended the last 30 days
         /// </summary>
         /// <param name="noOfCups">Number of cups wanted in searchresult</param>
+        /// <param name="daysFromToday">Days from today wanted in searchresult</param>
         /// <returns>Cups</returns>
         [HttpGet]
-        public async Task<IActionResult> Finished(int noOfCups=15)
+        public async Task<IActionResult> Finished(int noOfCups=15, int daysFromToday=30)
         {
             try
             {
-                var cups = await _cupRepo.GetFinished(noOfCups);
+                var cups = await _cupRepo.GetFinished(noOfCups, daysFromToday);
                 return Ok(cups);
             }
             catch (Exception ex)
@@ -120,6 +122,7 @@ namespace CupOnlineAPI.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
+
 
 
 
