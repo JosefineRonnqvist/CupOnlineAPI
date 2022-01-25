@@ -11,35 +11,60 @@ function GetComing() {
 fetch(urlComing)
     .then(response => response.json())
     .then(data => displayCups(data,"coming"))
-    .catch(error => console.error('Unable to get cup.', error));
+    .catch(error => console.error("Unable to get cup.", error));
 }
 
 function GetOngoing() {
     fetch(urlOngoing)
         .then(response => response.json())
         .then(data => displayCups(data,"ongoing"))
-        .catch(error => console.error('Unable to get cup.', error));
+        .catch(error => console.error("Unable to get cup.", error));
 }
 
 function GetFinished() {
     fetch(urlFinished)
         .then(response => response.json())
         .then(data => displayCups(data, "finished"))
-        .catch(error => console.error('Unable to get cup.', error));
+        .catch(error => console.error("Unable to get cup.", error));
 }
 
 function GetSearchedCups() {
     fetch(urlSearched)
         .then(response => response.json())
         .then(data => displaySearchedCups(data))
-        .catch(error => console.error('Unable to get cup.', error));
+        .catch(error => console.error("Unable to get cup.", error));
+}
+
+function GetSports() {
+    fetch(urlSports)
+        .then(response => response.json())
+        .then(data => sportForm(data))
+        .catch(error => console.error("Unable to get sport.", error));
+}
+
+function sportForm(data) {
+    var container = document.getElementById("searchForm");
+    var form = document.createElement("form");
+    var select = document.createElement("select");
+
+    for (var i = 0; i < data.length; i++)
+    {
+        var option = document.createElement("option");
+        option.textContent = data[i].sport_name;
+        select.appendChild(option);
+    }
+    form.appendChild(select);
+    container.appendChild(form);
 }
 
 function displayCups(data,active) {
     var container = document.getElementById(active);
-    var table = document.createElement('table');
+    var table = document.createElement("table");
     table.setAttribute("class", "activeTable");
     //table.border = '1';
+
+    var form = document.createElement("form");
+    var select = document.createElement("select");
 
     for (var i = 0; i < data.length; i++) {
        
@@ -60,12 +85,12 @@ function displayCups(data,active) {
 
         var tdDate = document.createElement('td');
         tdDate.textContent = data[i].date;
-        tdDate.id= "cupDate";
+        tdDate.id= "Date";
         tr.appendChild(tdDate);
 
         var tdSportName = document.createElement('td');
         tdSportName.textContent = data[i].sport_name;
-        tdSportName.id= "cupSportName";
+        tdSportName.id= "SportName";
         tr.appendChild(tdSportName);
         table.appendChild(tr);
 
@@ -79,8 +104,15 @@ function displayCups(data,active) {
         tdName.appendChild(link);
         trCup.appendChild(tdName); 
         table.appendChild(trCup);
+
+        var option = document.createElement("option");
+        option.textContent = data[i].name;
+        select.appendChild(option);
     }
     container.appendChild(table);
+    
+    form.appendChild(select);
+    container.appendChild(form);
 }
 
 function displaySearchedCups(data) {
@@ -134,7 +166,7 @@ function displaySearchedCups(data) {
 
         var tdSportName = document.createElement('td');
         tdSportName.textContent = data[i].sport_name;
-        tdSportName.id = "cupSportName";
+        tdSportName.id = "searchedSportName";
         tr.appendChild(tdSportName);
 
         var tdPlace = document.createElement('td');
@@ -145,69 +177,61 @@ function displaySearchedCups(data) {
     container.appendChild(table);
 }
 
-function searchForm() {
-    var container = document.getElementById("searchForm");
-    var form = document.createElement("form");
-
-    GetSports();
-    GetYears();
-    GetAges();
-
-    form.appendChild(select)
-    container.appendChild(form);
-
-    function GetSports() {
-        fetch(urlSports)
-            .then(response => response.json())
-            .then(data => sportForm(data))
-            .catch(error => console.error('Unable to get sport.', error));
-    }
-
-    function sportForm(data) {
-        let select = document.createElement("select");
-
-        for (var i = 0; i < data.length, i++;) {
-            let option = document.createElement("option");
-            option.setAttribute.value = data[i].sport_name;
-            select.appendChild(option);
-        }
-       
-    }
-
-    function GetYears() {
-        fetch(urlYears)
-            .then(response => response.json())
-            .then(data => yearForm(data))
-            .catch(error => console.error('Unable to get year.', error));
-    }
-
-    function yearForm(data) {
-        let select = document.createElement("select");
-
-        for (var i = 0; i < data.length, i++;) {
-            let option = document.createElement("option");
-            option.setAttribute.value = data[i].year;
-            select.appendChild(option);
-        }
-    }
-
-    function GetAges() {
-        fetch(urlAges)
-            .then(response => response.json())
-            .then(data => ageForm(data))
-            .catch(error => console.error('Unable to get age.', error));
-    }
+//function searchForm() {
+//    var container = document.getElementById("searchForm");
+//    var form = document.createElement("form");
+//    var select = document.createElement("select");
+//    var option = document.createElement("option");
+//    var option2 = document.createElement("option");
+//    option.textContent = "val1";
+//    option2.textContent = "val2";
     
-    function ageForm(data) {
-        let select = document.createElement("select");
 
-        for (var i = 0; i < data.length, i++;) {
-            let option = document.createElement("option");
-            option.setAttribute.value = data[i].age;
-            select.appendChild(option);
-        }
-    }
+//    //GetSports();
+//    //GetYears();
+//    //GetAges();
 
-}
+//    select.appendChild(option2);
+//    select.appendChild(option);
+//    form.appendChild(select);
+//    container.appendChild(form);
+
+ 
+
+//    function GetYears() {
+//        fetch(urlYears)
+//            .then(response => response.json())
+//            .then(data => yearForm(data))
+//            .catch(error => console.error('Unable to get year.', error));
+//    }
+
+//    function yearForm(data) {
+//        let select = document.createElement("select");
+
+//        for (var i = 0; i < data.length, i++;) {
+//            let option = document.createElement("option");
+//            option.setAttribute.value = data[i].year;
+//            select.appendChild(option);
+//        }
+//    }
+
+//    function GetAges() {
+//        fetch(urlAges)
+//            .then(response => response.json())
+//            .then(data => ageForm(data))
+//            .catch(error => console.error('Unable to get age.', error));
+//    }
+    
+//    function ageForm(data) {
+//        let select = document.createElement("select");
+
+//        for (var i = 0; i < data.length, i++;) {
+//            let option = document.createElement("option");
+//            option.setAttribute.value = data[i].age;
+//            select.appendChild(option);
+//        }
+//    }
+
+//}
 
     
