@@ -35,27 +35,6 @@ function GetSearchedCups() {
         .catch(error => console.error('Unable to get cup.', error));
 }
 
-function GetSports() {
-    fetch(urlSports)
-        .then(response => response.json())
-        .then(data => sportForm(data))
-        .catch(error => console.error('Unable to get sport.', error));
-}
-
-function GetYears() {
-    fetch(urlYears)
-        .then(response => response.json())
-        .then(data => yearForm(data))
-        .catch(error => console.error('Unable to get year.', error));
-}
-
-function GetAges() {
-    fetch(urlAges)
-        .then(response => response.json())
-        .then(data => AgeForm(data))
-        .catch(error => console.error('Unable to get age.', error));
-}
-
 function displayCups(data,active) {
     var container = document.getElementById(active);
     var table = document.createElement('table');
@@ -135,12 +114,12 @@ function displaySearchedCups(data) {
 
         var tdAge = document.createElement('td');
         tdAge.textContent = data[i].age;
-        tdAge.id= "searchedCupAge";
+        tdAge.id = "searchedCupAge";
         tr.appendChild(tdAge);
 
         var tdDate = document.createElement('td');
         tdDate.textContent = data[i].date;
-        tdDate.id= "searchedCupDate";
+        tdDate.id = "searchedCupDate";
         tr.appendChild(tdDate);
 
         var tdClubName = document.createElement('td');
@@ -150,35 +129,85 @@ function displaySearchedCups(data) {
         clubLink.href = data[i].club_url;
         clubLink.className = 'clubLink';
         clubLink.appendChild(clubName);
-        tdClubName.appendChild(clubLink);        
+        tdClubName.appendChild(clubLink);
         tr.appendChild(tdClubName);
 
         var tdSportName = document.createElement('td');
         tdSportName.textContent = data[i].sport_name;
-        tdSportName.id= "cupSportName";
+        tdSportName.id = "cupSportName";
         tr.appendChild(tdSportName);
 
         var tdPlace = document.createElement('td');
         tdPlace.textContent = data[i].place;
-        tdPlace.id= "searchedCupPlace";
+        tdPlace.id = "searchedCupPlace";
         tr.appendChild(tdPlace);
     }
     container.appendChild(table);
+}
 
-    function sportForm(sport) {
-        var container = document.getElementById("searchedForm")
-        let select = document.createElement("select");
-        for (var i = 0; i < sport.length, i++;) {
-            let option = document.createElement("option");
-            option.setAttribute("value", sport[i].sport_name);
-            select.appendChild(option);           
-        }
-        container.appendChild(select);
+function searchForm() {
+    var container = document.getElementById("searchForm");
+    var form = document.createElement("form");
+
+    GetSports();
+    GetYears();
+    GetAges();
+
+    form.appendChild(select)
+    container.appendChild(form);
+
+    function GetSports() {
+        fetch(urlSports)
+            .then(response => response.json())
+            .then(data => sportForm(data))
+            .catch(error => console.error('Unable to get sport.', error));
     }
 
-    //function searchForm() {
-    //    var container = document.getElementById("searchedForm");
-    //    var form = document.createElement("form")
-    //    sportForm()
-    //}
+    function sportForm(data) {
+        let select = document.createElement("select");
+
+        for (var i = 0; i < data.length, i++;) {
+            let option = document.createElement("option");
+            option.setAttribute.value = data[i].sport_name;
+            select.appendChild(option);
+        }
+       
+    }
+
+    function GetYears() {
+        fetch(urlYears)
+            .then(response => response.json())
+            .then(data => yearForm(data))
+            .catch(error => console.error('Unable to get year.', error));
+    }
+
+    function yearForm(data) {
+        let select = document.createElement("select");
+
+        for (var i = 0; i < data.length, i++;) {
+            let option = document.createElement("option");
+            option.setAttribute.value = data[i].year;
+            select.appendChild(option);
+        }
+    }
+
+    function GetAges() {
+        fetch(urlAges)
+            .then(response => response.json())
+            .then(data => ageForm(data))
+            .catch(error => console.error('Unable to get age.', error));
+    }
+    
+    function ageForm(data) {
+        let select = document.createElement("select");
+
+        for (var i = 0; i < data.length, i++;) {
+            let option = document.createElement("option");
+            option.setAttribute.value = data[i].age;
+            select.appendChild(option);
+        }
+    }
+
 }
+
+    
