@@ -142,8 +142,8 @@ namespace CupOnlineAPI.Repositories
                         AND cup_date LIKE @year
                         AND cup_players_age LIKE @age
                         AND club_name LIKE @organizer
-                        AND sport_name LIKE @sport
-                        AND cup_play_place LIKE @place
+                        AND sport_name LIKE @sport OR
+                        AND cup_play_place LIKE @place OR
                         ORDER BY cup_enddate DESC";
             using (var connection = _context.CreateConnection())
             {

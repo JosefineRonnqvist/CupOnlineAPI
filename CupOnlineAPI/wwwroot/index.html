@@ -10,17 +10,33 @@
         <div id="coming">Kommande cuper</div>
         <div id="ongoing">Pågående cuper</div>
         <div id="finished">Avslutade cuper</div>
-        <div id="searchForm">Sökformulär</div>
+        <div id="searchForm">
+            Sökformulär
+            <div id="search_cupname"></div>
+            <div id="search_organizer"></div>
+            <div id="search_city"></div>
+            <div id="search_sport"></div>
+            <div id="search_year"></div>
+            <div id="search_age"></div>
+            <div id="search_status"></div>
+            <div id="search_button">Search</div>
+            <div id=" search_freetextfield"></div>
+
+        </div>
         <div id="searchedCups">Sökta cuper</div>
 
     </div>
 
-    <script src="js/site.js" asp-append-version="true"></script>
+    <!--<script src="js/cup_online_start_cups.js" asp-append-version="true"></script>
     <script type="text/javascript">
         GetComing();
         GetOngoing();
         GetFinished();
-        GetSearchedCups();
+    </script>-->
+
+    <script src="js/cup_online_search.js" asp-append-version="true"></script>
+    <script type="text/javascript">
+        SearchForm();
     </script>
 </body>
 </html>

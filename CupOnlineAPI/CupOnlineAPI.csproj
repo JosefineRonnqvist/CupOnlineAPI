@@ -16,7 +16,7 @@
 
   <ItemGroup>
     <None Include="wwwroot\index.html" />
-    <None Include="wwwroot\js\site.js" />
+    <None Include="wwwroot\js\cup_online_start_cups.js" />
   </ItemGroup>
 
 </Project>
