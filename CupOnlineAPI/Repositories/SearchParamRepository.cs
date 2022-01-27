@@ -53,7 +53,7 @@ namespace CupOnlineAPI.Repositories
         public async Task<IEnumerable<SearchParam>> Ages()
         {
             var query = @"declare @LID as int =1
-                        SELECT td_ages.ID, td_ages.year, td_ages.status, ISNULL(l.localName, lEng.localName) + 
+                        SELECT td_ages.ID AS age_id, td_ages.year, td_ages.status, ISNULL(l.localName, lEng.localName) + 
                         CASE WHEN status < 3 THEN ' ' + CONVERT(nvarchar(4), [year]) ELSE '' END AS age
                         FROM td_ages LEFT OUTER JOIN
                         td_localization AS l ON l.languageId = @LID AND l.property = 'gender_status_' + 

@@ -12,6 +12,7 @@ function SearchForm() {
     GetSports();
     GetYears();   
     GetAges();
+    StatusForm();
     GetSearchButton();
    /* GetStatus();*/
 
@@ -28,17 +29,21 @@ function SearchParams() {
     var city = document.getElementById("search_city_field").value;
     urlSearched.searchParams.set("place", city);
 
-    var sport = document.getElementById("search_sport_field");
+    var sport = document.getElementById("search_sport_select");
     var selected_sport = sport.options[sport.selectedIndex].text;
     urlSearched.searchParams.set("sport", selected_sport);
 
-    var year = document.getElementById("search_year_field");
+    var year = document.getElementById("search_year_select");
     var selected_year = year.options[year.selectedIndex].text;
     urlSearched.searchParams.set("year", selected_year);
 
-    //var age = document.getElementById("search_age_field");
-    //var selected_age = age.options[age.selectedIndex].text;
-    //urlSearched.searchParams.set("age", selected_age);
+    var age = document.getElementById("search_age_select");
+    var selected_age = age.options[age.selectedIndex].value;
+    urlSearched.searchParams.set("age", selected_age);
+
+    var status = document.getElementById("search_status_select");
+    var selected_status = status.options[status.selectedIndex].value;
+    urlSearched.searchParams.set("status", selected_status);
 
     GetSearchedCups();
 }
@@ -82,7 +87,7 @@ function GetSports() {
 function sportForm(data) {
     var container = document.getElementById("search_sport");
     var select = document.createElement("select");
-    select.id = "search_sport_field";
+    select.id = "search_sport_select";
     var option = document.createElement("option");
     option.textContent = "";
     select.appendChild(option);
@@ -104,7 +109,7 @@ function GetYears() {
 function yearForm(data) {
     var container = document.getElementById("search_year");
     var select = document.createElement("select");
-    select.id = "search_year_field";
+    select.id = "search_year_select";
     var option = document.createElement("option");
     option.textContent = "";
     select.appendChild(option);
@@ -126,15 +131,40 @@ function GetAges() {
 function ageForm(data) {
     var container = document.getElementById("search_age");
     var select = document.createElement("select")
-    select.id = "search_age_field";
+    select.id = "search_age_select";
     var option = document.createElement("option");
     option.textContent = "";
+    option.value = 0;
     select.appendChild(option);
     for (var i = 0; i < data.length; i++) {
         var option = document.createElement("option");
         option.textContent = data[i].age;
+        option.value = data[i].age_id;
         select.appendChild(option);
     }
+    container.appendChild(select);
+}
+
+function StatusForm() {
+    var container = document.getElementById("search_status");
+    var select = document.createElement("select")
+    select.id = "search_status_select";
+    var option = document.createElement("option");
+    option.textContent = "";
+    option.value = 0;
+    select.appendChild(option);
+    var option1 = document.createElement("option");
+    option1.textContent = "Genomförda";
+    option1.value = 1;
+    select.appendChild(option1);
+    var option2 = document.createElement("option");
+    option2.textContent = "Pågående";
+    option2.value = 2;
+    select.appendChild(option2);
+    var option3 = document.createElement("option");
+    option3.textContent = "Kommande";
+    option3.value = 3;
+    select.appendChild(option3);
     container.appendChild(select);
 }
 

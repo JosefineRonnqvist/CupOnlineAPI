@@ -109,12 +109,12 @@ namespace CupOnlineAPI.Controllers
         /// <param name="age">Age</param>
         /// <returns>Cups</returns>
         [HttpGet]
-        public async Task<IActionResult> Search(int noOfCups=200, string name="", string year="", string organizer = "", string place = "",
-                                                      string sport = "", string age = "")
+        public async Task<IActionResult> Search(int noOfCups=200, string? name="", string? year="", string? organizer = "", string? place = "",
+                                                      string? sport = "", int? age=0, int? status=0)
         {
             try
             {
-                var cups = await _cupRepo.Search(noOfCups,name, year, organizer, place, sport, age);
+                var cups = await _cupRepo.Search(noOfCups,name, year, organizer, place, sport, age, status);
                 return Ok(cups);
             }
             catch (Exception ex)
