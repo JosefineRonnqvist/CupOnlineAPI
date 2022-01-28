@@ -14,6 +14,7 @@ function SearchForm() {
     GetAges();
     StatusForm();
     GetSearchButton();
+
    /* GetStatus();*/
 
     //SearchParams();
@@ -30,7 +31,7 @@ function SearchParams() {
     urlSearched.searchParams.set("place", city);
 
     var sport = document.getElementById("search_sport_select");
-    var selected_sport = sport.options[sport.selectedIndex].text;
+    var selected_sport = sport.options[sport.selectedIndex].value;
     urlSearched.searchParams.set("sport", selected_sport);
 
     var year = document.getElementById("search_year_select");
@@ -44,13 +45,14 @@ function SearchParams() {
     var status = document.getElementById("search_status_select");
     var selected_status = status.options[status.selectedIndex].value;
     urlSearched.searchParams.set("status", selected_status);
-
+    alert(urlSearched);
     GetSearchedCups();
 }
 
 function GetSearchButton() {
     var container = document.getElementById("search_button");
     container.onclick = SearchParams;
+    alert()
 }
 
 function CupNameForm() {
@@ -89,11 +91,13 @@ function sportForm(data) {
     var select = document.createElement("select");
     select.id = "search_sport_select";
     var option = document.createElement("option");
-    option.textContent = "";
+    option.textContent = "-";
+    option.value = 0;
     select.appendChild(option);
     for (var i = 0; i < data.length; i++) {
         var option = document.createElement("option");
         option.textContent = data[i].sport_name;
+        option.value = data[i].sport_id;
         select.appendChild(option);
     }   
     container.appendChild(select);
@@ -111,7 +115,7 @@ function yearForm(data) {
     var select = document.createElement("select");
     select.id = "search_year_select";
     var option = document.createElement("option");
-    option.textContent = "";
+    option.textContent = "-";
     select.appendChild(option);
     for (var i = 0; i < data.length; i++) {
         var option = document.createElement("option");
@@ -149,8 +153,12 @@ function StatusForm() {
     var container = document.getElementById("search_status");
     var select = document.createElement("select")
     select.id = "search_status_select";
+    var option4 = document.createElement("option");
+    option4.textContent = "Aktuella";
+    option4.value = 4;
+    select.appendChild(option4);
     var option = document.createElement("option");
-    option.textContent = "";
+    option.textContent = "Alla";
     option.value = 0;
     select.appendChild(option);
     var option1 = document.createElement("option");

@@ -45,7 +45,7 @@ namespace CupOnlineAPI.Controllers
         /// <param name="daysFromToday">Days from today wanted in searchresult</param>
         /// <returns>cups</returns>
         [HttpGet]
-        public async Task<IActionResult> Coming(int noOfCups=15, int daysFromToday = 30)
+        public async Task<IActionResult> Coming(int noOfCups=20, int daysFromToday = 30)
         {
             try
             {
@@ -64,7 +64,7 @@ namespace CupOnlineAPI.Controllers
         /// <param name="noOfCups">Number of cups wanted in searchresult</param>
         /// <returns>Cups</returns>
         [HttpGet]
-        public async Task<IActionResult> Ongoing(int noOfCups=15)
+        public async Task<IActionResult> Ongoing(int noOfCups=20)
         {
             try
             {
@@ -84,7 +84,7 @@ namespace CupOnlineAPI.Controllers
         /// <param name="daysFromToday">Days from today wanted in searchresult</param>
         /// <returns>Cups</returns>
         [HttpGet]
-        public async Task<IActionResult> Finished(int noOfCups=15, int daysFromToday=30)
+        public async Task<IActionResult> Finished(int noOfCups=20, int daysFromToday=30)
         {
             try
             {
@@ -96,6 +96,18 @@ namespace CupOnlineAPI.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
+        //[HttpGet]
+        //public async Task<IActionResult> Search()
+        //{
+        //    return await Search(100);
+
+        //}
+        //[HttpGet]
+        //public async Task<IActionResult> Search(string name = "")
+        //{
+        //    return await Search(100,name);
+            
+        //}
 
         /// <summary>
         /// Finds cups that matches search
@@ -108,13 +120,13 @@ namespace CupOnlineAPI.Controllers
         /// <param name="sport">Sport</param>
         /// <param name="age">Age</param>
         /// <returns>Cups</returns>
-        [HttpGet]
-        public async Task<IActionResult> Search(int noOfCups=200, string? name="", string? year="", string? organizer = "", string? place = "",
-                                                      string? sport = "", int? age=0, int? status=0)
+        [HttpGet]        
+        public async Task<IActionResult> Search(int noOfCups=1000, string name="", string year="", string organizer ="", string place ="",
+                                                      int sport_id =0, int age_id=0, int status=4)
         {
             try
             {
-                var cups = await _cupRepo.Search(noOfCups,name, year, organizer, place, sport, age, status);
+                var cups = await _cupRepo.Search(noOfCups,name, year, organizer, place, sport_id, age_id, status);
                 return Ok(cups);
             }
             catch (Exception ex)
