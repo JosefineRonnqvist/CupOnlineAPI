@@ -22,25 +22,31 @@ function SearchForm() {
 
 function SearchParams() {
     var cupname = document.getElementById("search_cupname_field").value;
-    urlSearched.searchParams.set("name", cupname);
+    if (cupname = ) { urlSearched.searchParams.set("name", "%") }
+    else { urlSearched.searchParams.set("name", cupname) };
 
     var organizer = document.getElementById("search_organizer_field").value;
-    urlSearched.searchParams.set("organizer",organizer);
+    if (organizer = "") { urlSearched.searchParams.set("organizer", "%") }
+    else { urlSearched.searchParams.set("organizer", organizer) };
 
     var city = document.getElementById("search_city_field").value;
-    urlSearched.searchParams.set("place", city);
+    if (city = "") { urlSearched.searchParams.set("city", "%") }
+    else { urlSearched.searchParams.set("city", city) };
 
     var sport = document.getElementById("search_sport_select");
     var selected_sport = sport.options[sport.selectedIndex].value;
-    urlSearched.searchParams.set("sport", selected_sport);
+    if (sport = "-") { urlSearched.searchParams.set("sport", "%") }
+    else { urlSearched.searchParams.set("sport", selected_sport) };
 
     var year = document.getElementById("search_year_select");
     var selected_year = year.options[year.selectedIndex].text;
-    urlSearched.searchParams.set("year", selected_year);
+    if (year = "-") { urlSearched.searchParams.set("year", "%") }
+    else { urlSearched.searchParams.set("year", selected_year) };
 
     var age = document.getElementById("search_age_select");
     var selected_age = age.options[age.selectedIndex].value;
-    urlSearched.searchParams.set("age", selected_age);
+    if (age = "-") { urlSearched.searchParams.set("age", "%") }
+    else { urlSearched.searchParams.set("age", selected_age) };
 
     var status = document.getElementById("search_status_select");
     var selected_status = status.options[status.selectedIndex].value;
@@ -137,7 +143,7 @@ function ageForm(data) {
     var select = document.createElement("select")
     select.id = "search_age_select";
     var option = document.createElement("option");
-    option.textContent = "";
+    option.textContent = "-";
     option.value = 0;
     select.appendChild(option);
     for (var i = 0; i < data.length; i++) {

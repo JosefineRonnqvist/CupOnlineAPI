@@ -125,13 +125,13 @@ namespace CupOnlineAPI.Repositories
             }
         }
 
-        public async Task<IEnumerable<Cup>> Search(int? noOfCups, string name="", string year="", string organizer="", string place="",
+        public async Task<IEnumerable<Cup>> Search(int noOfCups, string name="", string year="", string organizer="", string city="",
                                                     int sport_id=0, int age_id=0, int status=4)
         {
             var query = @"SET ROWCOUNT @noOfCups
                         SELECT TOP 1000 cup_id AS id, cup_name AS name, cup_players_age AS age, 
                         cup_date AS date, cup_startdate, cup_enddate, cup_url, club_url,
-                        club_name, sport_name, cup_play_place AS place
+                        club_name AS organizer, sport_name, cup_play_place AS city
                         FROM td_cups
                         INNER JOIN td_sports ON cup_sport_id=sport_id
                         INNER JOIN td_clubs ON cup_club_id=club_id
@@ -142,7 +142,7 @@ namespace CupOnlineAPI.Repositories
                             AND ((@age_id=0) OR (cup_id IN (SELECT cup_Id FROM td_cup_ages WHERE age_id = @age_id)))
                             AND ((@organizer = '') OR (club_name LIKE @organizer))  
                             AND (cup_sport_id = @sport_id)
-                            AND ((@place = '') OR cup_play_place LIKE @place)
+                            AND ((@city = '') OR cup_play_place LIKE @city)
                             AND (((@status = 0) 
                                 OR (@status=1 AND cup_enddate < GETDATE()))
                             OR (@status=2 AND cup_startdate <= GETDATE()
@@ -161,7 +161,7 @@ namespace CupOnlineAPI.Repositories
                     year = "%" + year + "%",
                     organizer = "%" + organizer.Replace("*", "%").Replace("?", "_") + "%",
                     sport_id = sport_id,
-                    place = "%" + place.Replace("*", "%").Replace("?", "_") + "%",
+                    city = "%" + city.Replace("*", "%").Replace("?", "_") + "%",
                     noOfCups = noOfCups,
                     status = status,
                 }); 
