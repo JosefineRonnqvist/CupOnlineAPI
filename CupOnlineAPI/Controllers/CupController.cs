@@ -122,13 +122,13 @@ namespace CupOnlineAPI.Controllers
         /// <param name="age">Age</param>
         /// <param name="status">Status</param>
         /// <returns>Cups</returns>
-        [HttpGet]        
-        public async Task<IActionResult> Search(int noOfCups=1000, string name="", string year="", string organizer ="", string city ="",
-                                                      int sport_id =0, int age_id=0, int status=4)
+        [HttpGet("{name?}/{year?}/{organizer?}/{city?}/{freetext?}")]        
+        public async Task<IActionResult> Search(int noOfCups=1000, string name="", string year= "", string organizer = "", string city = "",
+                                                      int sport_id =0, int age_id=0, int status=4, string freetext= "")
         {
             try
             {
-                var cups = await _cupRepo.Search(noOfCups,name, year, organizer, city, sport_id, age_id, status);
+                var cups = await _cupRepo.Search(noOfCups,name, year, organizer, city, sport_id, age_id, status, freetext);
                 return Ok(cups);
             }
             catch (Exception ex)

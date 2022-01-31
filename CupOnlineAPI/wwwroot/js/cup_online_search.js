@@ -15,6 +15,7 @@ function SearchForm() {
     GetYears();   
     GetAges();
     StatusForm();
+    FreeTextSearchForm();
     GetSearchButton();
 
    /* GetStatus();*/
@@ -24,17 +25,21 @@ function SearchForm() {
 
 function SearchParams() {
     var cupname = document.getElementById("search_cupname_field").value;
-    if (cupname != "") {urlSearched.searchParams.set("name", cupname)};
+    if (cupname == "") { urlSearched.searchParams.set("name", "%") }
+    else  { urlSearched.searchParams.set("name", cupname) };
 
     var year = document.getElementById("search_year_select");
     var selected_year = year.options[year.selectedIndex].text;
-    if (selected_year != "-") { urlSearched.searchParams.set("year", selected_year) };
+    if (selected_year == "-") { urlSearched.searchParams.set("year", "%") }
+    else { urlSearched.searchParams.set("year", selected_year)};
 
     var organizer = document.getElementById("search_organizer_field").value;
-    if (organizer != "") { urlSearched.searchParams.set("organizer", organizer) };
+    if (organizer == "") { urlSearched.searchParams.set("organizer", "%") }
+    else { urlSearched.searchParams.set("organizer", organizer) };
 
     var city = document.getElementById("search_city_field").value;
-    if (city != "") { urlSearched.searchParams.set("city", city) } ;
+    if (city == "") { urlSearched.searchParams.set("city", "%") }
+    else { urlSearched.searchParams.set("city", city) };
 
     var sport = document.getElementById("search_sport_select");
     var selected_sport = sport.options[sport.selectedIndex].value;
@@ -47,6 +52,10 @@ function SearchParams() {
     var status = document.getElementById("search_status_select");
     var selected_status = status.options[status.selectedIndex].value;
     urlSearched.searchParams.set("status", selected_status);
+
+    var freetext = document.getElementById("search_freetextfield").value;
+    if (freetext != "") { urlSearched.searchParams.set("freetext", "%") }
+    else { urlSearched.searchParams.set("freetext", freetext) };
 
     alert(urlSearched);
     GetSearchedCups();
@@ -176,6 +185,14 @@ function StatusForm() {
     option3.value = 3;
     select.appendChild(option3);
     container.appendChild(select);
+}
+
+function FreeTextSearchForm() {
+    var container = document.getElementById("search_freetextfield");
+    var input = document.createElement("input");
+    input.id = "search_freetext_field";
+    input.placeholder = "Fritext";
+    container.appendChild(input);
 }
 
 //search cups with api
