@@ -126,7 +126,7 @@ namespace CupOnlineAPI.Repositories
         }
 
         public async Task<IEnumerable<Cup>> Search(int noOfCups, string name="", string year="", string organizer="", string city="",
-                                                    int sport_id=0, int age_id=0, int status=4)
+                                                    int? sport_id=0, int? age_id=0, int status=4)
         {
             var query = @"SET ROWCOUNT @noOfCups
                         SELECT TOP 1000 cup_id AS id, cup_name AS name, cup_players_age AS age, 
@@ -141,7 +141,7 @@ namespace CupOnlineAPI.Repositories
                            ( @year = '' OR cup_date LIKE @year)
                             AND ((@age_id=0) OR (cup_id IN (SELECT cup_Id FROM td_cup_ages WHERE age_id = @age_id)))
                             AND ((@organizer = '') OR (club_name LIKE @organizer))  
-                            AND (cup_sport_id = @sport_id)
+                            AND ((cup_sport_id = @sport_id) OR @sport_id=0)
                             AND ((@city = '') OR cup_play_place LIKE @city)
                             AND (((@status = 0) 
                                 OR (@status=1 AND cup_enddate < GETDATE()))

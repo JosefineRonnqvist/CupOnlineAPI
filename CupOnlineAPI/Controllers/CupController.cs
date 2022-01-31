@@ -107,7 +107,7 @@ namespace CupOnlineAPI.Controllers
         //public async Task<IActionResult> Search(string name = "")
         //{
         //    return await Search(100,name);
-            
+
         //}
 
         /// <summary>
@@ -120,6 +120,7 @@ namespace CupOnlineAPI.Controllers
         /// <param name="place">Place where cup is</param>
         /// <param name="sport">Sport</param>
         /// <param name="age">Age</param>
+        /// <param name="status">Status</param>
         /// <returns>Cups</returns>
         [HttpGet]        
         public async Task<IActionResult> Search(int noOfCups=1000, string name="", string year="", string organizer ="", string city ="",
