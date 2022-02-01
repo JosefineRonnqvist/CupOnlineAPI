@@ -16,8 +16,13 @@ namespace CupOnlineAPI.Controllers
             _searchParamRepo = searchParam;
         }
 
+        /// <summary>
+        /// Get all sport from cuponline with GetAll-method (no query)
+        /// </summary>
+        /// <returns>List of searchparam with sports</returns>
+        /// <exception cref="Exception"></exception>
         [HttpGet]
-        public IEnumerable<SearchParam> GetAll()
+        public IEnumerable<SearchParam> GetAllSports()
         {
             try
             {
@@ -29,6 +34,10 @@ namespace CupOnlineAPI.Controllers
             }
         }
 
+        /// <summary>
+        /// Get all sports from cuponline
+        /// </summary>
+        /// <returns>List of searchparam with sports, ordered with selected most popular first</returns>
         [HttpGet]
         public async Task<IActionResult> Sports()
         {
@@ -43,7 +52,10 @@ namespace CupOnlineAPI.Controllers
             }
         }
 
-
+        /// <summary>
+        /// Get all years registered at cuponline
+        /// </summary>
+        /// <returns>List of searchparam with years</returns>
         [HttpGet]
         public async Task<IActionResult> Years()
         {
@@ -58,7 +70,10 @@ namespace CupOnlineAPI.Controllers
             }
         }
 
-
+        /// <summary>
+        /// Get ages to use in cup search
+        /// </summary>
+        /// <returns>List of searchparam with ages</returns>
         [HttpGet]
         public async Task<IActionResult> Ages()
         {

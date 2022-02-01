@@ -1,0 +1,223 @@
+﻿openapi: 3.0.1
+info:
+  title: CupOnlineAPI
+  description: Get lists of sport tournaments registered at cuponline. Get lists of ongoing, coming or finished cups. Search cups by name, city, sport, players age, organizer or the cup year. search cup by id. Get all registered sports.
+  version: 1.1.2
+servers:
+  - url:
+paths:
+  /api/Cup/Cups:
+    get:
+      description: Selects sport cups from cuponline. Choose how many with noOfCups
+      parameters:
+        - name: noOfCups
+          in: query
+          schema:
+            type: string
+          example: '100'
+      responses: id, name, age, city, startdate,enddate, date(written readable), sport name, organizer
+        '200':
+          description: array of response
+      servers:
+        - url:
+    servers:
+      - url: 
+  /api/SearchParam/Sports:
+    get:
+      description: Selects all registered sports, ordering icehockey, soccer and floorball highest
+      responses: sport id, sport name
+        '200':
+          description: array of response
+          content:
+            application/json; charset=utf-8:
+              schema:
+                type: string
+              examples: {}
+      servers:
+        - url: 
+    servers:
+      - url: 
+  /api/Cup/Ongoing:
+    get:
+      description: Selects cups with startdate before now and enddate after now
+      parameters:
+        - name: noOfCups
+          in: query
+          schema:
+            type: string
+          example: '20'
+      responses: id, name, startdate,enddate, date(written readable), sport name
+        '200':
+          description: array of response
+          content:
+            application/json; charset=utf-8:
+              schema:
+                type: string
+              examples: {}
+      servers:
+        - url: 
+    servers:
+      - url: 
+  /api/CupById/Find/1:
+    get:
+      description: Selects cup by cup id
+      responses: id, club id, sport id, logotype, sponsor logotype, sponsor url, date, startdate, enddate, name, players age, groups, periods, periodtime, play place, round, game no, gamewin points, table sort, show teammembers, game report, sponsors, status, binStatus, gamedraw points, gamewinsd points, gamewinpenalties points, gamewinextra points, changeDate, changedBy
+        '200':
+          description: array of response
+          content:
+            application/json; charset=utf-8:
+              schema:
+                type: string
+              examples: {}
+      servers:
+        - url: 
+    servers:
+      - url: 
+  /api/Cup/Finished:
+    get:
+      description: Selects cups that are finished ordered with latest first. Choose how many wanted in search result, and how many days from today included
+      parameters:
+        - name: daysFromToday
+          in: query
+          schema:
+            type: string
+          example: '30'
+        - name: noOfCups
+          in: query
+          schema:
+            type: string
+          example: '20'
+      responses: id, name, startdate,enddate, date(written readable), sport name
+        '200':
+          description: array of response
+          content:
+            application/json; charset=utf-8:
+              schema:
+                type: string
+              examples: {}
+      servers:
+        - url: 
+    servers:
+      - url: 
+  /api/SearchParam/Years:
+    get:
+      description: Select all years registered in startdate
+      responses: year
+        '200':
+          description: array of response
+          content:
+            application/json; charset=utf-8:
+              schema:
+                type: string
+              examples: {}
+      servers:
+        - url: 
+    servers:
+      - url: 
+  /api/SearchParam/Ages:
+    get:
+      description: transfer age to selectable value
+      responses: year, age, age id
+        '200':
+          description: array of response
+          content:
+            application/json; charset=utf-8:
+              schema:
+                type: string
+              examples: {}
+      servers:
+        - url: 
+    servers:
+      - url: 
+  /api/Cup/Search:
+    get:
+      description: Search sport cups
+      parameters:
+        - name: sport_id
+          in: query
+          schema:
+            type: string
+          example: '0'
+        - name: year
+          in: query
+          schema:
+            type: string
+          example: '%25'
+        - name: city
+          in: query
+          schema:
+            type: string
+          example: '%25'
+        - name: organizer
+          in: query
+          schema:
+            type: string
+          example: '%25'
+        - name: name
+          in: query
+          schema:
+            type: string
+          example: '%25'
+        - name: age_id
+          in: query
+          schema:
+            type: string
+          example: '0'
+        - name: noOfCups
+          in: query
+          schema:
+            type: string
+          example: '1000'
+        - name: status
+          in: query
+          schema:
+            type: string
+          example: '0'
+      responses: id, name, age, city, startdate,enddate, date(written readable), sport name, organizer
+        '200':
+          description: array of response
+      servers:
+        - url: 
+    servers:
+      - url: 
+  /api/SearchParam/GetAllSports:
+    get:
+      description: Selects all sports to translate id to name
+      responses: sport id, sport name
+        '200':
+          description: array of response
+          content:
+            application/json; charset=utf-8:
+              schema:
+                type: string
+              examples: {}
+      servers:
+        - url: 
+    servers:
+      - url: 
+  /api/Cup/Coming:
+    get:
+      description: Selects all cups starting after today. Choose how many wanted in search result, and how many days from today included
+      parameters:
+        - name: daysFromToday
+          in: query
+          schema:
+            type: string
+          example: '30'
+        - name: noOfCups
+          in: query
+          schema:
+            type: string
+          example: '20'
+      responses: id, name, startdate,enddate, date(written readable), sport name
+        '200':
+          description: array of response
+          content:
+            application/json; charset=utf-8:
+              schema:
+                type: string
+              examples: {}
+      servers:
+        - url: 
+    servers:
+      - url:

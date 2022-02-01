@@ -1,7 +1,6 @@
 ﻿
 using CupOnlineAPI.Models;
 using CupOnlineAPI.Repositories;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CupOnlineAPI.Controllers
@@ -11,7 +10,6 @@ namespace CupOnlineAPI.Controllers
     public class CupByIdController : ControllerBase
     {
         private readonly CupByIdRepository _cupByIdRepo;
-
         public CupByIdController(CupByIdRepository cupByIdRepo)
         {
             _cupByIdRepo = cupByIdRepo;
@@ -23,8 +21,6 @@ namespace CupOnlineAPI.Controllers
             try
             {
                 var cup = _cupByIdRepo.GetCupById(id);
-                //if(cup==null)
-                //return NotFound();
                 return cup;
             }
             catch (Exception ex)

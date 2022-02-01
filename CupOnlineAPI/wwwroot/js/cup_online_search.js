@@ -14,9 +14,11 @@ function SearchForm() {
     GetYears();   
     GetAges();
     StatusForm();
+    SearchParams();
     GetSearchButton();
 }
 
+//get search parameters from input and selectfield and set and send to api url
 function SearchParams() {
     var cupname = document.getElementById("search_cupname_field").value;
     if (cupname == "") { urlSearched.searchParams.set("name", "%") }
@@ -50,35 +52,37 @@ function SearchParams() {
     GetSearchedCups();
 }
 
+//Connect search to div
 function GetSearchButton() {
     var container = document.getElementById("search_button");
     container.onclick = SearchParams;
 }
 
+//create input element to search cupname (or city, organizer or age)
 function CupNameForm() {
     var container = document.getElementById("search_cupname");
     var input = document.createElement("input");
     input.id = "search_cupname_field";
- /*   input.placeholder = "Cupnamn";*/
     container.appendChild(input);
 }
 
+//create input element to search organizer
 function OrganizerForm() {
     var container = document.getElementById("search_organizer");
     var input = document.createElement("input");
     input.id = "search_organizer_field";
-/*    input.placeholder = "Arrangör";*/
     container.appendChild(input);
 }
 
+//create input element to search city
 function CityForm() {
     var container = document.getElementById("search_city");
     var input = document.createElement("input");
     input.id = "search_city_field";
- /*   input.placeholder = "Ort";*/
     container.appendChild(input);
 }
 
+//get sports from api
 function GetSports() {
     fetch(urlSports)
         .then(response => response.json())
@@ -86,6 +90,7 @@ function GetSports() {
         .catch(error => console.error("Unable to get sport.", error));
 }
 
+//create  a select element with sport options
 function sportForm(data) {
     var container = document.getElementById("search_sport");
     var select = document.createElement("select");
@@ -103,6 +108,7 @@ function sportForm(data) {
     container.appendChild(select);
 }
 
+//get years from api
 function GetYears() {
     fetch(urlYears)
         .then(response => response.json())
@@ -110,6 +116,7 @@ function GetYears() {
         .catch(error => console.error("Unable to get year.", error));
 }
 
+//create a select element with year options
 function yearForm(data) {
     var container = document.getElementById("search_year");
     var select = document.createElement("select");
@@ -125,6 +132,7 @@ function yearForm(data) {
     container.appendChild(select);
 }
 
+//get ages from api
 function GetAges() {
     fetch(urlAges)
         .then(response => response.json())
@@ -132,6 +140,7 @@ function GetAges() {
         .catch(error => console.error("Unable to get age.", error));
 }
 
+//create a select element with age options
 function ageForm(data) {
     var container = document.getElementById("search_age");
     var select = document.createElement("select")
@@ -149,6 +158,7 @@ function ageForm(data) {
     container.appendChild(select);
 }
 
+//create a select element with status options
 function StatusForm() {
     var container = document.getElementById("search_status");
     var select = document.createElement("select")
@@ -191,20 +201,14 @@ function displaySearchedCups(data) {
     if (existing_table != null) { existing_table.remove() };
     var table = document.createElement("table");
     table.id = "searched_table";
-    //table.border = '1';
 
     for (var i = 0; i < data.length; i++) {
 
-        var tr = document.createElement("tr");
-      
+        var tr = document.createElement("tr");      
 
-        if (i % 2 === 1) {
-            tr.setAttribute("class", "odd");
-        }
+        if (i % 2 === 1) { tr.setAttribute("class", "odd");}
 
-        else {
-            tr.setAttribute("class", "even");
-        }
+        else {tr.setAttribute("class", "even");}
 
         var tdName = document.createElement("td");
         tdName.id = "searchedCupName";

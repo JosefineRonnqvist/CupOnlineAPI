@@ -1,8 +1,7 @@
 ﻿const url = 'https://localhost:7172'
-const urlComing = url + '/api/cup/coming?noOfCups=15&daysFromToday=30'
+const urlComing = url + '/api/cup/coming?noOfCups=15&daysFromToday=30'   //to change how many searchresult, change noOfCups={wanted number of searchresult}, and to change searchperiod change daysFromToday=
 const urlOngoing = url +'/api/Cup/Ongoing?noOfCups=15'
 const urlFinished = url + '/api/Cup/Finished?noOfCups=15&daysFromToday=30'
-
 
 function GetComing() {  
 fetch(urlComing)
@@ -29,20 +28,15 @@ function displayCups(data,active) {
     var container = document.getElementById(active);
     var table = document.createElement("table");
     table.setAttribute("class", "activeTable");
-    //table.border = '1';
 
-    for (var i = 0; i < data.length; i++) {
-       
-        var tr = document.createElement('tr');
-       
-        var trCup = document.createElement('tr');
-        
+    for (var i = 0; i < data.length; i++) {      
+        var tr = document.createElement('tr');      
+        var trCup = document.createElement('tr');        
 
         if (i%2===1) {
             tr.className = "odd";
             trCup.className = "odd";
         }
-
         else {
             tr.className = "even";
             trCup.className = "even";

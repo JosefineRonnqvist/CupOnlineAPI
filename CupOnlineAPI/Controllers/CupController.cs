@@ -1,11 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using CupOnlineAPI.Repositories;
-using CupOnlineAPI.Models;
-using System.Runtime.InteropServices;
-using Swashbuckle.AspNetCore.Annotations;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace CupOnlineAPI.Controllers
 {
@@ -14,7 +8,6 @@ namespace CupOnlineAPI.Controllers
     public class CupController : ControllerBase
     {
         private readonly CupRepository _cupRepo;
-
         public CupController(CupRepository cupRepo)
         {
             _cupRepo = cupRepo;
@@ -136,48 +129,5 @@ namespace CupOnlineAPI.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
-
-
-
-
-        //[HttpGet]
-        //public IEnumerable<Cup> GetAllCups()
-        //{
-        //    try
-        //    {
-        //        return _cupRepo.GetAllCups();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw new Exception(ex.Message);
-        //    }
-        //}
-
-        //// POST api/<CupController>
-        //[HttpPost]
-        //public async Task<IActionResult> CreateCup(Cup cup)
-        //{
-        //    try
-        //    {
-        //        var createdCup = await _cupRepo.CreateCup(cup);
-        //        return Ok(createdCup);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return StatusCode(500, ex.Message);
-        //    }
-        //}
-
-        //// PUT api/<CupController>/5
-        //[HttpPut("{id}")]
-        //public void Put(int id, [FromBody] string value)
-        //{
-        //}
-
-        //// DELETE api/<CupController>/5
-        //[HttpDelete("{id}")]
-        //public void Delete(int id)
-        //{
-        //}
     }
 }
