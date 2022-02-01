@@ -4,8 +4,7 @@ const urlYears = url + '/api/SearchParam/Years'
 const urlAges = url + '/api/SearchParam/Ages'
 var urlSearched = new URL(url + '/api/Cup/Search?noOfCups=1000');
 //&name=cup&year=2005&organizer=mo&place=vik&sport=is&age=u
-//https://localhost:7172/api/Cup/Search?noOfCups=1000&name=cup&year=2013&organizer=o&city=i&sport_id=1&age_id=0&status=0
-//https://localhost:7172/api/Cup/Search?noOfCups=1000&name=cup&year=2013&organizer=o&city=i&sport_id=1&age_id=0&status=0
+
 function SearchForm() {
 
     CupNameForm();
@@ -15,12 +14,7 @@ function SearchForm() {
     GetYears();   
     GetAges();
     StatusForm();
-/*    FreeTextSearchForm();*/
     GetSearchButton();
-
-   /* GetStatus();*/
-
-    //SearchParams();
 }
 
 function SearchParams() {
@@ -53,11 +47,6 @@ function SearchParams() {
     var selected_status = status.options[status.selectedIndex].value;
     urlSearched.searchParams.set("status", selected_status);
 
-    //var freetext = document.getElementById("search_freetextfield").value;
-    //if (freetext != "") { urlSearched.searchParams.set("freetext", "%") }
-    //else { urlSearched.searchParams.set("freetext", freetext) };
-
- /*   alert(urlSearched);*/
     GetSearchedCups();
 }
 
@@ -70,7 +59,7 @@ function CupNameForm() {
     var container = document.getElementById("search_cupname");
     var input = document.createElement("input");
     input.id = "search_cupname_field";
-    input.placeholder = "Cupnamn";
+ /*   input.placeholder = "Cupnamn";*/
     container.appendChild(input);
 }
 
@@ -78,7 +67,7 @@ function OrganizerForm() {
     var container = document.getElementById("search_organizer");
     var input = document.createElement("input");
     input.id = "search_organizer_field";
-    input.placeholder = "Arrangör";
+/*    input.placeholder = "Arrangör";*/
     container.appendChild(input);
 }
 
@@ -86,7 +75,7 @@ function CityForm() {
     var container = document.getElementById("search_city");
     var input = document.createElement("input");
     input.id = "search_city_field";
-    input.placeholder = "Ort";
+ /*   input.placeholder = "Ort";*/
     container.appendChild(input);
 }
 
@@ -187,14 +176,6 @@ function StatusForm() {
     container.appendChild(select);
 }
 
-//function FreeTextSearchForm() {
-//    var container = document.getElementById("search_freetextfield");
-//    var input = document.createElement("input");
-//    input.id = "search_freetext_field";
-//    input.placeholder = "Fritext";
-//    container.appendChild(input);
-//}
-
 //search cups with api
 function GetSearchedCups() {
     fetch(urlSearched)
@@ -206,8 +187,10 @@ function GetSearchedCups() {
 //create a table and display searchresult
 function displaySearchedCups(data) {
     var container = document.getElementById("search_table");
+    var existing_table = document.getElementById("searched_table");
+    if (existing_table != null) { existing_table.remove() };
     var table = document.createElement("table");
-    table.setAttribute("class", "searchedTable");
+    table.id = "searched_table";
     //table.border = '1';
 
     for (var i = 0; i < data.length; i++) {
