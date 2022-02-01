@@ -8,11 +8,12 @@ namespace CupOnlineAPI.Models
     {
         private string _startdate;
         private string _enddate;
+
         [Key]
         public int id { get; set; }
         public string name { get; set; }
         public string age { get; set; }
-        public string place { get; set; }
+        public string city { get; set; }
         internal string cup_startdate
         {
             get { return _startdate; }
@@ -22,7 +23,7 @@ namespace CupOnlineAPI.Models
                 try
                 {
                     CultureInfo provider = CultureInfo.InvariantCulture;
-                    startdate = DateTime.ParseExact(value, "yyyy-MM-dd", provider);
+                    startdate = DateTime.ParseExact(value, "yyyy-MM-dd", provider).Date;
                 }
                 catch(FormatException)
                 {
@@ -41,7 +42,7 @@ namespace CupOnlineAPI.Models
                 try
                 {
                     CultureInfo provider = CultureInfo.InvariantCulture;
-                    enddate = DateTime.ParseExact(value, "yyyy-MM-dd", provider);
+                    enddate = DateTime.ParseExact(value, "yyyy-MM-dd", provider).Date;
                 }
                 catch(FormatException)
                 {
@@ -53,7 +54,9 @@ namespace CupOnlineAPI.Models
         public DateTime enddate { get; set; }
         public string date { get; set; }
         public string sport_name { get; set; }
-
-        public string club_name { get; set; }   
+        public string organizer { get; set; } 
+        public string cup_url { get; set; }
+        public string club_url { get; set; }  
+        string freetext { get; set; }
     }
 }

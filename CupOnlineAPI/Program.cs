@@ -1,5 +1,4 @@
 using CupOnlineAPI.Context;
-using CupOnlineAPI.Interfaces;
 using CupOnlineAPI.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,10 +10,22 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<DapperContext>();
-builder.Services.AddScoped<ICupRepository, CupRepository>();
-builder.Services.AddScoped<ISportRepository, SportRepository>();
-builder.Services.AddScoped<ICupByIdRepository, CupByIdRepository>();
+builder.Services.AddScoped<CupRepository>();
+builder.Services.AddScoped<SearchParamRepository>();
+builder.Services.AddScoped<CupByIdRepository>();
 builder.Services.AddControllers();
+builder.Services.AddCors(setup =>
+{
+    setup.AddDefaultPolicy(p =>
+    {
+        //p.AllowAnyOrigin();
+        p.AllowAnyHeader();
+        p.AllowAnyMethod();
+        p.SetIsOriginAllowed(origin => true); // allow any origin, kanske inte denna
+                                              //p.AllowCredentials();
+    });
+});
+
 
 var app = builder.Build();
 
@@ -28,10 +39,11 @@ if (app.Environment.IsDevelopment())
 app.UseDefaultFiles();
 app.UseStaticFiles();
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
 app.MapControllers();
+app.UseCors();
 
 app.Run();

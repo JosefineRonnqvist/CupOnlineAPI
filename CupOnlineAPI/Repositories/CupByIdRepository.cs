@@ -1,11 +1,10 @@
 ﻿using CupOnlineAPI.Context;
-using CupOnlineAPI.Interfaces;
 using CupOnlineAPI.Models;
 using Dapper.Contrib.Extensions;
 
 namespace CupOnlineAPI.Repositories
 {
-    public class CupByIdRepository:ICupByIdRepository 
+    public class CupByIdRepository
     {
         private readonly DapperContext _context;
 

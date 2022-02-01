@@ -1,4 +1,4 @@
-﻿using CupOnlineAPI.Interfaces;
+﻿
 using CupOnlineAPI.Models;
 using CupOnlineAPI.Repositories;
 using Microsoft.AspNetCore.Http;
@@ -10,15 +10,15 @@ namespace CupOnlineAPI.Controllers
     [ApiController]
     public class CupByIdController : ControllerBase
     {
-        private readonly ICupByIdRepository _cupByIdRepo;
+        private readonly CupByIdRepository _cupByIdRepo;
 
-        public CupByIdController(ICupByIdRepository cupByIdRepo)
+        public CupByIdController(CupByIdRepository cupByIdRepo)
         {
             _cupByIdRepo = cupByIdRepo;
         }
 
         [HttpGet("{id}")]
-        public CupById CupById(int id)
+        public CupById Find(int id)
         {
             try
             {

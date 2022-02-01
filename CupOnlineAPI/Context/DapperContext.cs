@@ -11,7 +11,7 @@ namespace CupOnlineAPI.Context
         public DapperContext(IConfiguration config)
         {
             _configuration = config;
-            _connectionString = _configuration.GetConnectionString("Default");
+            _connectionString = _configuration.GetConnectionString("SqlConnection");
         }
 
         public IDbConnection CreateConnection() => new SqlConnection(_connectionString);
