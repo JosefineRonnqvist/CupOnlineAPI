@@ -15,7 +15,7 @@ function SearchForm() {
     GetYears();   
     GetAges();
     StatusForm();
-    FreeTextSearchForm();
+/*    FreeTextSearchForm();*/
     GetSearchButton();
 
    /* GetStatus();*/
@@ -53,11 +53,11 @@ function SearchParams() {
     var selected_status = status.options[status.selectedIndex].value;
     urlSearched.searchParams.set("status", selected_status);
 
-    var freetext = document.getElementById("search_freetextfield").value;
-    if (freetext != "") { urlSearched.searchParams.set("freetext", "%") }
-    else { urlSearched.searchParams.set("freetext", freetext) };
+    //var freetext = document.getElementById("search_freetextfield").value;
+    //if (freetext != "") { urlSearched.searchParams.set("freetext", "%") }
+    //else { urlSearched.searchParams.set("freetext", freetext) };
 
-    alert(urlSearched);
+ /*   alert(urlSearched);*/
     GetSearchedCups();
 }
 
@@ -187,13 +187,13 @@ function StatusForm() {
     container.appendChild(select);
 }
 
-function FreeTextSearchForm() {
-    var container = document.getElementById("search_freetextfield");
-    var input = document.createElement("input");
-    input.id = "search_freetext_field";
-    input.placeholder = "Fritext";
-    container.appendChild(input);
-}
+//function FreeTextSearchForm() {
+//    var container = document.getElementById("search_freetextfield");
+//    var input = document.createElement("input");
+//    input.id = "search_freetext_field";
+//    input.placeholder = "Fritext";
+//    container.appendChild(input);
+//}
 
 //search cups with api
 function GetSearchedCups() {
