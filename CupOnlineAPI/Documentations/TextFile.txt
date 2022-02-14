@@ -1,223 +1,159 @@
-﻿openapi: 3.0.1
-info:
+﻿With this APi it is possible to get details about sport tournaments (cups), registered at Cuponline.se. It can get lists of coming cups, finished cups or ongoing cups or search cups by name, sport, players age, city, organizer, year.  All registered sports and years, and players ages are also available.
+Getting started:
+It is possible to see the information from the api with the url directly in the web browser:
+https://demo.coreit.se/cuponline_api/api/Cup/Finished		
+
+But the information gets much more readable using a tool like Postman or Swagger Inspector:
+ Inspector (swagger.io). 
+All parameters in the url gets extracted in the inspector, so it is easy to change the search.
+
+
+Documentation made with Swagger Hub 
   title: CupOnlineAPI
-  description: Get lists of sport tournaments registered at cuponline. Get lists of ongoing, coming or finished cups. Search cups by name, city, sport, players age, organizer or the cup year. search cup by id. Get all registered sports.
-  version: 1.1.2
+  description: Get lists of sport tournaments registered at cuponline. Get lists of ongoing, coming or finished cups. Search cups by name, city, sport, players age, organizer or the cup year. search cup by id. Get all registered sports. Here are all endpoints,  parameters and responses listed.
+  version: 1.1.1
 servers:
-  - url:
-paths:
-  /api/Cup/Cups:
+  - url: https://demo.coreit.se/cuponline_api/api/SearchParam/Sports	
     get:
-      description: Selects sport cups from cuponline. Choose how many with noOfCups
-      parameters:
-        - name: noOfCups
-          in: query
-          schema:
-            type: string
-          example: '100'
-      responses: id, name, age, city, startdate,enddate, date(written readable), sport name, organizer
-        '200':
-          description: array of response
-      servers:
-        - url:
-    servers:
-      - url: 
-  /api/SearchParam/Sports:
-    get:
-      description: Selects all registered sports, ordering icehockey, soccer and floorball highest
+      description: Selects all registered sports, ordering ice hockey, soccer and floorball highest
       responses: sport id, sport name
         '200':
           description: array of response
-          content:
-            application/json; charset=utf-8:
-              schema:
-                type: string
-              examples: {}
-      servers:
-        - url: 
+            content: application/json; charset=utf-8:
     servers:
-      - url: 
-  /api/Cup/Ongoing:
+      - url: https://demo.coreit.se/cuponline_api/api/Cup/Ongoing	
     get:
       description: Selects cups with startdate before now and enddate after now
       parameters:
         - name: noOfCups
           in: query
-          schema:
-            type: string
-          example: '20'
+            type: int
+          example: 20
       responses: id, name, startdate,enddate, date(written readable), sport name
         '200':
           description: array of response
-          content:
-            application/json; charset=utf-8:
-              schema:
+           content: application/json; charset=utf-8:
                 type: string
               examples: {}
-      servers:
-        - url: 
     servers:
-      - url: 
-  /api/CupById/Find/1:
+      - url: https://demo.coreit.se/cuponline_api/api/CupById/Find/{id}		
     get:
-      description: Selects cup by cup id
+      description: Selects cup by cup id, change the {id} to the id of the cup wanted
+	 parameters:
+        - name: id
+          in: path
+            type: int
+          example: 1
       responses: id, club id, sport id, logotype, sponsor logotype, sponsor url, date, startdate, enddate, name, players age, groups, periods, periodtime, play place, round, game no, gamewin points, table sort, show teammembers, game report, sponsors, status, binStatus, gamedraw points, gamewinsd points, gamewinpenalties points, gamewinextra points, changeDate, changedBy
         '200':
           description: array of response
-          content:
-            application/json; charset=utf-8:
-              schema:
-                type: string
-              examples: {}
-      servers:
-        - url: 
+            content: application/json; charset=utf-8:
     servers:
-      - url: 
-  /api/Cup/Finished:
+      - url: https://demo.coreit.se/cuponline_api/api/Cup/Finished			
     get:
-      description: Selects cups that are finished ordered with latest first. Choose how many wanted in search result, and how many days from today included
+      description: Selects cups that are finished ordered with the latest first. Choose how many wanted in search result by adding /noofcups=100 (for 100 in searchresult), and how many days from today included by adding daysfromtoday=30 (for 30 days before today)
       parameters:
         - name: daysFromToday
           in: query
-          schema:
-            type: string
-          example: '30'
+            type: int
+          example: 30
         - name: noOfCups
           in: query
-          schema:
-            type: string
-          example: '20'
+            type: int
+          example: 20
       responses: id, name, startdate,enddate, date(written readable), sport name
         '200':
           description: array of response
-          content:
-            application/json; charset=utf-8:
-              schema:
-                type: string
-              examples: {}
-      servers:
-        - url: 
+           content: application/json; charset=utf-8:
     servers:
-      - url: 
-  /api/SearchParam/Years:
+      - url: https://demo.coreit.se/cuponline_api/api/SearchParam/Years	
     get:
       description: Select all years registered in startdate
       responses: year
         '200':
           description: array of response
-          content:
-            application/json; charset=utf-8:
-              schema:
-                type: string
-              examples: {}
-      servers:
-        - url: 
+            content: application/json; charset=utf-8:
     servers:
-      - url: 
-  /api/SearchParam/Ages:
+      - url: https://demo.coreit.se/cuponline_api /api/SearchParam/Ages:
     get:
-      description: transfer age to selectable value
+      description: convert players age to selectable value
       responses: year, age, age id
         '200':
           description: array of response
-          content:
-            application/json; charset=utf-8:
-              schema:
-                type: string
-              examples: {}
-      servers:
-        - url: 
+            content: application/json; charset=utf-8:
     servers:
-      - url: 
-  /api/Cup/Search:
+      - url: https://demo.coreit.se/cuponline_api/api/Cup/Search	
     get:
-      description: Search sport cups
+      description: Search sport cups. Parameters can be added in any order. Int parameters are optional but all string parameters are required so if you do not know, let it be %.
+		example url: https://demo.coreit.se/cuponline_api/api/Cup/Search?noOfCups=1000&name=cup&year=2018&organizer=modo&city=vik&sport_id=1&age_id=0&status=0	
       parameters:
         - name: sport_id
           in: query
-          schema:
             type: string
-          example: '0'
+          example: '1'
+		information: All sports with name and id are found in get sports.
         - name: year
           in: query
-          schema:
             type: string
-          example: '%25'
+          example: '2018'
+		information: year is in string form because it searches in a nvarchar column
         - name: city
           in: query
-          schema:
             type: string
-          example: '%25'
+          example: 'vik'
         - name: organizer
           in: query
-          schema:
             type: string
-          example: '%25'
+          example: 'modo'
         - name: name
           in: query
-          schema:
             type: string
-          example: '%25'
+          example: 'cup'
         - name: age_id
           in: query
-          schema:
-            type: string
-          example: '0'
+            type: int
+          example: 0
+		information: Age id is found in url ages, but to get all it is okay to leave it out
         - name: noOfCups
           in: query
-          schema:
-            type: string
-          example: '1000'
+            type: int
+          example: 1000
         - name: status
           in: query
-          schema:
-            type: string
-          example: '0'
+            type: int
+          example: 0
+information: 	status 0 = all cups, 
+		status 1 = finished cups, end date < today
+		status 2 = ongoing cups, start date <= today and end date >= today
+		status 3 = coming cups, start date > today or end date > today
+		status 4 = relevant cups, end date >= today
       responses: id, name, age, city, startdate,enddate, date(written readable), sport name, organizer
         '200':
           description: array of response
-      servers:
-        - url: 
     servers:
-      - url: 
-  /api/SearchParam/GetAllSports:
+      - url: https://demo.coreit.se/cuponline_api/api/SearchParam/GetAllSports	
     get:
-      description: Selects all sports to translate id to name
+      description: Selects all sports with id and name
       responses: sport id, sport name
         '200':
           description: array of response
-          content:
-            application/json; charset=utf-8:
-              schema:
-                type: string
-              examples: {}
-      servers:
-        - url: 
+            content: application/json; charset=utf-8:
     servers:
-      - url: 
-  /api/Cup/Coming:
+      - url: https://demo.coreit.se/cuponline_api/api/Cup/Coming		
     get:
-      description: Selects all cups starting after today. Choose how many wanted in search result, and how many days from today included
+      description: Selects all cups starting after today. Choose how many wanted in search result by adding /noofcups=100 (for 100 in searchresult), and how many days from today included by adding daysfromtoday=30 (for 30 days after today)
       parameters:
         - name: daysFromToday
           in: query
-          schema:
-            type: string
-          example: '30'
+          type: int
+          example: 30
         - name: noOfCups
           in: query
-          schema:
-            type: string
-          example: '20'
+            type: int
+          example: 20
       responses: id, name, startdate,enddate, date(written readable), sport name
         '200':
           description: array of response
-          content:
-            application/json; charset=utf-8:
-              schema:
-                type: string
-              examples: {}
-      servers:
-        - url: 
-    servers:
-      - url:
+            content: application/json; charset=utf-8:
+
+
