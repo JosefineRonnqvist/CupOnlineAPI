@@ -57,7 +57,7 @@ function displayCups(data,active) {
         trCup.id = 'cupName';
         var link = document.createElement('a');
         var name = document.createTextNode(data[i].name);
-        link.href= data[i].cup_url;
+        link.href = "https://www.cuponline.se/start.aspx?cupid=" + data[i].id;
         link.className = 'link';
         link.appendChild(name);
         tdName.appendChild(link);

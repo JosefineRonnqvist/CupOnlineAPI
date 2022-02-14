@@ -14,60 +14,13 @@ namespace CupOnlineAPI.Repositories
         public CupRepository(DapperContext context)
         {
             _context = context;
-        }
-        
-        //public IEnumerable<Cup> GetAllCups()
-        //{
-        //    using (var connection = _context.CreateConnection())
-        //    {
-        //        return connection.GetAll<Cup>().ToList();
-
-        //    }
-        //}
-
-        //public async Task CreateCup(Cup cup)
-        //{
-        //    var query = @"insert into [td_cups] (cup_id as Id, cup_name as Name, cup_players_age as Players_age, cup_play_place as Play_place)
-        //                  values (@Id, @Name, @Players_age, @Play_place)";
-        //    var parameters = new DynamicParameters();
-        //    parameters.Add("Name", cup.Name, DbType.String);
-        //    parameters.Add("Players_age", cup.Players_age, DbType.String);
-        //    parameters.Add("Play_place", cup.Play_place, DbType.String);
-        //    using (var connection = _context.CreateConnection())
-        //    {
-        //        await connection.ExecuteAsync(query, parameters);
-        //    }
-        //}
-
-        //public Cup GetCupById(int id)
-        //{
-        //    //var query = @"select cup_id as Id, cup_name as Name, cup_players_age as Players_age, cup_play_place as Play_place 
-        //    //            from[td_cups] 
-        //    //            where cup_id=@Id";
-        //    using (var connection = _context.CreateConnection())
-        //    {
-        //        return connection.Get<Cup>(id);
-        //        //var cup = await connection.QuerySingleOrDefaultAsync<Cup>(query, new { id });
-        //        //return cup;
-        //    }
-        //}
-
-        public async Task<IEnumerable<Cup>> GetCups(int? noOfCups)
-        {
-            var query = @"SET ROWCOUNT @noOfCups
-                          SELECT cup_id AS id, cup_name AS name, cup_players_age AS age, 
-                          cup_date AS date, cup_startdate, cup_enddate, cup_url, club_url,
-                          club_name, sport_name, cup_play_place AS place
-                          FROM td_cups
-                          INNER JOIN td_sports ON cup_sport_id=sport_id
-                          INNER JOIN td_clubs ON cup_club_id=club_id";
-            using (var connection = _context.CreateConnection())
-            {
-                var cups = await connection.QueryAsync<Cup>(query, new { noOfCups = noOfCups });
-                return cups.ToList();
-            }
-        }
-
+        }        
+/// <summary>
+/// Get cups with start date after today
+/// </summary>
+/// <param name="noOfCups">Number of cups in searchresult</param>
+/// <param name="daysFromToday">How many days from today included</param>
+/// <returns>List of cups</returns>
         public async Task<IEnumerable<Cup>> GetComing(int? noOfCups, int daysFromToday)
         {
             var query = @"SET ROWCOUNT @noOfCups
@@ -87,6 +40,11 @@ namespace CupOnlineAPI.Repositories
             }
         }
 
+        /// <summary>
+        /// Get cups with start date before today and enddate after today
+        /// </summary>
+        /// <param name="noOfCups">Number of cups in searchresult</param>
+        /// <returns>List of cups</returns>
         public async Task<IEnumerable<Cup>> GetOngoing(int? noOfCups)
         {
             var query = @"SET ROWCOUNT @noOfCups
@@ -106,6 +64,12 @@ namespace CupOnlineAPI.Repositories
             }
         }
 
+        /// <summary>
+        /// Get cups with end date before today
+        /// </summary>
+        /// <param name="noOfCups">Number of cups in searchresult</param>
+        /// <param name="daysFromToday">How many days from today included</param>
+        /// <returns>List of cups</returns>
         public async Task<IEnumerable<Cup>> GetFinished(int? noOfCups, int daysFromToday)
         {
             var query = @"SET ROWCOUNT @noOfCups
@@ -125,6 +89,18 @@ namespace CupOnlineAPI.Repositories
             }
         }
 
+        /// <summary>
+        /// Get cups matching search parameters
+        /// </summary>
+        /// <param name="noOfCups">Number of cups in searchresult</param>
+        /// <param name="name">Name of cup</param>
+        /// <param name="year">Year when cup is</param>
+        /// <param name="organizer">Club name of club that organize cup</param>
+        /// <param name="city">Place where cup is</param>
+        /// <param name="sport_id">Id of sport played (get name with SearchParamRepository.getsports())</param>
+        /// <param name="age_id">Id of age cathegory</param>
+        /// <param name="status">Status of cup</param>
+        /// <returns>List of cups</returns>
         public async Task<IEnumerable<Cup>> Search(int noOfCups, string name="", string year="", string organizer="", string city="",
                                                     int? sport_id=0, int? age_id=0, int status=4)
         {
@@ -145,7 +121,7 @@ namespace CupOnlineAPI.Repositories
                                 OR (@status=1 AND cup_enddate < GETDATE())
                                 OR (@status=2 AND cup_startdate <= GETDATE() AND cup_enddate>=GETDATE()) 
                                 OR (@status=3 AND (cup_startdate > GETDATE() OR cup_enddate>GETDATE())) 
-                                OR (@status = 4 AND cup_enddate > GETDATE()))
+                                OR (@status = 4 AND cup_enddate >= GETDATE()))
                         ORDER BY cup_enddate DESC";
 
             using (var connection = _context.CreateConnection())
@@ -160,7 +136,6 @@ namespace CupOnlineAPI.Repositories
                     city = "%" + city.Replace("*", "%").Replace("?", "_") + "%",
                     noOfCups = noOfCups,
                     status = status,
-                    //freetext = "%" + freetext.Replace("*", "%").Replace("?", "_") + "%",
                 }); 
                 return cups.ToList();
             }

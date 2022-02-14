@@ -12,6 +12,11 @@ namespace CupOnlineAPI.Repositories
         {
             _context = context;
         }
+        /// <summary>
+        /// Using Dapper contrib to get cup by id
+        /// </summary>
+        /// <param name="id">Id of cup</param>
+        /// <returns>list of cups</returns>
         public CupById GetCupById(int? id)
         {
             using (var connection = _context.CreateConnection())

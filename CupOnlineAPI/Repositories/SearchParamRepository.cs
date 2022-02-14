@@ -13,6 +13,11 @@ namespace CupOnlineAPI.Repositories
         {
             _context = context;
         }
+
+        /// <summary>
+        /// Get all registered cups
+        /// </summary>
+        /// <returns>List of sports with name and id</returns>
         public IEnumerable<SearchParam> GetAllSports()
         {
             using (var connection = _context.CreateConnection())
@@ -22,6 +27,11 @@ namespace CupOnlineAPI.Repositories
             }
         }
 
+
+        /// <summary>
+        /// Get all registered cups, ordered with 
+        /// </summary>
+        /// <returns>List of sports with name and id</returns>
         public async Task<IEnumerable<SearchParam>> GetSports()
         {
             var query = @"SELECT sport_id, sport_name from td_sports 

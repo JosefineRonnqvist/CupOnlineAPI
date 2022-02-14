@@ -2,8 +2,7 @@
 const urlSports = url + '/api/SearchParam/Sports'
 const urlYears = url + '/api/SearchParam/Years'
 const urlAges = url + '/api/SearchParam/Ages'
-var urlSearched = new URL(url + '/api/Cup/Search?noOfCups=1000');
-//&name=cup&year=2005&organizer=mo&place=vik&sport=is&age=u
+var urlSearched = new URL(url + '/api/Cup/Search?noOfCups=1000&name=%25&year=%25&organizer=%25&city=%25&status=4');
 
 function SearchForm() {
 
@@ -14,7 +13,7 @@ function SearchForm() {
     GetYears();   
     GetAges();
     StatusForm();
-    SearchParams();
+    GetSearchedCups();
     GetSearchButton();
 }
 
@@ -24,10 +23,9 @@ function SearchParams() {
     if (cupname == "") { urlSearched.searchParams.set("name", "%") }
     else  { urlSearched.searchParams.set("name", cupname) };
 
-    var year = document.getElementById("search_year_select");
-    var selected_year = year.options[year.selectedIndex].text;
-    if (selected_year == "-") { urlSearched.searchParams.set("year", "%") }
-    else { urlSearched.searchParams.set("year", selected_year)};
+    var year = document.getElementById("search_year_select").value;
+    if (year == "") { urlSearched.searchParams.set("year", "%") }
+    else { urlSearched.searchParams.set("year", year)};
 
     var organizer = document.getElementById("search_organizer_field").value;
     if (organizer == "") { urlSearched.searchParams.set("organizer", "%") }
@@ -37,17 +35,14 @@ function SearchParams() {
     if (city == "") { urlSearched.searchParams.set("city", "%") }
     else { urlSearched.searchParams.set("city", city) };
 
-    var sport = document.getElementById("search_sport_select");
-    var selected_sport = sport.options[sport.selectedIndex].value;
-    if (selected_sport != 0) { urlSearched.searchParams.set("sport_id", selected_sport) };
+    var sport = document.getElementById("search_sport_select").value;
+    if (sport != 0) { urlSearched.searchParams.set("sport_id", sport) };
 
-    var age = document.getElementById("search_age_select");
-    var selected_age = age.options[age.selectedIndex].value;
-    if (selected_age != 0) { urlSearched.searchParams.set("age_id", selected_age) } ;
+    var age = document.getElementById("search_age_select").value;
+    if (age != 0) { urlSearched.searchParams.set("age_id", age) } ;
 
-    var status = document.getElementById("search_status_select");
-    var selected_status = status.options[status.selectedIndex].value;
-    urlSearched.searchParams.set("status", selected_status);
+    var status = document.getElementById("search_status_select").value;
+    urlSearched.searchParams.set("status", status);
 
     GetSearchedCups();
 }
@@ -123,10 +118,12 @@ function yearForm(data) {
     select.id = "search_year_select";
     var option = document.createElement("option");
     option.textContent = "-";
+    option.value = "";
     select.appendChild(option);
     for (var i = 0; i < data.length; i++) {
         var option = document.createElement("option");
         option.textContent = data[i].year;
+        option.value = option.textContent;
         select.appendChild(option);
     }
     container.appendChild(select);
@@ -214,7 +211,7 @@ function displaySearchedCups(data) {
         tdName.id = "searchedCupName";
         var link = document.createElement("a");
         var name = document.createTextNode(data[i].name);
-        link.href = data[i].cup_url;
+        link.href = "https://www.cuponline.se/start.aspx?cupid=" + data[i].id;
         link.className = "link";
         link.appendChild(name);
         tdName.appendChild(link);
@@ -232,12 +229,8 @@ function displaySearchedCups(data) {
 
         var tdOrganizer = document.createElement("td");
         tdOrganizer.id = "searchedCupOrganizer";
-        var clubLink = document.createElement("a");
         var organizer = document.createTextNode(data[i].organizer);
-        clubLink.href = data[i].club_url;
-        clubLink.className = 'clubLink';
-        clubLink.appendChild(organizer);
-        tdOrganizer.appendChild(clubLink);
+        tdOrganizer.appendChild(organizer);
         tr.appendChild(tdOrganizer);
 
         var tdSportName = document.createElement("td");

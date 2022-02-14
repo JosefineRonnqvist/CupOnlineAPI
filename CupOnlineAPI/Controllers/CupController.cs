@@ -14,25 +14,6 @@ namespace CupOnlineAPI.Controllers
         }
 
         /// <summary>
-        /// Finds cups from Cuponline
-        /// </summary>
-        /// <param name="noOfCups">Number of found cups</param>
-        /// <returns>Cups</returns>
-        [HttpGet]
-        public async Task<IActionResult> Cups(int noOfCups=100)
-        {
-            try
-            {
-                var cups=await _cupRepo.GetCups(noOfCups);
-                return Ok(cups);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
-        }
-
-        /// <summary>
         /// Finds cups that start the coming 30 days
         /// </summary>
         /// <param name="noOfCups">Number of cups wanted in searchresult</param>
@@ -90,18 +71,6 @@ namespace CupOnlineAPI.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
-        //[HttpGet]
-        //public async Task<IActionResult> Search()
-        //{
-        //    return await Search(100);
-
-        //}
-        //[HttpGet]
-        //public async Task<IActionResult> Search(string name = "")
-        //{
-        //    return await Search(100,name);
-
-        //}
 
         /// <summary>
         /// Finds cups that matches search

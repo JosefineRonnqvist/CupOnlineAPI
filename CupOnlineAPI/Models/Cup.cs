@@ -55,8 +55,5 @@ namespace CupOnlineAPI.Models
         public string date { get; set; }
         public string sport_name { get; set; }
         public string organizer { get; set; } 
-        public string cup_url { get; set; }
-        public string club_url { get; set; }  
-        string freetext { get; set; }
     }
 }
