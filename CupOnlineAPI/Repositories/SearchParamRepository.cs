@@ -15,20 +15,6 @@ namespace CupOnlineAPI.Repositories
         }
 
         /// <summary>
-        /// Get all registered cups
-        /// </summary>
-        /// <returns>List of sports with name and id</returns>
-        public IEnumerable<SearchParam> GetAllSports()
-        {
-            using (var connection = _context.CreateConnection())
-            {
-                return connection.GetAll<SearchParam>().ToList();
-
-            }
-        }
-
-
-        /// <summary>
         /// Get all registered cups, ordered with 
         /// </summary>
         /// <returns>List of sports with name and id</returns>
@@ -47,7 +33,10 @@ namespace CupOnlineAPI.Repositories
             }
         }
 
-
+        /// <summary>
+        /// get all registered years from start date
+        /// </summary>
+        /// <returns>List of years</returns>
         public async Task<IEnumerable<SearchParam>> Years()
         {
             var query = @"SELECT DISTINCT LEFT (cup_startdate,4) AS year
@@ -60,6 +49,10 @@ namespace CupOnlineAPI.Repositories
             }
         }
 
+        /// <summary>
+        /// Calculate ages
+        /// </summary>
+        /// <returns>list of age cathegory</returns>
         public async Task<IEnumerable<SearchParam>> Ages()
         {
             var query = @"declare @LID as int =1
@@ -79,5 +72,6 @@ namespace CupOnlineAPI.Repositories
                 return searchParam.ToList();
             }
         }
+  
     }
 }

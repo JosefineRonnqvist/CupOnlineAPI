@@ -23,6 +23,11 @@
 
         </div>
         <div id="search_table">Sökta cuper</div>
+        <div id="order_form">
+            <input list="brow" />
+            <!--<datalist id="brow">Arrangör</datalist>-->
+            <div id="order_organizer"></div>
+        </div>
 
     </div>
 
@@ -33,9 +38,15 @@
         GetFinished();
     </script>-->
 
-    <script src="js/cup_online_search.js" asp-append-version="true"></script>
+    <!--<script src="js/cup_online_search.js" asp-append-version="true"></script>
     <script type="text/javascript">
         SearchForm();
+    </script>-->
+
+    <script src="js/cup_online_order.js" asp-append-version="true"></script>
+    <script type="text/javascript">
+        GetOrganizers();
     </script>
+
 </body>
 </html>

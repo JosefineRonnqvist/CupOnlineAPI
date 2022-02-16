@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using CupOnlineAPI.Repositories;
+using CupOnlineAPI.Models;
 
 namespace CupOnlineAPI.Controllers
 {
@@ -14,11 +15,31 @@ namespace CupOnlineAPI.Controllers
         }
 
         /// <summary>
+        /// Get cup by id
+        /// </summary>
+        /// <param name="id">id of cup</param>
+        /// <returns>cup information</returns>
+        /// <exception cref="Exception"></exception>
+        [HttpGet("{id}")]
+        public CupById Find(int id)
+        {
+            try
+            {
+                var cup = _cupRepo.GetCupById(id);
+                return cup;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        /// <summary>
         /// Finds cups that start the coming 30 days
         /// </summary>
         /// <param name="noOfCups">Number of cups wanted in searchresult</param>
         /// <param name="daysFromToday">Days from today wanted in searchresult</param>
-        /// <returns>cups</returns>
+        /// <returns>Cups</returns>
         [HttpGet]
         public async Task<IActionResult> Coming(int noOfCups=20, int daysFromToday = 30)
         {
@@ -39,11 +60,30 @@ namespace CupOnlineAPI.Controllers
         /// <param name="noOfCups">Number of cups wanted in searchresult</param>
         /// <returns>Cups</returns>
         [HttpGet]
-        public async Task<IActionResult> Ongoing(int noOfCups=20)
+        public async Task<IActionResult> OngoingCups(int noOfCups=20)
         {
             try
             {
-                var cups = await _cupRepo.GetOngoing(noOfCups);
+                var cups = await _cupRepo.GetOngoingCups(noOfCups);
+                return Ok(cups);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Finds series that is active now
+        /// </summary>
+        /// <param name="noOfCups">Number of cups wanted in searchresult</param>
+        /// <returns>Series</returns>
+        [HttpGet]
+        public async Task<IActionResult> OngoingSeries(int noOfCups = 20)
+        {
+            try
+            {
+                var cups = await _cupRepo.GetOngoingSeries(noOfCups);
                 return Ok(cups);
             }
             catch (Exception ex)

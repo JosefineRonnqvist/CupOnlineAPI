@@ -17,35 +17,17 @@ namespace CupOnlineAPI.Tests
     {
         private readonly DapperContext context;
 
-        [TestMethod]
-        public async Task GetCupsTestAsync_returnCups()
-        {
-            var repo = new CupRepository(context);
-            var cups = await repo.GetCups(15);
-            Assert.AreEqual(cups.Count(), 15);
-        }
+        private CupRepository repo;   
 
-        [TestMethod]
-        public async Task GetCupsTestAsync_returnZero()
+        public CupRepositoryTests()
         {
-            var repo = new CupRepository(context);
-            var cups = await repo.GetCups(0);
-            Assert.AreEqual(cups.Count(), 0);
-        }
-
-        [TestMethod]
-        public async Task GetCupsTestAsync_returnnull()
-        {
-            var repo = new CupRepository(context);
-            var cups = await repo.GetCups(null);
-            Assert.IsNull(cups);
+            repo = new CupRepository(context);
         }
 
         [TestMethod]
         public async Task GetComing_returnCups()
         {
-            var repo = new CupRepository(context);
-            var cups = await repo.GetComing(15);
+            var cups = await repo.GetComing(15,30);
             Assert.AreEqual(cups.Count(), 15);
         }
 
@@ -53,8 +35,8 @@ namespace CupOnlineAPI.Tests
         public async Task GetComingNull_returnCups()
         {
             var repo = new CupRepository(context);
-            var cups = await repo.GetComing(null);
-            Assert.AreEqual(cups.Count(), 15);
+            var cups = await repo.GetComing(null,30);
+            Assert.AreEqual(cups.Count(), 0);
         }
     }
 }

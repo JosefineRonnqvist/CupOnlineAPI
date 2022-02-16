@@ -17,24 +17,6 @@ namespace CupOnlineAPI.Controllers
         }
 
         /// <summary>
-        /// Get all sport from cuponline with GetAll-method (no query)
-        /// </summary>
-        /// <returns>List of searchparam with sports</returns>
-        /// <exception cref="Exception"></exception>
-        [HttpGet]
-        public IEnumerable<SearchParam> GetAllSports()
-        {
-            try
-            {
-                return _searchParamRepo.GetAllSports();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-
-        /// <summary>
         /// Get all sports from cuponline
         /// </summary>
         /// <returns>List of searchparam with sports, ordered with selected most popular first</returns>

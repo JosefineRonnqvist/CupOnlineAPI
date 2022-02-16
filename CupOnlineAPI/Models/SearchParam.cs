@@ -1,8 +1,7 @@
-﻿using Dapper.Contrib.Extensions;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace CupOnlineAPI.Models
 {
-    [Table("td_sports")]
     public class SearchParam
     {
         [Key]
@@ -12,5 +11,6 @@ namespace CupOnlineAPI.Models
         public string age { get; set; }
         public string status { get; set; }
         public int age_id { get; set; }
+        public string organizer { get; set; }
     }
 }
