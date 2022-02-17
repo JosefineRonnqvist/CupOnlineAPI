@@ -33,21 +33,25 @@ namespace CupOnlineAPI.Repositories
         /// Get cups with start date after today
         /// </summary>
         /// <param name="noOfCups">Number of cups in searchresult</param>
-        /// <param name="daysFromToday">How many days from today included</param>
         /// <returns>List of cups</returns>
-        public async Task<IEnumerable<Cup>> GetComing(int? noOfCups, int daysFromToday)
+        public async Task<IEnumerable<Cup>> GetComing(int? noOfCups)
         {
             var query = @"SET ROWCOUNT @noOfCups
-                        SELECT cup_id AS id,cup_date AS date, cup_name AS name, cup_startdate, cup_enddate, sport_name
-                        FROM td_cups
-                        INNER JOIN td_sports ON cup_sport_id=sport_id
-                        WHERE cup_startdate BETWEEN GETDATE() AND @today_plus
-                        ORDER BY cup_startdate ASC";
+                        SELECT TOP 1000 cup_id AS id,cup_date AS date, cup_name AS name, cup_startdate, cup_enddate, sport_name, RowNumber, diff
+                        FROM (SELECT cup_date,sport_name,cup_id,cup_startdate, cup_enddate, cup_name, ROW_NUMBER() 
+                                    OVER(ORDER BY cup_startdate ASC, cup_name ASC) AS RowNumber, DATEDIFF(d, cup_startdate, GETDATE())
+                            diff FROM td_cups                       
+                            INNER JOIN td_sports ON cup_sport_id=sport_id 
+                            INNER JOIN td_clubs ON cup_club_id=club_id
+                            WHERE DATEDIFF(d,cup_startdate, GETDATE()) < 0 
+                            AND cup_club_id <> 5 
+                            AND club_status = 1)
+                        d WHERE (diff > -15 OR RowNumber <11)
+                        ORDER BY cup_startdate ASC, cup_name ASC";
             using (var connection = _context.CreateConnection())
             {
                 var cups = await connection.QueryAsync<Cup>(query, new
                 {
-                    today_plus = DateTime.Now.AddDays(daysFromToday).ToString("yyyy-MM-dd"),
                     noOfCups = noOfCups
                 });
                 return cups.ToList();
@@ -62,16 +66,16 @@ namespace CupOnlineAPI.Repositories
         public async Task<IEnumerable<Cup>> GetOngoingCups(int? noOfCups)
         {
             var query = @"SET ROWCOUNT @noOfCups
-                        SELECT cup_id AS id,cup_date AS date, cup_name AS name, cup_startdate, cup_enddate, sport_name
+                        SELECT TOP 1000 cup_id AS id,cup_date AS date, cup_name AS name, cup_startdate, cup_enddate, sport_name
                         FROM td_cups
                         INNER JOIN td_sports ON cup_sport_id=sport_id
                         INNER JOIN td_clubs ON cup_club_id=club_id
-                        WHERE datediff(d, cup_startdate, GETDATE())>=0
-                        AND datediff(d, cup_enddate, getdate()) <=0
+                        WHERE DATEDIFF(d, cup_startdate, GETDATE())>=0
+                        AND DATEDIFF(d, cup_enddate, getdate()) <=0
                         AND cup_club_id <> 5 
                         AND club_status = 1 
                         AND cup_status =1
-                        AND datediff(d, cup_startdate, cup_enddate)<30
+                        AND DATEDIFF(d, cup_startdate, cup_enddate)<30
                         ORDER BY cup_startdate DESC, cup_name ASC";
             using (var connection = _context.CreateConnection())
             {
@@ -91,12 +95,17 @@ namespace CupOnlineAPI.Repositories
         public async Task<IEnumerable<Cup>> GetOngoingSeries(int? noOfCups)
         {
             var query = @"SET ROWCOUNT @noOfCups
-                        SELECT cup_id AS id,cup_date AS date, cup_name AS name, cup_startdate, cup_enddate, sport_name
+                        SELECT TOP 1000 cup_id AS id,cup_date AS date, cup_name AS name, cup_startdate, cup_enddate, sport_name
                         FROM td_cups
                         INNER JOIN td_sports ON cup_sport_id=sport_id
-                        WHERE cup_startdate < GETDATE() 
-                        AND cup_enddate > GETDATE()
-                        ORDER BY cup_startdate DESC";
+                        INNER JOIN td_clubs ON cup_club_id=club_id
+                        WHERE DATEDIFF(d, cup_startdate, GETDATE()) >= 0                        
+                        AND DATEDIFF(d, cup_enddate, GETDATE()) <= 0
+                        AND cup_club_id <> 5 
+                        AND club_status = 1 
+                        AND cup_status =1
+                        AND DATEDIFF(d, cup_startdate, cup_enddate) > 30 
+                        ORDER BY cup_startdate DESC, cup_name ASC";
             using (var connection = _context.CreateConnection())
             {
                 var cups = await connection.QueryAsync<Cup>(query, new
@@ -111,21 +120,52 @@ namespace CupOnlineAPI.Repositories
         /// Get cups with end date before today
         /// </summary>
         /// <param name="noOfCups">Number of cups in searchresult</param>
-        /// <param name="daysFromToday">How many days from today included</param>
         /// <returns>List of cups</returns>
-        public async Task<IEnumerable<Cup>> GetFinished(int? noOfCups, int daysFromToday)
+        public async Task<IEnumerable<Cup>> GetFinished(int? noOfCups)
         {
             var query = @"SET ROWCOUNT @noOfCups
-                        SELECT top 1000 cup_id AS id,cup_date AS date, cup_name AS name, cup_startdate, cup_enddate, sport_name
-                        FROM td_cups
-                        INNER JOIN td_sports ON cup_sport_id=sport_id
-                        WHERE cup_enddate BETWEEN @today_minus AND GETDATE()
-                        ORDER BY cup_enddate DESC";
+                        SELECT TOP 1000 cup_id AS id,cup_date AS date, cup_name AS name, cup_startdate, cup_enddate, sport_name, RowNumber, 
+                        diff FROM (SELECT cup_date,sport_name,cup_id,cup_startdate, cup_enddate,cup_name, ROW_NUMBER() OVER(ORDER BY cup_enddate desc, cup_name ASC)
+                                   AS RowNumber, datediff(d, cup_startdate, getdate()) diff 
+                                   FROM td_cups
+                                   INNER JOIN td_sports ON cup_sport_id=sport_id
+                                   INNER JOIN td_clubs ON cup_club_id=club_id
+                                   WHERE datediff(d, cup_enddate, GETDATE()) > 0
+                                   AND cup_club_id <> 5 
+                                   AND club_status = 1 
+                                   AND cup_status =1) 
+                        d WHERE (diff < 15 OR RowNumber < 11)
+                        ORDER BY cup_enddate DESC, cup_name ASC";
             using (var connection = _context.CreateConnection())
             {
                 var cups = await connection.QueryAsync<Cup>(query, new
                 {
-                    today_minus = DateTime.Now.AddDays(-daysFromToday).ToString("yyyy-MM-dd"),
+                    noOfCups = noOfCups
+                });
+                return cups.ToList();
+            }
+        }
+
+        /// <summary>
+        /// Get the last registered cups
+        /// </summary>
+        /// <param name="noOfCups"></param>
+        /// <returns></returns>
+        public async Task<IEnumerable<Cup>> GetLatest(int? noOfCups)
+        {
+            var query = @"SET ROWCOUNT @noOfCups
+                        SELECT TOP 1000 cup_id AS id,cup_date AS date, cup_name AS name, cup_startdate, cup_enddate, sport_name 
+                        FROM td_cups                       
+                        INNER JOIN td_sports ON cup_sport_id=sport_id 
+                        INNER JOIN td_clubs ON cup_club_id=club_id
+                        WHERE cup_club_id <> 5 
+                        AND club_status = 1
+                        AND cup_status =1
+                        ORDER BY cup_id DESC";
+            using (var connection = _context.CreateConnection())
+            {
+                var cups = await connection.QueryAsync<Cup>(query, new
+                {
                     noOfCups = noOfCups
                 });
                 return cups.ToList();

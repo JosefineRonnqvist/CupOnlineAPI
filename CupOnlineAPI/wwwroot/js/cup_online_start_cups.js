@@ -1,7 +1,9 @@
 ﻿const url = 'https://localhost:7172'
-const urlComing = url + '/api/cup/coming?noOfCups=15&daysFromToday=30'   //to change how many searchresult, change noOfCups={wanted number of searchresult}, and to change searchperiod change daysFromToday=
-const urlOngoing = url +'/api/Cup/Ongoing?noOfCups=15'
-const urlFinished = url + '/api/Cup/Finished?noOfCups=15&daysFromToday=30'
+const urlComing = url + '/api/cup/coming?noOfCups=30'   //to change how many searchresult, change noOfCups={wanted number of searchresult}=
+const urlOngoingCups = url + '/api/Cup/OngoingCups?noOfCups=30'
+const urlOngoingSeries = url + '/api/Cup/OngoingSeries?noOfCups=30'
+const urlFinished = url + '/api/Cup/Finished?noOfCups=30'
+const urlLatest = url + '/api/Cup/Latest?noOfCups=30'
 
 function GetComing() {  
 fetch(urlComing)
@@ -10,10 +12,17 @@ fetch(urlComing)
     .catch(error => console.error("Unable to get cup.", error));
 }
 
-function GetOngoing() {
-    fetch(urlOngoing)
+function GetOngoingCups() {
+    fetch(urlOngoingCups)
         .then(response => response.json())
-        .then(data => displayCups(data,"ongoing"))
+        .then(data => displayCups(data,"ongoing_cups"))
+        .catch(error => console.error("Unable to get cup.", error));
+}
+
+function GetOngoingSeries() {
+    fetch(urlOngoingSeries)
+        .then(response => response.json())
+        .then(data => displayCups(data, "ongoing_series"))
         .catch(error => console.error("Unable to get cup.", error));
 }
 
@@ -21,6 +30,13 @@ function GetFinished() {
     fetch(urlFinished)
         .then(response => response.json())
         .then(data => displayCups(data, "finished"))
+        .catch(error => console.error("Unable to get cup.", error));
+}
+
+function GetLatest() {
+    fetch(urlLatest)
+        .then(response => response.json())
+        .then(data => displayCups(data, "latest"))
         .catch(error => console.error("Unable to get cup.", error));
 }
 

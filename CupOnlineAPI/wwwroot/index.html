@@ -8,8 +8,10 @@
     <div id="cuponline">
 
         <div id="coming">Kommande cuper</div>
-        <div id="ongoing">Pågående cuper</div>
+        <div id="ongoing_cups">Pågående cuper</div>
+        <div id="ongoing_series">Pågående serier</div>
         <div id="finished">Avslutade cuper</div>
+        <div id="latest">Nyligen registrerade cuper</div>
         <div id="searchForm">
             Sökformulär
             <div id="search_cupname"></div>
@@ -31,22 +33,24 @@
 
     </div>
 
-    <!--<script src="js/cup_online_start_cups.js" asp-append-version="true"></script>
+    <script src="js/cup_online_start_cups.js" asp-append-version="true"></script>
     <script type="text/javascript">
         GetComing();
-        GetOngoing();
+        GetOngoingCups();
+        GetOngoingSeries();
         GetFinished();
-    </script>-->
+        GetLatest();
+    </script>
 
     <!--<script src="js/cup_online_search.js" asp-append-version="true"></script>
     <script type="text/javascript">
         SearchForm();
     </script>-->
 
-    <script src="js/cup_online_order.js" asp-append-version="true"></script>
+    <!--<script src="js/cup_online_order.js" asp-append-version="true"></script>
     <script type="text/javascript">
         GetOrganizers();
-    </script>
+    </script>-->
 
 </body>
 </html>

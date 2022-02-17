@@ -41,11 +41,11 @@ namespace CupOnlineAPI.Controllers
         /// <param name="daysFromToday">Days from today wanted in searchresult</param>
         /// <returns>Cups</returns>
         [HttpGet]
-        public async Task<IActionResult> Coming(int noOfCups=20, int daysFromToday = 30)
+        public async Task<IActionResult> Coming(int noOfCups=20)
         {
             try
             {
-                var cups = await _cupRepo.GetComing(noOfCups, daysFromToday);
+                var cups = await _cupRepo.GetComing(noOfCups);
                 return Ok(cups);
             }
             catch (Exception ex)
@@ -99,11 +99,30 @@ namespace CupOnlineAPI.Controllers
         /// <param name="daysFromToday">Days from today wanted in searchresult</param>
         /// <returns>Cups</returns>
         [HttpGet]
-        public async Task<IActionResult> Finished(int noOfCups=20, int daysFromToday=30)
+        public async Task<IActionResult> Finished(int noOfCups=20)
         {
             try
             {
-                var cups = await _cupRepo.GetFinished(noOfCups, daysFromToday);
+                var cups = await _cupRepo.GetFinished(noOfCups);
+                return Ok(cups);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Finds cups that are last registered
+        /// </summary>
+        /// <param name="noOfCups">Number of cups wanted in searchresult</param>
+        /// <returns>Cups</returns>
+        [HttpGet]
+        public async Task<IActionResult> Latest(int noOfCups = 20)
+        {
+            try
+            {
+                var cups = await _cupRepo.GetLatest(noOfCups);
                 return Ok(cups);
             }
             catch (Exception ex)
