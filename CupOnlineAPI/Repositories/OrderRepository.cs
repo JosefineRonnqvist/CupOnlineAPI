@@ -28,18 +28,18 @@ namespace CupOnlineAPI.Repositories
         }
 
 
-        ///// <summary>
-        ///// Get all registered cups
-        ///// </summary>
-        ///// <returns>List of sports with name and id</returns>
-        //public IEnumerable<Sport> GetAllSports()
-        //{
-        //    using (var connection = _context.CreateConnection())
-        //    {
-        //        return connection.GetAll<Sport>().ToList();
+        /// <summary>
+        /// Get all registered sports
+        /// </summary>
+        /// <returns>List of sports with name and id</returns>
+        public IEnumerable<Sport> GetAllSports()
+        {
+            using (var connection = _context.CreateConnection())
+            {
+                return connection.GetAll<Sport>().ToList();
 
-        //    }
-        //}
+            }
+        }
 
         //public async Task<OrderCup> CreateCup(OrderCup cup)
         //{

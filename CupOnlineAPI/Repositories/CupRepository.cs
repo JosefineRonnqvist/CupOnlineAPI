@@ -30,7 +30,7 @@ namespace CupOnlineAPI.Repositories
         }
 
         /// <summary>
-        /// Get cups with start date after today
+        /// Get cups with start date 15 days from today
         /// </summary>
         /// <param name="noOfCups">Number of cups in searchresult</param>
         /// <returns>List of cups</returns>
@@ -59,7 +59,7 @@ namespace CupOnlineAPI.Repositories
         }
 
         /// <summary>
-        /// Get cups with start date before today and enddate after today
+        /// Get cups with start date before today and enddate after today and where enddate is less than 30 days after startdate
         /// </summary>
         /// <param name="noOfCups">Number of cups in searchresult</param>
         /// <returns>List of cups</returns>
@@ -88,7 +88,7 @@ namespace CupOnlineAPI.Repositories
         }
 
         /// <summary>
-        /// Get cups with start date before today and enddate after today
+        /// Get series with start date before today and enddate after today and difference more than 30 days
         /// </summary>
         /// <param name="noOfCups">Number of cups in searchresult</param>
         /// <returns>List of cups</returns>

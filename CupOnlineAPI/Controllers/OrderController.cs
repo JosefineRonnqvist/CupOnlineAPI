@@ -34,23 +34,23 @@ namespace CupOnlineAPI.Controllers
             }
         }
 
-        ///// <summary>
-        ///// Get all sports from cuponline with GetAll-method (no query)
-        ///// </summary>
-        ///// <returns>List of sports</returns>
-        ///// <exception cref="Exception"></exception>
-        //[HttpGet]
-        //public IEnumerable<Sport> GetAllSports()
-        //{
-        //    try
-        //    {
-        //        return _orderRepo.GetAllSports();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw new Exception(ex.Message);
-        //    }
-        //}
+        /// <summary>
+        /// Get all sports from cuponline with GetAll-method (no query)
+        /// </summary>
+        /// <returns>List of sports</returns>
+        /// <exception cref="Exception"></exception>
+        [HttpGet]
+        public IEnumerable<Sport> GetAllSports()
+        {
+            try
+            {
+                return _orderRepo.GetAllSports();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
 
         //[HttpPost]
         //public async Task<IActionResult> CreateCup(OrderCup cup)
