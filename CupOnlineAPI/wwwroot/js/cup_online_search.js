@@ -2,6 +2,7 @@
 const urlSports = url + '/api/SearchParam/Sports'
 const urlYears = url + '/api/SearchParam/Years'
 const urlAges = url + '/api/SearchParam/Ages'
+//const urlCities = url + '/api/SearchParam/Cities'
 var urlSearched = new URL(url + '/api/Cup/Search?noOfCups=1000&name=%25&year=%25&organizer=%25&city=%25&status=4');
 
 function SearchForm() {

@@ -53,12 +53,12 @@ namespace CupOnlineAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateCity(string city)
+        public async Task<IActionResult> CreateCity(City city)
         {
             try
             {
-                var createdCity = await _orderRepo.CreateCity(city);
-                return  Ok(createdCity);
+                city.city_id = await _orderRepo.CreateCity(city);
+                return  Ok(city);
             }
             catch (Exception ex)
             {
@@ -71,8 +71,8 @@ namespace CupOnlineAPI.Controllers
         {
             try
             {
-                var createdOrganizer = await _orderRepo.CreateOrganizer(organizer);
-                return Ok(createdOrganizer);
+                organizer.club_id =await _orderRepo.CreateOrganizer(organizer);
+                return Ok(organizer);
             }
             catch (Exception ex)
             {
@@ -81,12 +81,42 @@ namespace CupOnlineAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateCup(OrderCup cup)
+        public async Task<IActionResult> CreateCup(OrderCup cup, int cupType)
         {
             try
             {
-                var createdCup = await _orderRepo.CreateCup(cup);
-                return CreatedAtRoute("CupById", new { id = createdCup.id }, createdCup);
+                cup.cup_id = await _orderRepo.CreateCup(cup, cupType);
+                return Ok(cup);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> CreateCupRegistration(OrderRegistration reg)
+        {
+            try
+            {
+                reg.id = await _orderRepo.CreateCupRegistration(reg);
+                return Ok(reg);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> CreateCupAdmin(OrderAdmin admin)
+        {
+            try
+            {
+                admin.cup_user_id = await _orderRepo.CreateCupAdmin(admin);
+                return Ok(admin);
             }
             catch (Exception ex)
             {

@@ -1,9 +1,13 @@
-﻿namespace CupOnlineAPI.Models
+﻿using Dapper.Contrib.Extensions;
+
+namespace CupOnlineAPI.Models
 {
+    [Table("td_cities")]
     public class City
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
+        [Key]
+        public int city_id { get; set; }
+        public string city_name { get; set; }
         
     }
 }

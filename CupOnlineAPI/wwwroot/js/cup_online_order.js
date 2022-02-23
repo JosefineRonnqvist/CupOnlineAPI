@@ -1,5 +1,10 @@
 ﻿const url = 'https://localhost:7172'
 const urlOrganizer = url + '/api/Organizer/GetAllOrganizers'
+const urlCreateCity = url + '/api/Order/CreateCity'
+const urlCreateOrganizer = url + '/api/Order/CreateOrganizer'
+const urlCreateCup = url + '/api/Order/CreateCup'
+const urlCreateCupRegistration = url + '/api/Order/CreateCupRegistration'
+const urlCreateCupAdmin = url + '/api/Order/CreateCupAdmin'
 
 function GetOrganizers() {
     fetch(urlOrganizer)
@@ -7,6 +12,21 @@ function GetOrganizers() {
         .then(data => organizerForm(data))
         .catch(error => console.error("Unable to get organizer.", error));
 }
+
+//let _data = {
+//    title: "foo",
+//    body: "bar",
+//    userId: 1
+//}
+
+//fetch('https://jsonplaceholder.typicode.com/posts', {
+//    method: "POST",
+//    body: JSON.stringify(_data),
+//    headers: { "Content-type": "application/json; charset=UTF-8" }
+//})
+//    .then(response => response.json())
+//    .then(json => console.log(json));
+//.catch (err => console.log(err));
 
 //function organizerForm(data) {
 //    var select = document.getElementById("brow");
@@ -43,5 +63,9 @@ function organizerForm(data) {
         select.appendChild(option);
     }
     container.appendChild(select);
+}
+
+function newOrganizer() {
+
 }
 

@@ -79,7 +79,7 @@ namespace CupOnlineAPI.Repositories
         /// <returns>List of cities</returns>
         public async Task<IEnumerable<City>> GetCities()
         {
-            var query = @"SELECT DISTINCT city_name AS name, city_id AS id
+            var query = @"SELECT DISTINCT city_name, city_id
                         FROM td_cities
                         ORDER BY city_name ASC";
             using (var connection = _context.CreateConnection())

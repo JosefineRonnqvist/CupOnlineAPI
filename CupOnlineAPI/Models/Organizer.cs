@@ -15,7 +15,7 @@ namespace CupOnlineAPI.Models
 
         public int club_sport_id { get; set; }
 
-        public int club_status { get; set; }
+        public int club_status { get; set; } = 1;
 
     }
 }
