@@ -66,6 +66,9 @@ function organizerForm(data) {
 }
 
 function newOrganizer() {
-
+    var clubName = document.getElementById("order_new_club_name").value;
+    var clubUrl = document.getElementById("order_new_club_url").value;
+    var clubCityId = document.getElementById("order_city").value;
+    var clubSportId = document.getElementById("order_sport").value;
 }
 
