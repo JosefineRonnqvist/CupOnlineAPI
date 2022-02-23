@@ -43,7 +43,7 @@ namespace CupOnlineAPI.Controllers
         {
             try
             {
-                var years = await _searchParamRepo.Years();
+                var years = await _searchParamRepo.GetYears();
                 return Ok(years);
             }
             catch (Exception ex)
@@ -61,8 +61,26 @@ namespace CupOnlineAPI.Controllers
         {
             try
             {
-                var ages = await _searchParamRepo.Ages();
+                var ages = await _searchParamRepo.GetAges();
                 return Ok(ages);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Get all cities from cuponline
+        /// </summary>
+        /// <returns>List of searchparam with cities</returns>
+        [HttpGet]
+        public async Task<IActionResult> Cities()
+        {
+            try
+            {
+                var cities = await _searchParamRepo.GetCities();
+                return Ok(cities);
             }
             catch (Exception ex)
             {

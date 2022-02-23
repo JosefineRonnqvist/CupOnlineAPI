@@ -52,18 +52,46 @@ namespace CupOnlineAPI.Controllers
             }
         }
 
-        //[HttpPost]
-        //public async Task<IActionResult> CreateCup(OrderCup cup)
-        //{
-        //    try 
-        //    {
-        //        var createdCup = await _orderRepo.CreateCup(cup);
-        //        return CreatedAtRoute("CupById", new { id = createdCup.id }, createdCup);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return StatusCode(500, ex.Message);
-        //    }
-        //}
+        [HttpPost]
+        public async Task<IActionResult> CreateCity(string city)
+        {
+            try
+            {
+                var createdCity = await _orderRepo.CreateCity(city);
+                return  Ok(createdCity);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateOrganizer(Organizer organizer)
+        {
+            try
+            {
+                var createdOrganizer = await _orderRepo.CreateOrganizer(organizer);
+                return Ok(createdOrganizer);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateCup(OrderCup cup)
+        {
+            try
+            {
+                var createdCup = await _orderRepo.CreateCup(cup);
+                return CreatedAtRoute("CupById", new { id = createdCup.id }, createdCup);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
     }
 }

@@ -37,7 +37,7 @@ namespace CupOnlineAPI.Repositories
         /// get all registered years from start date
         /// </summary>
         /// <returns>List of years</returns>
-        public async Task<IEnumerable<SearchParam>> Years()
+        public async Task<IEnumerable<SearchParam>> GetYears()
         {
             var query = @"SELECT DISTINCT LEFT (cup_startdate,4) AS year
                         FROM td_cups
@@ -53,7 +53,7 @@ namespace CupOnlineAPI.Repositories
         /// Calculate ages
         /// </summary>
         /// <returns>list of age cathegory</returns>
-        public async Task<IEnumerable<SearchParam>> Ages()
+        public async Task<IEnumerable<SearchParam>> GetAges()
         {
             var query = @"declare @LID as int =1
                         SELECT td_ages.ID AS age_id, td_ages.year, td_ages.status, ISNULL(l.localName, lEng.localName) + 
@@ -72,6 +72,22 @@ namespace CupOnlineAPI.Repositories
                 return searchParam.ToList();
             }
         }
-  
+
+        /// <summary>
+        /// Get all registered cities 
+        /// </summary>
+        /// <returns>List of cities</returns>
+        public async Task<IEnumerable<City>> GetCities()
+        {
+            var query = @"SELECT DISTINCT city_name AS name, city_id AS id
+                        FROM td_cities
+                        ORDER BY city_name ASC";
+            using (var connection = _context.CreateConnection())
+            {
+                var city = await connection.QueryAsync<City>(query);
+                return city.ToList();
+            }
+        }
+
     }
 }
