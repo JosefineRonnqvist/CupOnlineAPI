@@ -17,20 +17,21 @@ namespace CupOnlineAPI.Controllers
         }
 
         /// <summary>
-        /// Get all sports from cuponline with GetAll-method (no query)
+        /// Get all organizers from cuponline ordered alphabetically
         /// </summary>
-        /// <returns>List of sports</returns>
+        /// <returns>List of organizers</returns>
         /// <exception cref="Exception"></exception>
         [HttpGet]
-        public IEnumerable<Organizer> GetAllOrganizers()
+        public async Task<IActionResult> GetAllOrganizers()
         {
             try
             {
-                return _orderRepo.GetAllOrganizers();
+                 var organizers = await _orderRepo.GetAllOrganizers();
+                return Ok(organizers);
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                return StatusCode(500, ex.Message);
             }
         }
 

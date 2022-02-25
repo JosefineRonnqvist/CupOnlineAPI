@@ -25,29 +25,29 @@
 
         </div>
         <div id="search_table">Sökta cuper</div>-->
-        <div id="order_form">
-            <div id="order_organizer"></div>
-            <div id="order_new_club_name"></div>
-            <div id="order_new_club_city"></div>
-            <div id="order_new_club_url"></div>
-            <div id="order_cup_name"></div>
-            <div id="order_sport"></div>
-            <div id="order_city"></div>
-            <div id="order_age_text"></div>
+        <form id="order_form">
+            <select id="order_organizer"></select>
+            <input type="text" placeholder="Föreningsnamn" id="order_new_club_name"></input>
+            <input type="text" placeholder="Hemort" id="order_new_club_city"></input>
+            <input type="text" placeholder="Webbsida" id="order_new_club_url"></input>
+            <input type="text" placeholder="Cupnamn" id="order_cup_name"></input>
+            <select id="order_sport"></select>
+            <input type="text" placeholder="Spelplats/ort" id="order_city"></input>
+            <input type="text" placeholder="Ålder" id="order_age_text"></input>
             <div id="order_age_checkbox"></div>
-            <div id="order_startdate"></div>
-            <div id="order_enddate"></div>
-            <div id="order_pay_type"></div>
-            <div id="order_contact_name"></div>
-            <div id="order_contact_number"></div>
-            <div id="order_contact_mail"></div>
-            <div id="order_message"></div>
-            <div id="order_found_cuponline"></div>
-            <div id="order_approval"></div>
+            <input type="date" placeholder="startdatum" id="order_startdate"></input>
+            <input type="date" placeholder="slutdatum" id="order_enddate"></input>
+            <select id="order_cup_type"></select>
+            <input type="text" placeholder="Kontaktperson" id="order_contact_name"></input>
+            <input type="text" placeholder="Telefonnummer" id="order_contact_number"></input>
+            <input type="text" placeholder="Mejl" id="order_contact_mail"></input>
+            <textarea id="order_message"></textarea>
+            <select id="order_found_cuponline"></select>
+            <input type="checkbox" id="order_approval"></input>
             <div id="order_verify_code"></div>
-            <div id="order_verify_answer"></div>
-            <div id="order_button"></div>
-        </div>
+            <input type="text" placeholder="verifieringskod" id="order_verify_answer"></input>
+            <input type="button" id="order_button" value="Beställ CupOnline"></input>
+        </form>
 
     </div>
 
@@ -67,7 +67,7 @@
 
     <script src="js/cup_online_order.js" asp-append-version="true"></script>
     <script type="text/javascript">
-        GetOrganizers();
+        GetOptions();
     </script>
 
 </body>

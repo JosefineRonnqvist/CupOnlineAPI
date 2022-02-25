@@ -18,11 +18,14 @@ namespace CupOnlineAPI.Repositories
         /// Get all registered organizers
         /// </summary>
         /// <returns>List of organizers with name and id</returns>
-        public IEnumerable<Organizer> GetAllOrganizers()
+        public async Task<IEnumerable<Organizer>> GetAllOrganizers()
         {
+            var query = @"SELECT club_id, club_name from td_clubs 
+                        ORDER BY club_name ASC";
             using (var connection = _context.CreateConnection())
             {
-                return connection.GetAll<Organizer>().ToList();
+                var cups = await connection.QueryAsync<Organizer>(query);
+                return cups.ToList();
             }
         }
 

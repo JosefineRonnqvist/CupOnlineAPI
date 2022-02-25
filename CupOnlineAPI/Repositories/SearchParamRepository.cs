@@ -18,7 +18,7 @@ namespace CupOnlineAPI.Repositories
         /// Get all registered cups, ordered with 
         /// </summary>
         /// <returns>List of sports with name and id</returns>
-        public async Task<IEnumerable<SearchParam>> GetSports()
+        public async Task<IEnumerable<Sport>> GetSports()
         {
             var query = @"SELECT sport_id, sport_name from td_sports 
                         ORDER BY case 
@@ -28,7 +28,7 @@ namespace CupOnlineAPI.Repositories
                         END,sport_name";
             using (var connection = _context.CreateConnection())
             {
-                var cups = await connection.QueryAsync<SearchParam>(query);
+                var cups = await connection.QueryAsync<Sport>(query);
                 return cups.ToList();
             }
         }
