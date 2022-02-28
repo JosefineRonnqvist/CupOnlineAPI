@@ -7,9 +7,9 @@ var urlSearched = new URL(url + '/api/Cup/Search?noOfCups=1000&name=%25&year=%25
 
 function SearchForm() {
 
-    CupNameForm();
-    OrganizerForm();
-    CityForm();
+    CreateInputField("search_cupname", "search_cupname_field");//create input element to search cupname (or city, organizer or age)
+    CreateInputField("search_organizer", "search_organizer_field");//create input element to search organizer
+    CreateInputField("search_city", "search_city_field");//create input element to search city
     GetSports();
     GetYears();   
     GetAges();
@@ -55,26 +55,10 @@ function GetSearchButton() {
 }
 
 //create input element to search cupname (or city, organizer or age)
-function CupNameForm() {
-    var container = document.getElementById("search_cupname");
+function CreateInputField(elementId, inputId) {
+    var container = document.getElementById(elementId);
     var input = document.createElement("input");
-    input.id = "search_cupname_field";
-    container.appendChild(input);
-}
-
-//create input element to search organizer
-function OrganizerForm() {
-    var container = document.getElementById("search_organizer");
-    var input = document.createElement("input");
-    input.id = "search_organizer_field";
-    container.appendChild(input);
-}
-
-//create input element to search city
-function CityForm() {
-    var container = document.getElementById("search_city");
-    var input = document.createElement("input");
-    input.id = "search_city_field";
+    input.id = inputId;
     container.appendChild(input);
 }
 
