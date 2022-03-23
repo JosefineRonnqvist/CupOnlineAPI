@@ -7,7 +7,7 @@
 <body>
     <div id="cuponline">
 
-        <div id="coming">Kommande cuper</div>
+        <!--<div id="coming">Kommande cuper</div>
         <div id="ongoing_cups">Pågående cuper</div>
         <div id="ongoing_series">Pågående serier</div>
         <div id="finished">Avslutade cuper</div>
@@ -24,9 +24,10 @@
             <div id="search_button">Search</div>
 
         </div>
-        <div id="search_table">Sökta cuper</div>
-        <!--<form id="order_form">
-            <select id="order_organizer"></select>
+        <div id="search_table">Sökta cuper</div>-->
+        <form autocomplete="off" id="order_form">
+            <input type="search" id="order_organizer" <span>onKeyUp</span>="GetOrganizers(this.value)"></input>
+            <div id="result"></div>
             <input type="text" placeholder="Föreningsnamn" id="order_new_club_name"></input>
             <input type="text" placeholder="Hemort" id="order_new_club_city"></input>
             <input type="text" placeholder="Webbsida" id="order_new_club_url"></input>
@@ -47,7 +48,7 @@
             <div id="order_verify_code"></div>
             <input type="text" placeholder="verifieringskod" id="order_verify_answer"></input>
             <input type="button" id="order_button" value="Beställ CupOnline"></input>
-        </form>-->
+        </form>
 
     </div>
 
@@ -60,15 +61,15 @@
         GetLatest();
     </script>-->
 
-    <script src="js/cup_online_search.js" asp-append-version="true"></script>
+    <!--<script src="js/cup_online_search.js" asp-append-version="true"></script>
     <script type="text/javascript">
         SearchForm();
-    </script>
+    </script>-->
 
-    <!--<script src="js/cup_online_order.js" asp-append-version="true"></script>
+    <script src="js/cup_online_order.js" asp-append-version="true"></script>
     <script type="text/javascript">
         GetOptions();
-    </script>-->
+    </script>
 
 </body>
 </html>

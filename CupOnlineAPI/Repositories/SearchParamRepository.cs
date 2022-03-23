@@ -89,5 +89,21 @@ namespace CupOnlineAPI.Repositories
             }
         }
 
+        public async Task<IEnumerable<Organizer>> GetOrganizers(string clubName)
+        {
+            var query = @"SELECT DISTINCT club_id, club_name
+                        FROM td_clubs
+                        WHERE club_name LIKE @clubName
+                        ORDER BY club_name ASC";
+            using (var connection = _context.CreateConnection())
+            {
+                var organizer = await connection.QueryAsync<Organizer>(query, new
+                {
+                    clubName= "%"+clubName+"%"
+                } );
+                return organizer.ToList();
+            }
+        }
+
     }
 }

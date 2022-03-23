@@ -17,26 +17,50 @@ function GetOptions() {
 }
 
 
+////getOrganizers from api
+//function GetOrganizers() {
+//    fetch(urlOrganizers)
+//        .then(response => response.json())
+//        .then(data => organizerOptions(data))
+//        .catch(error => console.error("Unable to get organizer.", error));
+//}
 
-function GetOrganizers() {
-    fetch(urlOrganizers)
-        .then(response => response.json())
-        .then(data => organizerOptions(data))
-        .catch(error => console.error("Unable to get organizer.", error));
-}
+////Create organizer options
+//function organizerOptions(data) {
+//    var select = document.getElementById("order_organizer");
+//    var option = document.createElement("option");
+//    option.textContent = "-";
+//    option.value = 0;
+//    select.appendChild(option);
+//    for (var i = 0; i < data.length; i++) {
+//        var option = document.createElement("option");
+//        option.textContent = data[i].club_name;
+//        option.value = data[i].club_id;
+//        select.appendChild(option);
+//    }
+//}
 
-function organizerOptions(data) {
-    var select = document.getElementById("order_organizer");
-    var option = document.createElement("option");
-    option.textContent = "-";
-    option.value = 0;
-    select.appendChild(option);
-    for (var i = 0; i < data.length; i++) {
-        var option = document.createElement("option");
-        option.textContent = data[i].club_name;
-        option.value = data[i].club_id;
-        select.appendChild(option);
+
+function GetOrganizers(val) {
+    res = document.getElementById("result");
+    res.innerHTML = '';
+    if (val == '') {
+        return;
     }
+    let list = '';
+    fetch( + val).then(
+        function (response) {
+            return response.json();
+        }).then(function (data) {
+            for (i = 0; i < data.length; i++) {
+                list += '<li>' + data[i] + '</li>';
+            }
+            res.innerHTML = '<ul>' + list + '</ul>';
+            return true;
+        }).catch(function (err) {
+            console.warn('Something went wrong.', err);
+            return false;
+        });
 }
 
 //get ages from api
@@ -69,6 +93,7 @@ function GetSports() {
         .catch(error => console.error("Unable to get sport.", error));
 }
 
+//creatae sport options
 function sportOptions(data) {
     var select = document.getElementById("order_sport");
     var option = document.createElement("option");
@@ -83,6 +108,7 @@ function sportOptions(data) {
     }
 }
 
+//Create cup type
 function cupType() {
     var select = document.getElementById("order_cup_type");
     var option = document.createElement("option");
@@ -99,6 +125,7 @@ function cupType() {
     select.appendChild(option3);
 }
 
+//create options for cup type
 function foundCupOnline() {
     var select = document.getElementById("order_found_cuponline");
     var option = document.createElement("option");
@@ -131,6 +158,7 @@ function foundCupOnline() {
     select.appendChild(option7);
 }
 
+//post new organizer
 function newOrganizer() {
 
     let organizer = {
@@ -151,6 +179,7 @@ function newOrganizer() {
     .catch (err => console.log(err));
 }
 
+//post new city
 function newCity() {
 
     let city = {
@@ -167,6 +196,7 @@ function newCity() {
         .catch(err => console.log(err));
 }
 
+//post new cup
 function newCup() {
     let cup = {
         cup_club_id: document.getElementById("order_organizer").value,
@@ -188,6 +218,7 @@ function newCup() {
         .catch(err => console.log(err));
 }
 
+//post new reigistration
 function newRegistration() {
     let registration = {
         message: document.getElementById("order_message").value,
@@ -211,6 +242,7 @@ function newRegistration() {
         .catch(err => console.log(err));
 }
 
+//post new cup admin
 function newCupAdmin() {
     let cupAdmin = {
         //cup_user_username:,

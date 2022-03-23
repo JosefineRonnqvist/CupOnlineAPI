@@ -87,5 +87,19 @@ namespace CupOnlineAPI.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Organizers(string clubName)
+        {
+            try
+            {
+                var organizers = await _searchParamRepo.GetOrganizers(clubName);
+                return Ok(organizers);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
     }
 }
