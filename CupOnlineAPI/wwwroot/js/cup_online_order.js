@@ -1,5 +1,6 @@
 ﻿const url = 'https://localhost:7172'
 const urlOrganizers = url + '/api/Order/GetAllOrganizers'
+const urlOreganizerSearch = url + '/api/SearchParam/Organizers?clubName='
 const urlSports = url + '/api/Order/GetAllSports'
 const urlAges = url + '/api/SearchParam/Ages'
 const urlCreateCity = url + '/api/Order/CreateCity'
@@ -9,7 +10,7 @@ const urlCreateCupRegistration = url + '/api/Order/CreateCupRegistration'
 const urlCreateCupAdmin = url + '/api/Order/CreateCupAdmin'
 
 function GetOptions() {
-    GetOrganizers();
+    //GetOrganizers();
     GetSports();
     GetAges();
     cupType();
@@ -48,16 +49,16 @@ function GetOrganizers(val) {
         return;
     }
     let list = '';
-    fetch( + val).then(
+    fetch(urlOreganizerSearch + val).then(
         function (response) {
             return response.json();
         }).then(function (data) {
             for (i = 0; i < data.length; i++) {
-                list += '<li>' + data[i] + '</li>';
-            }
-            res.innerHTML = '<ul>' + list + '</ul>';
-            return true;
-        }).catch(function (err) {
+                var option = document.createElement("option");
+                option.textContent = data[i].club_name;
+                option.value = data[i].club_id;
+                res.appendChild(option);
+            }}).catch(function (err) {
             console.warn('Something went wrong.', err);
             return false;
         });
