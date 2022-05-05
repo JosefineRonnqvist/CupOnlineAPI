@@ -38,7 +38,7 @@ namespace CupOnlineAPI.Repositories
         {
             using (var connection = _context.CreateConnection())
             {
-                return connection.GetAll<Sport>().ToList();
+                return connection.GetAll<Sport>().OrderBy(s=>s.sport_name);
             }
         }
 
