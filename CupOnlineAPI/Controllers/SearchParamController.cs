@@ -75,11 +75,11 @@ namespace CupOnlineAPI.Controllers
         /// </summary>
         /// <returns>List of searchparam with cities</returns>
         [HttpGet]
-        public async Task<IActionResult> Cities()
+        public async Task<IActionResult> Cities(string city)
         {
             try
             {
-                var cities = await _searchParamRepo.GetCities();
+                var cities = await _searchParamRepo.GetCities(city);
                 return Ok(cities);
             }
             catch (Exception ex)
@@ -88,6 +88,11 @@ namespace CupOnlineAPI.Controllers
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="clubName"></param>
+        /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> Organizers(string clubName)
         {

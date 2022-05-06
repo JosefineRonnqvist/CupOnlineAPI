@@ -26,10 +26,11 @@
         </div>
         <div id="search_table">Sökta cuper</div>-->
         <form autocomplete="off" id="order_form">
-            <input type="search" id="order_organizer" onKeyUp='GetOrganizers(this.value)'></input>
-            <div id="result"></div>
+            <input type="search" id="order_organizer" onKeyUp="GetOrganizers(this.value)"></input>
+            <div id="getOrganizersResult"></div>
             <input type="text" placeholder="Föreningsnamn" id="order_new_club_name"></input>
-            <input type="text" placeholder="Hemort" id="order_new_club_city"></input>
+            <input type="text" placeholder="Hemort" id="order_new_club_city" onKeyUp='GetCities(this.value)'></input>
+            <div id="getCitiesResult"></div>
             <input type="text" placeholder="Webbsida" id="order_new_club_url"></input>
             <input type="text" placeholder="Cupnamn" id="order_cup_name"></input>
             <select id="order_sport"></select>
@@ -47,7 +48,7 @@
             <input type="checkbox" id="order_approval"></input>
             <div id="order_verify_code"></div>
             <input type="text" placeholder="verifieringskod" id="order_verify_answer"></input>
-            <input type="button" id="order_button" value="Beställ CupOnline"></input>
+            <input type="button" id="order_button" value="Beställ CupOnline" onclick="ClickedOrderCup"></input>
         </form>
 
     </div>

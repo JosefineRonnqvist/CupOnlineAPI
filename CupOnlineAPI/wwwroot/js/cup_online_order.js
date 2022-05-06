@@ -1,6 +1,7 @@
 ﻿const url = 'https://localhost:7172'
 const urlOrganizers = url + '/api/Order/GetAllOrganizers'
 const urlOreganizerSearch = url + '/api/SearchParam/Organizers?clubName='
+const urlCitiesSearch = url + '/api/SearchParam/Cities?city='
 const urlSports = url + '/api/Order/GetAllSports'
 const urlAges = url + '/api/SearchParam/Ages'
 const urlCreateCity = url + '/api/Order/CreateCity'
@@ -10,7 +11,6 @@ const urlCreateCupRegistration = url + '/api/Order/CreateCupRegistration'
 const urlCreateCupAdmin = url + '/api/Order/CreateCupAdmin'
 
 function GetOptions() {
-    //GetOrganizers();
     GetSports();
     GetAges();
     cupType();
@@ -43,12 +43,11 @@ function GetOptions() {
 
 
 function GetOrganizers(val) {
-    res = document.getElementById("result");
+    res = document.getElementById("getOrganizersResult");
     res.innerHTML = '';
     if (val == '') {
         return;
     }
-    let list = '';
     fetch(urlOreganizerSearch + val).then(
         function (response) {
             return response.json();
@@ -59,6 +58,28 @@ function GetOrganizers(val) {
                 option.value = data[i].club_id;
                 res.appendChild(option);
             }}).catch(function (err) {
+            console.warn('Something went wrong.', err);
+            return false;
+        });
+}
+
+function GetCities(val) {
+    res = document.getElementById("getCitiesResult");
+    res.innerHTML = '';
+    if (val == '') {
+        return;
+    }
+    fetch(urlCitiesSearch + val).then(
+        function (response) {
+            return response.json();
+        }).then(function (data) {
+            for (i = 0; i < data.length; i++) {
+                var option = document.createElement("option");
+                option.textContent = data[i].city_name;
+                option.value = data[i].city_id;
+                res.appendChild(option);
+            }
+        }).catch(function (err) {
             console.warn('Something went wrong.', err);
             return false;
         });
@@ -184,7 +205,7 @@ function newOrganizer() {
 function newCity() {
 
     let city = {
-        city_name: document.getElementById("order_new_club_city").value, //Add Check if city exists*************************************************************
+        city_name: document.getElementById("order_new_club_city").value,
     }
 
     fetch(urlCreateCity, {

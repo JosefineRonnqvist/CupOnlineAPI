@@ -94,14 +94,33 @@ namespace CupOnlineAPI.Repositories
                 {
                     cup_club_id = cup.cup_club_id,
                     cup_sport_id = cup.cup_sport_id,
+                    cup_logotype= "",
                     cup_sponsor_logotype = CheckLogotype(cupType),
                     cup_sponsor_url = CheckUrl(cupType),
+                    cup_url="",
                     cup_date = cup.cup_date,
                     cup_startdate = cup.cup_startdate,
                     cup_enddate = cup.cup_enddate,
                     cup_name= cup.cup_name,
                     cup_players_age = cup.cup_players_age,
+                    cup_groups=1,
+                    cup_periods=1,
+                    cup_periodtime=1,
                     cup_play_place= cup.cup_play_place,
+                    cup_round=1,
+                    cup_game_no=1,
+                    cup_table_sort= @"temp_group_team_points DESC, temp_group_team_sort_number DESC
+                                    temp_group_team_plus_minus DESC, temp_group_team_score_forward DESC",
+                    cup_show_teammembers=1,
+                    cup_game_report=1,
+                    cup_sponsors=1,
+                    cup_status=0,
+                    cup_binStatus=0,
+                    cup_gamewin_points=2,
+                    cup_gamedraw_points=1,
+                    cup_gamewinsd_points=2,
+                    cup_gamewinpenalties_points=2,
+                    cup_gamewinextra_points=0
                 };
                 return await connection.InsertAsync(newCup);
             }
