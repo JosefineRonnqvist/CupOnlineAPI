@@ -10,7 +10,9 @@ const urlCreateCup = url + '/api/Order/CreateCup'
 const urlCreateCupRegistration = url + '/api/Order/CreateCupRegistration'
 const urlCreateCupAdmin = url + '/api/Order/CreateCupAdmin'
 
+
 function GetOptions() {
+    //GetOrganizers()
     GetSports();
     GetAges();
     cupType();
@@ -26,14 +28,20 @@ function GetOptions() {
 //        .catch(error => console.error("Unable to get organizer.", error));
 //}
 
+////var organizerArray;
 ////Create organizer options
 //function organizerOptions(data) {
 //    var select = document.getElementById("order_organizer");
 //    var option = document.createElement("option");
-//    option.textContent = "-";
+//    //option.textContent = "-";
 //    option.value = 0;
 //    select.appendChild(option);
 //    for (var i = 0; i < data.length; i++) {
+//    //    organizerArray = [
+//    //        {
+//    //            id: data[i].club_id,
+//    //            text: data[i].club_name
+//    //        }        ]
 //        var option = document.createElement("option");
 //        option.textContent = data[i].club_name;
 //        option.value = data[i].club_id;
@@ -42,48 +50,44 @@ function GetOptions() {
 //}
 
 
-function GetOrganizers(val) {
-    res = document.getElementById("getOrganizersResult");
-    res.innerHTML = '';
-    if (val == '') {
-        return;
-    }
-    fetch(urlOreganizerSearch + val).then(
-        function (response) {
-            return response.json();
-        }).then(function (data) {
-            for (i = 0; i < data.length; i++) {
-                var option = document.createElement("option");
-                option.textContent = data[i].club_name;
-                option.value = data[i].club_id;
-                res.appendChild(option);
-            }}).catch(function (err) {
-            console.warn('Something went wrong.', err);
-            return false;
-        });
-}
+//function GetOrganizers(val) {
+//    res = document.getElementById("order_organizer");
+//    fetch(urlOreganizerSearch + val).then(
+//        function (response) {
+//            return response.json();
+//        }).then(function (data) {
+//            for (i = 0; i < data.length; i++) {
+//                var option = document.createElement("option");
+//                option.textContent = data[i].club_name;
+//                option.value = data[i].club_id;
+//                res.appendChild(option);
+//            }}).catch(function (err) {
+//            console.warn('Something went wrong.', err);
+//            return false;
+//        });
+//}
 
-function GetCities(val) {
-    res = document.getElementById("getCitiesResult");
-    res.innerHTML = '';
-    if (val == '') {
-        return;
-    }
-    fetch(urlCitiesSearch + val).then(
-        function (response) {
-            return response.json();
-        }).then(function (data) {
-            for (i = 0; i < data.length; i++) {
-                var option = document.createElement("option");
-                option.textContent = data[i].city_name;
-                option.value = data[i].city_id;
-                res.appendChild(option);
-            }
-        }).catch(function (err) {
-            console.warn('Something went wrong.', err);
-            return false;
-        });
-}
+//function GetCities(val) {
+//    res = document.getElementById("getCitiesResult");
+//    res.innerHTML = '';
+//    if (val == '') {
+//        return;
+//    }
+//    fetch(urlCitiesSearch + val).then(
+//        function (response) {
+//            return response.json();
+//        }).then(function (data) {
+//            for (i = 0; i < data.length; i++) {
+//                var option = document.createElement("option");
+//                option.textContent = data[i].city_name;
+//                option.value = data[i].city_id;
+//                res.appendChild(option);
+//            }
+//        }).catch(function (err) {
+//            console.warn('Something went wrong.', err);
+//            return false;
+//        });
+//}
 
 //get ages from api
 function GetAges() {
@@ -276,7 +280,6 @@ function newCupAdmin() {
         cup_user_phone: document.getElementById("order_contact_number"),
     }
 
-
     fetch(urlCreateCupAdmin, {
         method: "POST",
         body: JSON.stringify(cupAdmin),
@@ -316,8 +319,4 @@ function newCupAdmin() {
 //    }
 //}
 
-//$(document).ready(function () {
-//    //change selectboxes to selectize mode to be searchable
-//    $("select").select2();
-//});
   
