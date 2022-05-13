@@ -50,8 +50,11 @@
             <textarea id="order_message"></textarea>
             <select id="order_found_cuponline"></select>
             <input type="checkbox" id="order_approval" />
+            <div><img id="ctl00_ctl00_ctl00_ctl00_main_main_main_captchaCtrl1_CaptchaImage" src="Core.CaptchaHandler.axd" 
+                      alt="This is a Captcha Image" style="height:50px;width:200px;border-width:0px;"></div>
             <div id="order_verify_code"></div>
             <input type="text" placeholder="verifieringskod" id="order_verify_answer" />
+            <input name="ctl00$ctl00$ctl00$ctl00$main$main$main$txtCaptcha" type="text" id="ctl00_ctl00_ctl00_ctl00_main_main_main_txtCaptcha" class="input">
             <input type="button" id="order_button" value="Beställ CupOnline" onclick="ClickedOrderCup" />
         </form>
 
@@ -108,6 +111,11 @@
         //});
         $(document).ready(function () {
             $("#Organizers").select2({
+                language: {
+                    searching: function () { return '' },
+                    noResults: function () { return '' },
+                    errorLoading: function () { return '' }
+                },
                 multiple: false,
                 selectOnClose: true,
                 ajax: {
@@ -123,6 +131,7 @@
                     processResults: function (response) {
                         var select2Data = $.map(response, function (obj) {
                             obj.text = obj.club_name;
+                            obj.id = obj.club_name;
                             return obj;
                         });
 
@@ -132,19 +141,19 @@
                     }
                 },
                 placeholder: "Sök klubbar...",
-                escapeMarkup: function (markup) { return markup; },
-                templateResult: formatUsers
+    
             });
         });
 
-        function formatUsers(state) {
-            if (state.loading) return "Looking up users...";
-            var markup = "<div class='d-flex flex-row'><div class='circle'></div><span class='ml-3 mt-1'>" + state.club_name + "</span>&nbsp;</div>";
-            return markup;
-        }
+      
 
         $(document).ready(function () {
             $("#Cities").select2({
+                language: {
+                    searching: function () { return '' },
+                    noResults: function () { return '' },
+                    errorLoading: function () {return ''}
+                },
                 multiple: false,
                 selectOnClose: true,
                 ajax: {
@@ -160,6 +169,7 @@
                     processResults: function (response) {
                         var select2Data = $.map(response, function (obj) {
                             obj.text = obj.city_name;
+                            obj.id = obj.city_id;
                             return obj;
                         });
 

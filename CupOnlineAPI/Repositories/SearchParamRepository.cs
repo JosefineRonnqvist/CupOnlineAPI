@@ -79,12 +79,13 @@ namespace CupOnlineAPI.Repositories
         /// <returns>List of cities</returns>
         public async Task<IEnumerable<City>> GetCities(string city)
         {
-            var query = @"SELECT DISTINCT (c.city_name), outter_c.city_id
-                        FROM td_cities AS c
-						OUTER APPLY (SELECT TOP(1) *
-						FROM td_cities AS inner_c
-                        WHERE inner_c.city_name =c.city_name)
-						AS outter_c";
+            var query = @"SELECT c.*
+                        FROM td_cities c
+                        INNER JOIN (SELECT city_name, MIN(city_id) AS id FROM td_cities
+                        GROUP BY city_name)
+                        AS b ON c.city_id=b.id 
+                        AND c.city_name =b.city_name
+                        WHERE c.city_name LIKE @city";
             using (var connection = _context.CreateConnection())
             {
                 var City = await connection.QueryAsync<City>(query, new
