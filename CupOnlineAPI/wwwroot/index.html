@@ -29,13 +29,15 @@
 
         </div>
         <div id="search_table">Sökta cuper</div>-->
+
         <form autocomplete="off" id="order_form">
             <select id="Organizers" name="Organizers" style="width: 300px;"/>
-            <input type="text" placeholder="Föreningsnamn" id="order_new_club_name" />
-            <select id="Cities" name="Cities" style="width: 300px;"/>
-            <!--<input type="text" placeholder="Hemort" id="order_new_club_city" onKeyUp='GetCities(this.value)' />-->
-            <div id="getCitiesResult"></div>
-            <input type="text" placeholder="Webbsida" id="order_new_club_url" />
+            <div id="popup">
+                <input type="text" placeholder="Föreningsnamn" id="order_new_club_name" />
+                <select id="Cities" name="Cities" style="width: 300px;" />
+                <input type="text" placeholder="Ort" id="order_new_club_city" />
+                <input type="text" placeholder="Webbsida" id="order_new_club_url" />
+            </div>
             <input type="text" placeholder="Cupnamn" id="order_cup_name" />
             <select id="order_sport"></select>
             <input type="text" placeholder="Spelplats/ort" id="order_city" />
@@ -55,7 +57,7 @@
             <div id="order_verify_code"></div>
             <input type="text" placeholder="verifieringskod" id="order_verify_answer" />
             <input name="ctl00$ctl00$ctl00$ctl00$main$main$main$txtCaptcha" type="text" id="ctl00_ctl00_ctl00_ctl00_main_main_main_txtCaptcha" class="input">
-            <input type="button" id="order_button" value="Beställ CupOnline" onclick="ClickedOrderCup" />
+            <input type="button" id="order_button" value="Beställ CupOnline" onclick="ClickedOrderCup()" />
         </form>
 
     </div>
@@ -80,107 +82,6 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
     <script type="text/javascript">
         GetOptions();
-        //$("body").on('keydown', ".select2,.select2-dropdown", function (e) {
-        //    var KEYS = { UP: 38, DOWN: 40 };
-        //    var $sel2 = $(this).closest(".select2");
-        //    // if we can't find it by traveersing the dom, search page for an open container
-        //    // ASSUMES only one open at a time - 
-        //    // don't really know how to cross walk from dropdown back to coresponding element
-        //    if ($sel2.length == 0) {
-        //        $sel2 = $(".select2.select2-container--open");
-        //    }
-
-        //    // make sure we found the <select> el
-        //    var $sel = $sel2.data("element")
-        //    if ($sel.length) {
-        //        var newValue
-
-        //        if (e.keyCode === KEYS.DOWN && !e.altKey) {
-        //            newValue = $sel.find('option:selected').nextAll(":enabled").first().val();
-        //        } else if (e.keyCode === KEYS.UP) {
-        //            newValue = $sel.find('option:selected').prevAll(":enabled").first().val();
-        //        }
-
-        //        // if we got a value, set it and update
-        //        if (newValue != undefined) {
-        //            $sel.val(newValue);
-        //            $sel.trigger('change');
-        //        }
-        //    }
-
-        //});
-        $(document).ready(function () {
-            $("#Organizers").select2({
-                language: {
-                    searching: function () { return '' },
-                    noResults: function () { return '' },
-                    errorLoading: function () { return '' }
-                },
-                multiple: false,
-                selectOnClose: true,
-                ajax: {
-                    url: "https://localhost:7172/api/SearchParam/Organizers",
-                    dataType: 'json',
-                    method: 'get',
-                    delay: 300,
-                    data: function (params) {
-                        return {
-                            clubName: params.term,
-                        };
-                    },
-                    processResults: function (response) {
-                        var select2Data = $.map(response, function (obj) {
-                            obj.text = obj.club_name;
-                            obj.id = obj.club_name;
-                            return obj;
-                        });
-
-                        return {
-                            results: select2Data
-                        };
-                    }
-                },
-                placeholder: "Sök klubbar...",
-    
-            });
-        });
-
-      
-
-        $(document).ready(function () {
-            $("#Cities").select2({
-                language: {
-                    searching: function () { return '' },
-                    noResults: function () { return '' },
-                    errorLoading: function () {return ''}
-                },
-                multiple: false,
-                selectOnClose: true,
-                ajax: {
-                    url: "https://localhost:7172/api/SearchParam/Cities",
-                    dataType: 'json',
-                    method: 'get',
-                    delay: 300,
-                    data: function (params) {
-                        return {
-                            city: params.term,
-                        };
-                    },
-                    processResults: function (response) {
-                        var select2Data = $.map(response, function (obj) {
-                            obj.text = obj.city_name;
-                            obj.id = obj.city_id;
-                            return obj;
-                        });
-
-                        return {
-                            results: select2Data
-                        };
-                    }
-                },
-                placeholder: "Ort",
-            });
-        });
     </script>
 
 </body>

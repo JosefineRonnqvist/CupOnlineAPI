@@ -75,7 +75,7 @@ namespace CupOnlineAPI.Controllers
         /// </summary>
         /// <returns>List of searchparam with cities</returns>
         [HttpGet]
-        public async Task<IActionResult> Cities(string city)
+        public async Task<ActionResult> Cities(string city)
         {
             try
             {

@@ -1,7 +1,7 @@
 ﻿const url = 'https://localhost:7172'
 const urlOrganizers = url + '/api/Order/GetAllOrganizers'
-const urlOreganizerSearch = url + '/api/SearchParam/Organizers?clubName='
-const urlCitiesSearch = url + '/api/SearchParam/Cities?city='
+const urlOreganizerSearch = url + '/api/SearchParam/Organizers'
+const urlCitiesSearch = url + '/api/SearchParam/Cities'
 const urlSports = url + '/api/Order/GetAllSports'
 const urlAges = url + '/api/SearchParam/Ages'
 const urlCreateCity = url + '/api/Order/CreateCity'
@@ -12,82 +12,21 @@ const urlCreateCupAdmin = url + '/api/Order/CreateCupAdmin'
 
 
 function GetOptions() {
-    //GetOrganizers()
     GetSports();
     GetAges();
     cupType();
     foundCupOnline();
 }
 
-
-////getOrganizers from api
-//function GetOrganizers() {
-//    fetch(urlOrganizers)
-//        .then(response => response.json())
-//        .then(data => organizerOptions(data))
-//        .catch(error => console.error("Unable to get organizer.", error));
-//}
-
-////var organizerArray;
-////Create organizer options
-//function organizerOptions(data) {
-//    var select = document.getElementById("order_organizer");
-//    var option = document.createElement("option");
-//    //option.textContent = "-";
-//    option.value = 0;
-//    select.appendChild(option);
-//    for (var i = 0; i < data.length; i++) {
-//    //    organizerArray = [
-//    //        {
-//    //            id: data[i].club_id,
-//    //            text: data[i].club_name
-//    //        }        ]
-//        var option = document.createElement("option");
-//        option.textContent = data[i].club_name;
-//        option.value = data[i].club_id;
-//        select.appendChild(option);
-//    }
-//}
+function ClickedOrderCup() {
+    //newCity(); //only if new city. fix select to accept new values
+    newOrganizer();
+    //newCup();
+    //newCupAdmin();
+    //newRegistration();
+}
 
 
-//function GetOrganizers(val) {
-//    res = document.getElementById("order_organizer");
-//    fetch(urlOreganizerSearch + val).then(
-//        function (response) {
-//            return response.json();
-//        }).then(function (data) {
-//            for (i = 0; i < data.length; i++) {
-//                var option = document.createElement("option");
-//                option.textContent = data[i].club_name;
-//                option.value = data[i].club_id;
-//                res.appendChild(option);
-//            }}).catch(function (err) {
-//            console.warn('Something went wrong.', err);
-//            return false;
-//        });
-//}
-
-//function GetCities(val) {
-//    res = document.getElementById("getCitiesResult");
-//    res.innerHTML = '';
-//    if (val == '') {
-//        return;
-//    }
-//    fetch(urlCitiesSearch + val).then(
-//        function (response) {
-//            return response.json();
-//        }).then(function (data) {
-//            for (i = 0; i < data.length; i++) {
-//                var option = document.createElement("option");
-//                option.textContent = data[i].city_name;
-//                option.value = data[i].city_id;
-//                res.appendChild(option);
-//            }
-//        }).catch(function (err) {
-//            console.warn('Something went wrong.', err);
-//            return false;
-//        });
-//}
 
 //get ages from api
 function GetAges() {
@@ -142,10 +81,10 @@ function cupType() {
     option.value = 0;
     var option2 = document.createElement("option");
     option2.textContent = "Gratis upp t.o.m. U12*";
-    option2.value = 1;
+    option2.value = 3;
     var option3 = document.createElement("option");
     option3.textContent = "Betalande över U12";
-    option3.value = 2;
+    option3.value = 17;
     select.appendChild(option);
     select.appendChild(option2);
     select.appendChild(option3);
@@ -191,7 +130,7 @@ function newOrganizer() {
         club_name: document.getElementById("order_new_club_name").value,
         club_shortname: document.getElementById("order_new_club_name").value,
         club_url: document.getElementById("order_new_club_url").value,
-        club_city_id: document.getElementById("order_new_club_city").value,
+        club_city_id: document.getElementById("Cities").value,
         club_sport_id: document.getElementById("order_sport").value,
     }
 
@@ -206,21 +145,34 @@ function newOrganizer() {
 }
 
 //post new city
-function newCity() {
+function newCity(city) {
 
-    let city = {
-        city_name: document.getElementById("order_new_club_city").value,
-    }
+    //let city = $("#Cities").val();
 
     fetch(urlCreateCity, {
         method: "POST",
         body: JSON.stringify(city),
         headers: { "Content-type": "application/json; charset=UTF-8" }
     })
-        .then(response => response.json())
+        .then(response => response.formData())
         .then(json => console.log(json))
         .catch(err => console.log(err));
 }
+
+//function newCity() {
+
+//    let city = {
+//        city_name: document.getElementById("order_new_club_city").value,
+//    };
+
+//    let response = await fetch(urlCreateCity, {
+//        method: "POST",
+//        body: JSON.stringify(city),
+//        headers: { "Content-type": "application/json; charset=UTF-8" }
+//    });
+
+//    let result = await response.formData();
+//}
 
 //post new cup
 function newCup() {
@@ -249,11 +201,11 @@ function newRegistration() {
     let registration = {
         message: document.getElementById("order_message").value,
         //invoiceAddress:,
-        //registrationDate:,
+        registrationDate: Date.now(),
         //payDate:,
-        //orderStatus:,
-        //foundType:,
-        //regIp:,
+        orderStatus: document.getElementById("order_cup_type").value,
+        foundType: document.getElementById("order_found_cuponline").value,
+        regIp: document.getElementById("regIp"),
         //status:,
         //payAmount:,
     }
@@ -290,33 +242,105 @@ function newCupAdmin() {
         .catch(err => console.log(err));
 }
 
-//let _data = {
-//    title: "foo",
-//    body: "bar",
-//    userId: 1
-//}
+$(document).ready(function () {
+    $('#popup').hide();
+    $('#addNewCity').click(function () {
+        $('#popup').show();
+    })
+});
 
-//fetch('https://jsonplaceholder.typicode.com/posts', {
-//    method: "POST",
-//    body: JSON.stringify(_data),
-//    headers: { "Content-type": "application/json; charset=UTF-8" }
-//})
-//    .then(response => response.json())
-//    .then(json => console.log(json));
-//.catch (err => console.log(err));
+$(document).ready(function () {
+    $("#Cities").select2({
+        language: {
+            searching: function () { return '' },
+            noResults: function () {
+                let tempCity = $("#Cities").data('select2').dropdown.$search.val();
+                var btnToReturn = document.createElement("button");
+                btnToReturn.type = "button";
+                btnToReturn.onclick = function () { newCity(tempCity); }
+                btnToReturn.innerHTML = "Lägg till ort";
+                return btnToReturn;
+                //return ''
+            },
+            errorLoading: function () { return '' },
+           
+        },
+        escapeMarkup: function (markup) { return markup; },
+/*        tags: true,*/
+        multiple: false,
+        selectOnClose: true,
+        ajax: {
+            url: urlCitiesSearch,
+            dataType: 'json',
+            method: 'get',
+            delay: 300,
+            data: function (params) {
+                return {
+                    city: params.term,
+                };
+            },
+            processResults: function (response) {
+                var select2Data = $.map(response, function (obj) {
+                    obj.text = obj.city_name;
+                    obj.id = obj.city_id;
+                    return obj;
+                });
 
-//function organizerForm(data) {
-//    var select = document.getElementById("brow");
-//    var option = document.createElement("option");
-//    option.textContent = "-";
-//    option.value = 0;
-//    select.appendChild(option);
-//    for (var i = 0; i < data.length; i++) {
-//        var option = document.createElement("option");
-//        //option.textContent = data[i].club_name;
-//        option.value = data[i].club_name;
-//        select.appendChild(option);
-//    }
-//}
+                return {
+                    results: select2Data
+                };
+            }
+        },
+        placeholder: "Ort",
+    });
+});
 
+
+
+$(document).ready(function () {
+    $("#Organizers").select2({
+        language: {
+            searching: function () { return '' },
+            noResults: function () {
+                return "<a href=''>Lägg till klubb</a>"
+            },
+            errorLoading: function () { return '' }
+        },
+        escapeMarkup: function (markup) {
+            return markup;
+        },
+        multiple: false,
+        selectOnClose: true,
+        ajax: {
+            url: urlOreganizerSearch,
+            dataType: 'json',
+            method: 'get',
+            delay: 300,
+            data: function (params) {
+                return {
+                    clubName: params.term,
+                };
+            },
+            processResults: function (response) {
+                var select2Data = $.map(response, function (obj) {
+                    obj.text = obj.club_name;
+                    obj.id = obj.club_name;
+                    return obj;
+                });
+
+                return {
+                    results: select2Data
+                };
+            }
+        },
+        placeholder: "Klubb",
+    });
+
+
+});
+
+
+$.getJSON("https://api.ipify.org?format=json", function (data) {
+    $("#regIp").html(data.ip);
+})
   

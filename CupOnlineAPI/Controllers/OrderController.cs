@@ -54,12 +54,12 @@ namespace CupOnlineAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateCity(City city)
+        public async Task<ActionResult<City>> CreateCity(City city)
         {
             try
             {
                 city.city_id = await _orderRepo.CreateCity(city);
-                return  Ok(city);
+                return Ok(city);
             }
             catch (Exception ex)
             {

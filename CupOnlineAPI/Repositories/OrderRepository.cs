@@ -182,5 +182,7 @@ namespace CupOnlineAPI.Repositories
                 return await connection.InsertAsync(newAdmin);
             }
         }
+
+
     }
 }
