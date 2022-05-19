@@ -17,7 +17,7 @@ namespace CupOnlineAPI.Models
         public string cup_startdate { get; set; }
         public string cup_enddate { get; set; }
         public string cup_name { get; set; }
-        public string cup_players_age { get; set; }
+        public string cup_players_age { get; set; } = "";
         public int cup_groups { get; set; } = 1;
         public int cup_periods { get; set; } = 1;
         public int cup_periodtime { get; set; } = 1;

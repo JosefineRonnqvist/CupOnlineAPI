@@ -68,7 +68,7 @@ namespace CupOnlineAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateOrganizer(Organizer organizer)
+        public async Task<ActionResult<Organizer>> CreateOrganizer([FromBody]Organizer organizer)
         {
             try
             {
@@ -82,11 +82,11 @@ namespace CupOnlineAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateCup(OrderCup cup, int cupType)
+        public async Task<IActionResult> CreateCup(OrderCup cup)
         {
             try
             {
-                cup.cup_id = await _orderRepo.CreateCup(cup, cupType);
+                cup.cup_id = await _orderRepo.CreateCup(cup);
                 return Ok(cup);
             }
             catch (Exception ex)
@@ -97,7 +97,7 @@ namespace CupOnlineAPI.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> CreateCupRegistration(OrderRegistration reg)
+        public async Task<ActionResult<OrderRegistration>> CreateCupRegistration(OrderRegistration reg)
         {
             try
             {

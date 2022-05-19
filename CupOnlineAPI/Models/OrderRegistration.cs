@@ -8,14 +8,14 @@ namespace CupOnlineAPI.Models
         [Key]
         public int id { get; set; }
         public int cup_id { get; set; }
-        public string message { get; set; }
-        public string invoiceAddress { get; set; }
-        public string registrationDate { get; set; }
-        public string payDate { get; set; }
-        public string orderStatus { get; set; }
-        public string foundType { get; set; }
-        public string regIp { get; set; }
-        public string status { get; set; }
-        public string payAmount { get; set; }
+        public string message { get; set; } = "";
+        public string invoiceAddress { get; set; } = "";
+        public DateTime registrationDate { get; set; }
+        public DateTime payDate { get; set; }
+        public int orderStatus { get; set; } = 3;
+        public int foundType { get; set; } = 0;
+        public string regIp { get; set; } = "";
+        public int status { get; set; } = 0;
+        public float? payAmount { get; set; } 
     }
 }

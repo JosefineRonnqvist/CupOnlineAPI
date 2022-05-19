@@ -86,7 +86,7 @@ namespace CupOnlineAPI.Repositories
         /// </summary>
         /// <param name="cup">Details about cup from form</param>
         /// <returns>Created cup id</returns>
-        public async Task<int> CreateCup(OrderCup cup, int cupType)
+        public async Task<int> CreateCup(OrderCup cup)
         {
             using (var connection = _context.CreateConnection())
             {
@@ -94,54 +94,35 @@ namespace CupOnlineAPI.Repositories
                 {
                     cup_club_id = cup.cup_club_id,
                     cup_sport_id = cup.cup_sport_id,
-                    cup_logotype= "",
-                    cup_sponsor_logotype = CheckLogotype(cupType),
-                    cup_sponsor_url = CheckUrl(cupType),
-                    cup_url="",
+                    cup_logotype= cup.cup_logotype,
+                    cup_sponsor_logotype = cup.cup_sponsor_logotype,
+                    cup_sponsor_url = cup.cup_sponsor_url,
+                    cup_url=cup.cup_url,
                     cup_date = cup.cup_date,
                     cup_startdate = cup.cup_startdate,
                     cup_enddate = cup.cup_enddate,
                     cup_name= cup.cup_name,
                     cup_players_age = cup.cup_players_age,
-                    cup_groups=1,
-                    cup_periods=1,
-                    cup_periodtime=1,
+                    cup_groups=cup.cup_groups,
+                    cup_periods=cup.cup_periods,
+                    cup_periodtime=cup.cup_periodtime,
                     cup_play_place= cup.cup_play_place,
-                    cup_round=1,
-                    cup_game_no=1,
-                    cup_table_sort= @"temp_group_team_points DESC, temp_group_team_sort_number DESC
-                                    temp_group_team_plus_minus DESC, temp_group_team_score_forward DESC",
-                    cup_show_teammembers=1,
-                    cup_game_report=1,
-                    cup_sponsors=1,
-                    cup_status=0,
-                    cup_binStatus=0,
-                    cup_gamewin_points=2,
-                    cup_gamedraw_points=1,
-                    cup_gamewinsd_points=2,
-                    cup_gamewinpenalties_points=2,
-                    cup_gamewinextra_points=0
+                    cup_round=cup.cup_round,
+                    cup_game_no=cup.cup_game_no,
+                    cup_table_sort=cup.cup_table_sort,
+                    cup_show_teammembers=cup.cup_show_teammembers,
+                    cup_game_report=cup.cup_game_report,
+                    cup_sponsors=cup.cup_sponsors,
+                    cup_status=cup.cup_status,
+                    cup_binStatus=cup.cup_binStatus,
+                    cup_gamewin_points=cup.cup_gamewin_points,
+                    cup_gamedraw_points=cup.cup_gamedraw_points,
+                    cup_gamewinsd_points=cup.cup_gamewinsd_points,
+                    cup_gamewinpenalties_points=cup.cup_gamewinpenalties_points,
+                    cup_gamewinextra_points=cup.cup_gamewinextra_points
                 };
                 return await connection.InsertAsync(newCup);
             }
-        }
-
-        public string CheckLogotype(int cupType)
-        {
-            if (cupType == 1)
-            {
-                return "logotype_coreit.gif";
-            }
-            return "";
-        }
-
-        public string CheckUrl(int cupType)
-        {
-            if (cupType == 1)
-            {
-                return "http://www.coreit.se";
-            }
-            return "";
         }
 
         public async Task<int> CreateCupRegistration(OrderRegistration reg)

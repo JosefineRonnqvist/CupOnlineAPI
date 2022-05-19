@@ -6,7 +6,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" />
- 
+
 </head>
 <body>
     <div id="cuponline">
@@ -31,16 +31,16 @@
         <div id="search_table">Sökta cuper</div>-->
 
         <form autocomplete="off" id="order_form">
-            <select id="Organizers" name="Organizers" style="width: 300px;"/>
-            <div id="popup">
-                <input type="text" placeholder="Föreningsnamn" id="order_new_club_name" />
-                <select id="Cities" name="Cities" style="width: 300px;" />
-                <input type="text" placeholder="Ort" id="order_new_club_city" />
+            <select id="Organizers" name="Organizers" style="width: 300px;" />
+            <div id="hide_add_new_organizer">
+                <input type="text" placeholder="Förening" id="order_new_club" />
                 <input type="text" placeholder="Webbsida" id="order_new_club_url" />
+                <select id="Cities" name="Cities" style="width: 300px;" />
             </div>
+           
             <input type="text" placeholder="Cupnamn" id="order_cup_name" />
             <select id="order_sport"></select>
-            <input type="text" placeholder="Spelplats/ort" id="order_city" />
+            <input type="text" placeholder="Spelplats/ort" id="order_play_place" />
             <input type="text" placeholder="Ålder" id="order_age_text" />
             <div id="order_age_checkbox"></div>
             <input type="date" placeholder="startdatum" id="order_startdate" />
@@ -52,8 +52,10 @@
             <textarea id="order_message"></textarea>
             <select id="order_found_cuponline"></select>
             <input type="checkbox" id="order_approval" />
-            <div><img id="ctl00_ctl00_ctl00_ctl00_main_main_main_captchaCtrl1_CaptchaImage" src="Core.CaptchaHandler.axd" 
-                      alt="This is a Captcha Image" style="height:50px;width:200px;border-width:0px;"></div>
+            <div>
+                <img id="ctl00_ctl00_ctl00_ctl00_main_main_main_captchaCtrl1_CaptchaImage" src="Core.CaptchaHandler.axd"
+                     alt="This is a Captcha Image" style="height:50px;width:200px;border-width:0px;">
+            </div>
             <div id="order_verify_code"></div>
             <input type="text" placeholder="verifieringskod" id="order_verify_answer" />
             <input name="ctl00$ctl00$ctl00$ctl00$main$main$main$txtCaptcha" type="text" id="ctl00_ctl00_ctl00_ctl00_main_main_main_txtCaptcha" class="input">
@@ -85,4 +87,4 @@
     </script>
 
 </body>
-</html >
+</html>

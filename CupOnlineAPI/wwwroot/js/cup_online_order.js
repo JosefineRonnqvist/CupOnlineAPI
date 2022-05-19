@@ -19,9 +19,8 @@ function GetOptions() {
 }
 
 function ClickedOrderCup() {
-    //newCity(); //only if new city. fix select to accept new values
-    newOrganizer();
-    //newCup();
+    //newOrganizer();
+    newCup();
     //newCupAdmin();
     //newRegistration();
 }
@@ -127,63 +126,69 @@ function foundCupOnline() {
 function newOrganizer() {
 
     let organizer = {
-        club_name: document.getElementById("order_new_club_name").value,
-        club_shortname: document.getElementById("order_new_club_name").value,
+        club_name: document.getElementById("order_new_club").value,
+        club_shortname: document.getElementById("order_new_club").value,
         club_url: document.getElementById("order_new_club_url").value,
         club_city_id: document.getElementById("Cities").value,
         club_sport_id: document.getElementById("order_sport").value,
     }
-
     fetch(urlCreateOrganizer, {
         method: "POST",
         body: JSON.stringify(organizer),
-    headers: { "Content-type": "application/json; charset=UTF-8" }
+        headers: { "Content-type": "application/json; charset=UTF-8" }
     })
-    .then(response => response.json())
-    .then(json => console.log(json))
-    .catch (err => console.log(err));
+        .then(response => response.json())
+        .then(json => {
+            console.log(json);
+            return json.club_city_id;
+        }
+        )
+        .catch(err => console.log(err));   
 }
 
 //post new city
-function newCity(city) {
-
-    //let city = $("#Cities").val();
+function newCity(cityToAdd) {
+    let city = {
+        city_name:cityToAdd
+    }
 
     fetch(urlCreateCity, {
         method: "POST",
         body: JSON.stringify(city),
         headers: { "Content-type": "application/json; charset=UTF-8" }
     })
-        .then(response => response.formData())
-        .then(json => console.log(json))
+        .then(response => response.json())
+        .then(json => {
+            setCity(json);
+            console.log(json);
+        })
         .catch(err => console.log(err));
 }
 
-//function newCity() {
+function setCity(city) {
+    var o = $("<option/>", { value: city.city_id, text: city.city_name });
+    $('#Cities').append(o);
+    $('#Cities option[value="' + city.city_id + '"]').prop('selected', true);
+    $('#Cities').trigger('change');
+    $("#Cities").select2("close");
+}
 
-//    let city = {
-//        city_name: document.getElementById("order_new_club_city").value,
-//    };
 
-//    let response = await fetch(urlCreateCity, {
-//        method: "POST",
-//        body: JSON.stringify(city),
-//        headers: { "Content-type": "application/json; charset=UTF-8" }
-//    });
-
-//    let result = await response.formData();
-//}
 
 //post new cup
 function newCup() {
+    let organizer = $('#Organizers').select2('data')[0].club_id;
+    if (organizer < 1) {
+        organizer = newOrganizer();
+    }
     let cup = {
-        cup_club_id: document.getElementById("order_organizer").value,
+        cup_club_id: organizer,
         cup_sport_id: document.getElementById("order_sport").value,
         cup_startdate: document.getElementById("order_startdate").value,
         cup_enddate: document.getElementById("order_enddate").value,
-        cup_name: document.getElementById("order_name").value,
+        cup_name: document.getElementById("order_cup_name").value,
         cup_players_age: document.getElementById("order_age_text").value,
-        cup_play_place: document.getElementById("order_city")
+        cup_play_place: document.getElementById("order_play_place").value
     }
 
     fetch(urlCreateCup, {
@@ -198,23 +203,25 @@ function newCup() {
 
 //post new reigistration
 function newRegistration() {
-    let registration = {
+
+    const registration = {
+        //cup_id:
         message: document.getElementById("order_message").value,
-        //invoiceAddress:,
-        registrationDate: Date.now(),
-        //payDate:,
+        invoiceAddress:"",
+        registrationDate: new Date(),
+        payDate:"",
         orderStatus: document.getElementById("order_cup_type").value,
         foundType: document.getElementById("order_found_cuponline").value,
         regIp: document.getElementById("regIp"),
-        //status:,
-        //payAmount:,
+        status:0,
+        payAmount:0,
     }
 
-    fetch(urlCreateCupRegistration, {
-        method: "POST",
-        body: JSON.stringify(registration),
-        headers: { "Content-type": "application/json; charset=UTF-8" }
-    })
+fetch(urlCreateCupRegistration, {
+    method: "POST",
+    body: JSON.stringify(registration),
+    headers: { "Content-type": "application/json; charset=UTF-8" }
+} )
         .then(response => response.json())
         .then(json => console.log(json))
         .catch(err => console.log(err));
@@ -223,11 +230,11 @@ function newRegistration() {
 //post new cup admin
 function newCupAdmin() {
     let cupAdmin = {
-        //cup_user_username:,
-        //cup_user_password:,
-        //cup_user_cup_id:,
-        //cup_user_rights:,
-        cup_user_name:document.getElementById("order_contact_name"),
+        cup_user_username:"",
+        cup_user_password:"",
+        cup_user_cup_id:"",
+        cup_user_rights:"",
+        cup_user_name: document.getElementById("order_contact_name"),
         cup_user_email: document.getElementById("order_contact_mail"),
         cup_user_phone: document.getElementById("order_contact_number"),
     }
@@ -242,12 +249,6 @@ function newCupAdmin() {
         .catch(err => console.log(err));
 }
 
-$(document).ready(function () {
-    $('#popup').hide();
-    $('#addNewCity').click(function () {
-        $('#popup').show();
-    })
-});
 
 $(document).ready(function () {
     $("#Cities").select2({
@@ -257,16 +258,16 @@ $(document).ready(function () {
                 let tempCity = $("#Cities").data('select2').dropdown.$search.val();
                 var btnToReturn = document.createElement("button");
                 btnToReturn.type = "button";
-                btnToReturn.onclick = function () { newCity(tempCity); }
-                btnToReturn.innerHTML = "Lägg till ort";
-                return btnToReturn;
-                //return ''
+                btnToReturn.onclick = function ()
+                {                   
+                    newCity(tempCity);
+                }
+                btnToReturn.innerHTML = "Lägg till denna ort";
+                return btnToReturn;                             
             },
             errorLoading: function () { return '' },
-           
         },
         escapeMarkup: function (markup) { return markup; },
-/*        tags: true,*/
         multiple: false,
         selectOnClose: true,
         ajax: {
@@ -297,12 +298,34 @@ $(document).ready(function () {
 
 
 
+$(function () {
+    var hidden = document.getElementById("hide_add_new_organizer");
+
+    //$('#Cities').select2().next().hide();
+    //$('#order_new_club_url').hide();
+});
+
 $(document).ready(function () {
     $("#Organizers").select2({
         language: {
             searching: function () { return '' },
             noResults: function () {
-                return "<a href=''>Lägg till klubb</a>"
+                let tempOrganizer = $("#Organizers").data('select2').dropdown.$search.val();
+                var btnToReturn = document.createElement("button");
+                btnToReturn.type = "button";
+                btnToReturn.innerHTML = "Lägg till denna klubb"
+                btnToReturn.id = "addNewOrganizer";
+                var tempOption = document.createElement("option");
+                tempOption.selected = "selected";
+                btnToReturn.onclick = function () {
+                    var organizerToAdd = document.getElementById("order_new_club");
+                    organizerToAdd.value = tempOrganizer;
+                    $('#Organizers').val(null).trigger('change');
+                    $("#Organizers").select2("close");
+                    //$('#Cities').select2().next().show();
+                    //$('#order_new_club_url').show();
+                }
+                return btnToReturn;
             },
             errorLoading: function () { return '' }
         },
@@ -331,16 +354,20 @@ $(document).ready(function () {
                 return {
                     results: select2Data
                 };
-            }
+            },
         },
-        placeholder: "Klubb",
+        placeholder: "Förening",
     });
-
-
 });
+
+//$(function () {
+//    $('#hide_add_new_organizer').children().hide();
+//    $('#addNewOrganizer').click(function () {
+//        $('#hide_add_new_organizer').children().show();
+//    })
+//});
 
 
 $.getJSON("https://api.ipify.org?format=json", function (data) {
     $("#regIp").html(data.ip);
 })
-  
