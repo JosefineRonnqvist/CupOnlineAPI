@@ -174,7 +174,6 @@ function setCity(city) {
 }
 
 
-
 //post new cup
 function newCup() {
     let organizer = $('#Organizers').select2('data')[0].club_id;
@@ -188,7 +187,10 @@ function newCup() {
         cup_enddate: document.getElementById("order_enddate").value,
         cup_name: document.getElementById("order_cup_name").value,
         cup_players_age: document.getElementById("order_age_text").value,
-        cup_play_place: document.getElementById("order_play_place").value
+        cup_play_place: document.getElementById("order_play_place").value,
+        cup_date: checkCupDate(),
+        cup_sponsor_logotype:checkCupTypeLogo(),
+        cup_sponsor_url:checkCupTypeUrl(),
     }
 
     fetch(urlCreateCup, {
@@ -199,6 +201,33 @@ function newCup() {
         .then(response => response.json())
         .then(json => console.log(json))
         .catch(err => console.log(err));
+}
+
+function checkCupDate() {
+    var startDate = document.getElementById("order_startdate").value.split('-');
+    var endDate = document.getElementById("order_enddate").value.split('-');
+    var months = ['Jan', 'Feb', 'Mar', 'Apr', 'Maj', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dec'];
+    var endDay = endDate[2];
+    var startDay = startDate[2];
+    var endMonth = months[parseInt(endDate[1])-1];
+    var startMonth = months[parseInt(startDate[1]) - 1] == endMonth ? '' : months[parseInt(startDate[1])-1] + ' ';
+    var endYear = endDate[0];
+    var startYear = startDate[0] == endYear ? '' : startDate[0] + ' ';
+    
+    var showDate = startDay + ' ' + startMonth + startYear + '- ' + endDay + ' ' + endMonth + ' ' + endYear;
+    return showDate;
+
+}
+
+function checkCupTypeLogo() {
+    if (document.getElementById("order_cup_type").value == 3) { return "logotype_coreit.gif"; }
+    else return "";
+}
+
+function checkCupTypeUrl() {
+    if (document.getElementById("order_cup_type").value == 3) {
+        return "http://www.coreit.se" ; }  
+    else return "";
 }
 
 //post new reigistration

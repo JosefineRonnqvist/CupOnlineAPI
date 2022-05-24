@@ -31,9 +31,7 @@ namespace CupOnlineAPI.Models
                 }
             }
         }
-
         public DateTime startdate { get; set; }
-
         internal string cup_enddate { 
           get { return _enddate; }
             set
@@ -50,7 +48,6 @@ namespace CupOnlineAPI.Models
                 }
             }
         }
-
         public DateTime enddate { get; set; }
         public string date { get; set; }
         public string sport_name { get; set; }

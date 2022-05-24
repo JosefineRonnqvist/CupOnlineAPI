@@ -68,7 +68,7 @@ namespace CupOnlineAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Organizer>> CreateOrganizer([FromBody]Organizer organizer)
+        public async Task<ActionResult<Organizer>> CreateOrganizer(Organizer organizer)
         {
             try
             {
