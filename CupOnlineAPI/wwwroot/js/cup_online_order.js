@@ -18,11 +18,10 @@ function GetOptions() {
     foundCupOnline();
 }
 
-function ClickedOrderCup() {
-    //newOrganizer();
-    newCup();
+function ClickedOrderCup() { 
     //newCupAdmin();
     //newRegistration();
+    newCup();
 }
 
 
@@ -199,24 +198,25 @@ function newCup() {
         headers: { "Content-type": "application/json; charset=UTF-8" }
     })
         .then(response => response.json())
-        .then(json => console.log(json))
+        .then(json => {
+            console.log(json);
+            json.cup_id;
+        })
         .catch(err => console.log(err));
 }
 
 function checkCupDate() {
     var startDate = document.getElementById("order_startdate").value.split('-');
     var endDate = document.getElementById("order_enddate").value.split('-');
-    var months = ['Jan', 'Feb', 'Mar', 'Apr', 'Maj', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dec'];
+    var months = ['jan', 'feb', 'mar', 'apr', 'maj', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'dec'];
     var endDay = endDate[2];
     var startDay = startDate[2];
     var endMonth = months[parseInt(endDate[1])-1];
     var startMonth = months[parseInt(startDate[1]) - 1] == endMonth ? '' : months[parseInt(startDate[1])-1] + ' ';
     var endYear = endDate[0];
-    var startYear = startDate[0] == endYear ? '' : startDate[0] + ' ';
-    
+    var startYear = startDate[0] == endYear ? '' : startDate[0] + ' ';   
     var showDate = startDay + ' ' + startMonth + startYear + '- ' + endDay + ' ' + endMonth + ' ' + endYear;
     return showDate;
-
 }
 
 function checkCupTypeLogo() {
@@ -234,7 +234,7 @@ function checkCupTypeUrl() {
 function newRegistration() {
 
     const registration = {
-        //cup_id:
+        cup_id: newCup(),
         message: document.getElementById("order_message").value,
         invoiceAddress:"",
         registrationDate: new Date(),
