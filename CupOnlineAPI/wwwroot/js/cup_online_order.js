@@ -10,21 +10,26 @@ const urlCreateCup = url + '/api/Order/CreateCup'
 const urlCreateCupRegistration = url + '/api/Order/CreateCupRegistration'
 const urlCreateCupAdmin = url + '/api/Order/CreateCupAdmin'
 
-
 function GetOptions() {
+    hidePanels();
     GetSports();
     GetAges();
     cupType();
     foundCupOnline();
 }
 
-function ClickedOrderCup() { 
-    //newCupAdmin();
-    //newRegistration();
-    newCup();
+const form = document.querySelector('#order_form');
+form.onsubmit = (e) => {
+    e.preventDefault();
+    var cupId = newCup();
+
 }
 
-
+//function ClickedOrderCup() { 
+//    var cupId = newCup();
+//    newCupAdmin(cupId);
+//    newRegistration(cupId);   
+//}
 
 //get ages from api
 function GetAges() {
@@ -121,6 +126,14 @@ function foundCupOnline() {
     select.appendChild(option7);
 }
 
+function showPanels() {
+    $('.hideNew').show();
+}
+
+function hidePanels() {
+    $('.hideNew').hide();
+}
+
 //post new organizer
 function newOrganizer() {
 
@@ -175,15 +188,17 @@ function setCity(city) {
 
 //post new cup
 function newCup() {
-    let organizer = $('#Organizers').select2('data')[0].club_id;
-    if (organizer < 1) {
+    let organizer;
+    try { organizer = $('#Organizers').select2('data')[0].club_id; }
+    catch (e) {
         organizer = newOrganizer();
     }
+    
     let cup = {
         cup_club_id: organizer,
         cup_sport_id: document.getElementById("order_sport").value,
-        cup_startdate: document.getElementById("order_startdate").value,
-        cup_enddate: document.getElementById("order_enddate").value,
+        cup_startdate: new Date(document.getElementById("order_startdate").value).toISOString().split('T')[0],
+        cup_enddate: new Date(document.getElementById("order_enddate").value).toISOString().split('T')[0],
         cup_name: document.getElementById("order_cup_name").value,
         cup_players_age: document.getElementById("order_age_text").value,
         cup_play_place: document.getElementById("order_play_place").value,
@@ -200,7 +215,9 @@ function newCup() {
         .then(response => response.json())
         .then(json => {
             console.log(json);
-            json.cup_id;
+            var cupId= json.cup_id;
+            newCupAdmin(cupId);
+            newRegistration(cupId);
         })
         .catch(err => console.log(err));
 }
@@ -231,24 +248,19 @@ function checkCupTypeUrl() {
 }
 
 //post new reigistration
-function newRegistration() {
+function newRegistration(cupId) {
 
-    const registration = {
-        cup_id: newCup(),
+    const reg = {
+        cup_id: cupId,
         message: document.getElementById("order_message").value,
         invoiceAddress:"",
-        registrationDate: new Date(),
-        payDate:"",
         orderStatus: document.getElementById("order_cup_type").value,
         foundType: document.getElementById("order_found_cuponline").value,
-        regIp: document.getElementById("regIp"),
-        status:0,
-        payAmount:0,
     }
-
+    console.log("reg before:" +JSON.stringify(reg))
 fetch(urlCreateCupRegistration, {
     method: "POST",
-    body: JSON.stringify(registration),
+    body: JSON.stringify(reg),
     headers: { "Content-type": "application/json; charset=UTF-8" }
 } )
         .then(response => response.json())
@@ -257,20 +269,20 @@ fetch(urlCreateCupRegistration, {
 }
 
 //post new cup admin
-function newCupAdmin() {
-    let cupAdmin = {
+function newCupAdmin(cupId) {
+    let admin = {
         cup_user_username:"",
         cup_user_password:"",
-        cup_user_cup_id:"",
-        cup_user_rights:"",
-        cup_user_name: document.getElementById("order_contact_name"),
-        cup_user_email: document.getElementById("order_contact_mail"),
-        cup_user_phone: document.getElementById("order_contact_number"),
+        cup_user_cup_id:cupId,
+        cup_user_rights:0,
+        cup_user_name: document.getElementById("order_contact_name").value,
+        cup_user_email: document.getElementById("order_contact_mail").value,
+        cup_user_phone: document.getElementById("order_contact_number").value,
     }
 
     fetch(urlCreateCupAdmin, {
         method: "POST",
-        body: JSON.stringify(cupAdmin),
+        body: JSON.stringify(admin),
         headers: { "Content-type": "application/json; charset=UTF-8" }
     })
         .then(response => response.json())
@@ -325,15 +337,6 @@ $(document).ready(function () {
     });
 });
 
-
-
-$(function () {
-    var hidden = document.getElementById("hide_add_new_organizer");
-
-    //$('#Cities').select2().next().hide();
-    //$('#order_new_club_url').hide();
-});
-
 $(document).ready(function () {
     $("#Organizers").select2({
         language: {
@@ -351,8 +354,7 @@ $(document).ready(function () {
                     organizerToAdd.value = tempOrganizer;
                     $('#Organizers').val(null).trigger('change');
                     $("#Organizers").select2("close");
-                    //$('#Cities').select2().next().show();
-                    //$('#order_new_club_url').show();
+                    showPanels();
                 }
                 return btnToReturn;
             },
@@ -389,14 +391,9 @@ $(document).ready(function () {
     });
 });
 
-//$(function () {
-//    $('#hide_add_new_organizer').children().hide();
-//    $('#addNewOrganizer').click(function () {
-//        $('#hide_add_new_organizer').children().show();
-//    })
-//});
+$(document).ready(function () {
+    $.getJSON("https://api.ipify.org?format=json", function (data) {
+        $("#regIp").html(data.ip);
+    })
+}
 
-
-$.getJSON("https://api.ipify.org?format=json", function (data) {
-    $("#regIp").html(data.ip);
-})
