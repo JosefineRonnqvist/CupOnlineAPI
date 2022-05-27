@@ -8,6 +8,7 @@ const urlCreateCity = url + '/api/Order/CreateCity'
 const urlCreateOrganizer = url + '/api/Order/CreateOrganizer'
 const urlCreateCup = url + '/api/Order/CreateCup'
 const urlCreateCupRegistration = url + '/api/Order/CreateCupRegistration'
+const urlCreateCupRegistrationValTest = url + '/api/Order/CreateCupRegistrationValTest'
 const urlCreateCupAdmin = url + '/api/Order/CreateCupAdmin'
 
 function GetOptions() {
@@ -155,13 +156,13 @@ function newOrganizer() {
             return json.club_city_id;
         }
         )
-        .catch(err => console.log(err));   
+        .catch(err => console.log(err));
 }
 
 //post new city
 function newCity(cityToAdd) {
     let city = {
-        city_name:cityToAdd
+        city_name: cityToAdd
     }
 
     fetch(urlCreateCity, {
@@ -193,7 +194,7 @@ function newCup(regIp) {
     catch (e) {
         organizer = newOrganizer();
     }
-    
+
     let cup = {
         cup_club_id: organizer,
         cup_sport_id: document.getElementById("order_sport").value,
@@ -203,8 +204,8 @@ function newCup(regIp) {
         cup_players_age: document.getElementById("order_age_text").value,
         cup_play_place: document.getElementById("order_play_place").value,
         cup_date: checkCupDate(),
-        cup_sponsor_logotype:checkCupTypeLogo(),
-        cup_sponsor_url:checkCupTypeUrl(),
+        cup_sponsor_logotype: checkCupTypeLogo(),
+        cup_sponsor_url: checkCupTypeUrl(),
     }
 
     fetch(urlCreateCup, {
@@ -215,7 +216,7 @@ function newCup(regIp) {
         .then(response => response.json())
         .then(json => {
             console.log(json);
-            var cupId= json.cup_id;
+            var cupId = json.cup_id;
             newCupAdmin(cupId);
             newRegistration(cupId, regIp);
         })
@@ -228,10 +229,10 @@ function checkCupDate() {
     var months = ['jan', 'feb', 'mar', 'apr', 'maj', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'dec'];
     var endDay = endDate[2];
     var startDay = startDate[2];
-    var endMonth = months[parseInt(endDate[1])-1];
-    var startMonth = months[parseInt(startDate[1]) - 1] == endMonth ? '' : months[parseInt(startDate[1])-1] + ' ';
+    var endMonth = months[parseInt(endDate[1]) - 1];
+    var startMonth = months[parseInt(startDate[1]) - 1] == endMonth ? '' : months[parseInt(startDate[1]) - 1] + ' ';
     var endYear = endDate[0];
-    var startYear = startDate[0] == endYear ? '' : startDate[0] + ' ';   
+    var startYear = startDate[0] == endYear ? '' : startDate[0] + ' ';
     var showDate = startDay + ' ' + startMonth + startYear + '- ' + endDay + ' ' + endMonth + ' ' + endYear;
     return showDate;
 }
@@ -243,7 +244,8 @@ function checkCupTypeLogo() {
 
 function checkCupTypeUrl() {
     if (document.getElementById("order_cup_type").value == 3) {
-        return "http://www.coreit.se" ; }  
+        return "http://www.coreit.se";
+    }
     else return "";
 }
 
@@ -253,20 +255,58 @@ function newRegistration(cupId, regIp) {
     const reg = {
         cup_id: cupId,
         message: document.getElementById("order_message").value,
-        invoiceAddress:"",
+        invoiceAddress: "",
         orderStatus: document.getElementById("order_cup_type").value,
         foundType: document.getElementById("order_found_cuponline").value,
         regIp: regIp,
     }
-    console.log("reg before:" +JSON.stringify(reg))
-fetch(urlCreateCupRegistration, {
-    method: "POST",
-    body: JSON.stringify(reg),
-    headers: { "Content-type": "application/json; charset=UTF-8" }
-} )
-        .then(response => response.json())
-        .then(json => console.log(json))
-        .catch(err => console.log(err));
+    console.log("reg before:" + JSON.stringify(reg))
+    fetch(urlCreateCupRegistration, {
+        method: "POST",
+        body: JSON.stringify(reg),
+        headers: { "Content-type": "application/json; charset=UTF-8" }
+    })
+        .then(async (response) => {
+
+            // get json response here
+            let data = await response.json();
+            let message = data.errors.message[0]
+            if (response.status === 200) {
+                // Process data here
+            } else {
+                alert(message);
+            }
+
+        })
+        .catch((err) => {
+            alert(err);
+        })
+        //.then(CheckError)
+        //.then((jsonResponse) => {
+        //    alert(jsonResponse)
+
+        //}).catch((error) => {
+        //    alert(error.message)
+        //});
+}
+
+function CheckError(response) {
+    if (response.status >= 200 && response.status <= 299) {
+
+        return response.json();
+
+    } else if (response.status == 400) {
+        alert("hej");
+        alert(response.statusText);
+        alert(response.jsonResponse);
+        return response.json().then(json => {
+            throw new Error(json.error);
+        })
+
+    } else {
+
+        throw Error(response.statusText);
+    }
 }
 
 function getRegIp(url) {
@@ -281,10 +321,10 @@ function getRegIp(url) {
 //post new cup admin
 function newCupAdmin(cupId) {
     let admin = {
-        cup_user_username:"",
-        cup_user_password:"",
-        cup_user_cup_id:cupId,
-        cup_user_rights:0,
+        cup_user_username: "",
+        cup_user_password: "",
+        cup_user_cup_id: cupId,
+        cup_user_rights: 0,
         cup_user_name: document.getElementById("order_contact_name").value,
         cup_user_email: document.getElementById("order_contact_mail").value,
         cup_user_phone: document.getElementById("order_contact_number").value,
@@ -309,12 +349,11 @@ $(document).ready(function () {
                 let tempCity = $("#Cities").data('select2').dropdown.$search.val();
                 var btnToReturn = document.createElement("button");
                 btnToReturn.type = "button";
-                btnToReturn.onclick = function ()
-                {                   
+                btnToReturn.onclick = function () {
                     newCity(tempCity);
                 }
                 btnToReturn.innerHTML = "Lägg till denna ort";
-                return btnToReturn;                             
+                return btnToReturn;
             },
             errorLoading: function () { return '' },
         },
@@ -391,7 +430,6 @@ $(document).ready(function () {
                     obj.id = obj.club_name;
                     return obj;
                 });
-
                 return {
                     results: select2Data
                 };

@@ -110,6 +110,22 @@ namespace CupOnlineAPI.Controllers
             }
         }
 
+        [HttpPost]
+        public async Task<ActionResult<OrderRegistration>> CreateCupRegistrationValTest(OrderRegistration reg)
+        {
+
+            return  BadRequest();
+            //try
+            //{
+            //    reg.id = await _orderRepo.CreateCupRegistration(reg);
+            //    return Ok(reg);
+            //}
+            //catch (Exception ex)
+            //{
+            //    return StatusCode(500, ex.Message);
+            //}
+        }
+
 
         [HttpPost]
         public async Task<IActionResult> CreateCupAdmin(OrderAdmin admin)

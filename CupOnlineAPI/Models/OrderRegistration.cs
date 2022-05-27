@@ -1,4 +1,6 @@
 ﻿using Dapper.Contrib.Extensions;
+using System.ComponentModel.DataAnnotations;
+using KeyAttribute = Dapper.Contrib.Extensions.KeyAttribute;
 
 namespace CupOnlineAPI.Models
 {
@@ -8,6 +10,7 @@ namespace CupOnlineAPI.Models
         [Key]
         public int id { get; set; }
         public int? cup_id { get; set; }
+        [Required]
         public string? message { get; set; } = "";
         public string? invoiceAddress { get; set; } = "";
         public DateTime? registrationDate { get; set; } = DateTime.Now;
