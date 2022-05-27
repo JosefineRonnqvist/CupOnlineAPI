@@ -21,7 +21,7 @@ function GetOptions() {
 const form = document.querySelector('#order_form');
 form.onsubmit = (e) => {
     e.preventDefault();
-    var cupId = newCup();
+    getRegIp('https://api.ipify.org?format=json');
 
 }
 
@@ -187,7 +187,7 @@ function setCity(city) {
 
 
 //post new cup
-function newCup() {
+function newCup(regIp) {
     let organizer;
     try { organizer = $('#Organizers').select2('data')[0].club_id; }
     catch (e) {
@@ -217,7 +217,7 @@ function newCup() {
             console.log(json);
             var cupId= json.cup_id;
             newCupAdmin(cupId);
-            newRegistration(cupId);
+            newRegistration(cupId, regIp);
         })
         .catch(err => console.log(err));
 }
@@ -248,7 +248,7 @@ function checkCupTypeUrl() {
 }
 
 //post new reigistration
-function newRegistration(cupId) {
+function newRegistration(cupId, regIp) {
 
     const reg = {
         cup_id: cupId,
@@ -256,6 +256,7 @@ function newRegistration(cupId) {
         invoiceAddress:"",
         orderStatus: document.getElementById("order_cup_type").value,
         foundType: document.getElementById("order_found_cuponline").value,
+        regIp: regIp,
     }
     console.log("reg before:" +JSON.stringify(reg))
 fetch(urlCreateCupRegistration, {
@@ -266,6 +267,15 @@ fetch(urlCreateCupRegistration, {
         .then(response => response.json())
         .then(json => console.log(json))
         .catch(err => console.log(err));
+}
+
+function getRegIp(url) {
+    fetch(url)
+        .then(res => res.json())
+        .then(json => {
+            var regIp = json.ip;
+            newCup(regIp);
+        });
 }
 
 //post new cup admin
@@ -391,9 +401,5 @@ $(document).ready(function () {
     });
 });
 
-$(document).ready(function () {
-    $.getJSON("https://api.ipify.org?format=json", function (data) {
-        $("#regIp").html(data.ip);
-    })
-}
+
 
