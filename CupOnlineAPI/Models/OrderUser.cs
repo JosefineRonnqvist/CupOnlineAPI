@@ -1,6 +1,9 @@
 ﻿using KeyAttribute = Dapper.Contrib.Extensions.KeyAttribute;
 using System.ComponentModel.DataAnnotations;
 using Dapper.Contrib.Extensions;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNet.Identity;
+using System.Web.Security;
 
 namespace CupOnlineAPI.Models
 {
@@ -21,5 +24,11 @@ namespace CupOnlineAPI.Models
         [Required]
         [Phone]
         public string? cup_user_phone { get; set; }
+
+        void CreatePassword()
+        {
+            var hasher = new PasswordHasher();
+            var password = Membership.GeneratePassword(8, 3);
+        }
     }
 }
