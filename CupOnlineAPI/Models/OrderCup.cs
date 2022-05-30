@@ -1,4 +1,6 @@
 ﻿using Dapper.Contrib.Extensions;
+using System.ComponentModel.DataAnnotations;
+using KeyAttribute = Dapper.Contrib.Extensions.KeyAttribute;
 
 namespace CupOnlineAPI.Models
 {
@@ -7,20 +9,26 @@ namespace CupOnlineAPI.Models
     {
         [Key]
         public int cup_id { get; set; }
+        [Required]
         public int cup_club_id { get; set; }
+        [Required]
         public int cup_sport_id { get; set; }
         public string cup_logotype { get; set; } = "";
         public string cup_sponsor_logotype { get; set; } 
         public string cup_sponsor_url { get; set; }
         public string cup_url { get; set; } = "";
         public string cup_date { get; set; }
+        [Required]
         public string cup_startdate { get; set; }
+        [Required]
         public string cup_enddate { get; set; }
+        [Required]
         public string cup_name { get; set; }
         public string cup_players_age { get; set; } = "";
         public int cup_groups { get; set; } = 1;
         public int cup_periods { get; set; } = 1;
         public int cup_periodtime { get; set; } = 1;
+        [Required]
         public string cup_play_place { get; set; }
         public int cup_round { get; set; } = 1;
         public int cup_game_no { get; set; } = 1;       

@@ -11,6 +11,7 @@ const urlCreateCupRegistration = url + '/api/Order/CreateCupRegistration'
 const urlCreateCupRegistrationValTest = url + '/api/Order/CreateCupRegistrationValTest'
 const urlCreateCupAdmin = url + '/api/Order/CreateCupAdmin'
 
+//gets options to form
 function GetOptions() {
     hidePanels();
     GetSports();
@@ -19,18 +20,12 @@ function GetOptions() {
     foundCupOnline();
 }
 
+//when submit button is clicked, first get reg ip and then send new cup, new registration and new 
 const form = document.querySelector('#order_form');
 form.onsubmit = (e) => {
     e.preventDefault();
     getRegIp('https://api.ipify.org?format=json');
-
 }
-
-//function ClickedOrderCup() { 
-//    var cupId = newCup();
-//    newCupAdmin(cupId);
-//    newRegistration(cupId);   
-//}
 
 //get ages from api
 function GetAges() {
@@ -135,7 +130,7 @@ function hidePanels() {
     $('.hideNew').hide();
 }
 
-//post new organizer
+//post new organizer and return id
 function newOrganizer() {
 
     let organizer = {
@@ -159,7 +154,7 @@ function newOrganizer() {
         .catch(err => console.log(err));
 }
 
-//post new city
+//post new city 
 function newCity(cityToAdd) {
     let city = {
         city_name: cityToAdd
@@ -178,6 +173,7 @@ function newCity(cityToAdd) {
         .catch(err => console.log(err));
 }
 
+//set the added city as the chosen city in select
 function setCity(city) {
     var o = $("<option/>", { value: city.city_id, text: city.city_name });
     $('#Cities').append(o);
@@ -187,7 +183,7 @@ function setCity(city) {
 }
 
 
-//post new cup
+//post new cup, get id and send it to new user and new registration
 function newCup(regIp) {
     let organizer;
     try { organizer = $('#Organizers').select2('data')[0].club_id; }
@@ -223,6 +219,7 @@ function newCup(regIp) {
         .catch(err => console.log(err));
 }
 
+//take startdate and enddate and change it to readable format
 function checkCupDate() {
     var startDate = document.getElementById("order_startdate").value.split('-');
     var endDate = document.getElementById("order_enddate").value.split('-');
@@ -249,7 +246,7 @@ function checkCupTypeUrl() {
     else return "";
 }
 
-//post new reigistration
+//post new registration
 function newRegistration(cupId, regIp) {
 
     const reg = {
@@ -266,49 +263,26 @@ function newRegistration(cupId, regIp) {
         body: JSON.stringify(reg),
         headers: { "Content-type": "application/json; charset=UTF-8" }
     })
-        .then(async (response) => {
+        .then(response => response.json())
+        .then(json => console.log(json))
+        .catch(err => console.log(err));
 
-            // get json response here
-            let data = await response.json();
-            let message = data.errors.message[0]
-            if (response.status === 200) {
-                // Process data here
-            } else {
-                alert(message);
-            }
-
-        })
-        .catch((err) => {
-            alert(err);
-        })
-        //.then(CheckError)
-        //.then((jsonResponse) => {
-        //    alert(jsonResponse)
-
-        //}).catch((error) => {
-        //    alert(error.message)
-        //});
+        //.then(async (response) => {
+        //    // get json response here
+        //    let data = await response.json();
+        //    let message = data.errors.message[0]
+        //    if (response.status === 200) {
+        //        // Process data here
+        //    } else {
+        //        alert(message);
+        //    }
+        //})
+        //.catch((err) => {
+        //    alert(err);
+        //})      
 }
 
-function CheckError(response) {
-    if (response.status >= 200 && response.status <= 299) {
-
-        return response.json();
-
-    } else if (response.status == 400) {
-        alert("hej");
-        alert(response.statusText);
-        alert(response.jsonResponse);
-        return response.json().then(json => {
-            throw new Error(json.error);
-        })
-
-    } else {
-
-        throw Error(response.statusText);
-    }
-}
-
+//get ip from registrator
 function getRegIp(url) {
     fetch(url)
         .then(res => res.json())
@@ -340,7 +314,7 @@ function newCupAdmin(cupId) {
         .catch(err => console.log(err));
 }
 
-
+//create the select with search for cities, if city not exists, create new if button is pressed
 $(document).ready(function () {
     $("#Cities").select2({
         language: {
@@ -386,6 +360,7 @@ $(document).ready(function () {
     });
 });
 
+//create select with search for organizers, if not found and button is pressed, open options to create new organizer
 $(document).ready(function () {
     $("#Organizers").select2({
         language: {

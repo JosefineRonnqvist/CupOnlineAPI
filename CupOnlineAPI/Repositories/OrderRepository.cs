@@ -146,11 +146,11 @@ namespace CupOnlineAPI.Repositories
             }
         }
 
-        public async Task<int> CreateCupAdmin(OrderAdmin admin)
+        public async Task<int> CreateCupAdmin(OrderUser admin)
         {
             using (var connection = _context.CreateConnection())
             {
-                var newAdmin = new OrderAdmin
+                var newAdmin = new OrderUser
                 {
                     cup_user_username = admin.cup_user_username,
                     cup_user_password = admin.cup_user_password,

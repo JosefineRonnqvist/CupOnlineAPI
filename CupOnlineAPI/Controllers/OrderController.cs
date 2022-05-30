@@ -128,7 +128,7 @@ namespace CupOnlineAPI.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> CreateCupAdmin(OrderAdmin admin)
+        public async Task<IActionResult> CreateCupAdmin(OrderUser admin)
         {
             try
             {
