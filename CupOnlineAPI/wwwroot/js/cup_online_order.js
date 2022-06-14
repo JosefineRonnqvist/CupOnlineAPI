@@ -27,6 +27,18 @@ form.onsubmit = (e) => {
     getRegIp('https://api.ipify.org?format=json');
 }
 
+function sendEmail(mail) {
+    Email.send({
+        SecureToken: "<your generated token>",
+        To: mail,
+        From: "support@cuponline.se",
+        Subject: "Cuponline ny cup - " + cup_name,
+        Body: "<html><h3>{cup_name}</h3></html>"
+    }).then(
+        message => alert("mail sent successfully")
+    );
+}
+
 //get ages from api
 function GetAges() {
     fetch(urlAges)
@@ -265,21 +277,7 @@ function newRegistration(cupId, regIp) {
     })
         .then(response => response.json())
         .then(json => console.log(json))
-        .catch(err => console.log(err));
-
-        //.then(async (response) => {
-        //    // get json response here
-        //    let data = await response.json();
-        //    let message = data.errors.message[0]
-        //    if (response.status === 200) {
-        //        // Process data here
-        //    } else {
-        //        alert(message);
-        //    }
-        //})
-        //.catch((err) => {
-        //    alert(err);
-        //})      
+        .catch(err => console.log(err));     
 }
 
 //get ip from registrator
