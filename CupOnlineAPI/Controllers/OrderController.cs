@@ -95,7 +95,6 @@ namespace CupOnlineAPI.Controllers
             }
         }
 
-
         [HttpPost]
         public async Task<ActionResult<OrderRegistration>> CreateCupRegistration(OrderRegistration reg)
         {
@@ -111,29 +110,54 @@ namespace CupOnlineAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<OrderRegistration>> CreateCupRegistrationValTest(OrderRegistration reg)
-        {
-
-            return  BadRequest();
-            //try
-            //{
-            //    reg.id = await _orderRepo.CreateCupRegistration(reg);
-            //    return Ok(reg);
-            //}
-            //catch (Exception ex)
-            //{
-            //    return StatusCode(500, ex.Message);
-            //}
-        }
-
-
-        [HttpPost]
         public async Task<IActionResult> CreateCupAdmin(OrderUser admin)
         {
             try
             {
                 admin.cup_user_id = await _orderRepo.CreateCupAdmin(admin);
                 return Ok(admin);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SendConfirmationMailSe(ConfirmationMailDetails confirmation)
+        {
+            try
+            {
+                await _orderRepo.SendConfirmationMailSe(confirmation);
+                return Ok();
+            }
+            catch(Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SendConfirmationMailEn(ConfirmationMailDetails confirmation)
+        {
+            try
+            {
+                await _orderRepo.SendConfirmationMailEn(confirmation);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SendOrderMail(OrderMailDetails orderDetails)
+        {
+            try
+            {
+                await _orderRepo.SendOrderMail(orderDetails);
+                return Ok();
             }
             catch (Exception ex)
             {

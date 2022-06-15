@@ -8,8 +8,10 @@ const urlCreateCity = url + '/api/Order/CreateCity'
 const urlCreateOrganizer = url + '/api/Order/CreateOrganizer'
 const urlCreateCup = url + '/api/Order/CreateCup'
 const urlCreateCupRegistration = url + '/api/Order/CreateCupRegistration'
-const urlCreateCupRegistrationValTest = url + '/api/Order/CreateCupRegistrationValTest'
 const urlCreateCupAdmin = url + '/api/Order/CreateCupAdmin'
+const urlConfirmationMailSe = url +'/api/Order/SendConfirmationMailSe'
+const urlConfirmationMailEn = url + '/api/Order/SendConfirmationMailEn'
+const urlOrderMail = url + '/api/Order/SendOrderMail'
 
 //gets options to form
 function GetOptions() {
@@ -25,18 +27,60 @@ const form = document.querySelector('#order_form');
 form.onsubmit = (e) => {
     e.preventDefault();
     getRegIp('https://api.ipify.org?format=json');
+    if (navigator.languages[0] == "sv") {
+        SendConfirmationMail(urlConfirmationMailSe);
+    }
+    else {
+        SendConfirmationMail(urlConfirmationMailEn);
+    }
+    SendOrderMail();
 }
 
-function sendEmail(mail) {
-    Email.send({
-        SecureToken: "<your generated token>",
-        To: mail,
-        From: "support@cuponline.se",
-        Subject: "Cuponline ny cup - " + cup_name,
-        Body: "<html><h3>{cup_name}</h3></html>"
-    }).then(
-        message => alert("mail sent successfully")
-    );
+function SendConfirmationMail(conUrl) {
+    let confirmationMailDetails = {
+        cup_user_name: "",
+        cup_user_username: "",
+        cup_id:0,
+        cup_name: document.getElementById("order_cup_name").value,
+        toMail: document.getElementById("order_contact_mail").value,
+    }
+    fetch(conUrl, {
+        method: "POST",
+        body: JSON.stringify(confirmationMailDetails),
+        headers: { "Content-type": "application/json; charset=UTF-8" }
+    })
+        .then(response => response.json())
+        .then(json => console.log(json))
+        .catch(err => console.log(err));
+}
+
+function SendOrderMail() {
+    let orderMailDetails = {
+        acceptSharing: document.getElementById("order_approval").value,   ///format? string?
+        invoiceAddress: "",
+        cup_user_password: "",
+        cup_user_username: "",
+        cup_user_phone: document.getElementById("order_contact_number").value,
+        cup_user_email: document.getElementById("order_contact_mail").value,
+        cup_user_name: document.getElementById("order_contact_mail").value,
+        sport: document.getElementById("order_sport").value,
+        cup_players_age: document.getElementById("order_age_text").value,
+        cup_play_place: document.getElementById("order_play_place").value,
+        cup_startdate: document.getElementById("order_startdate").value,
+        cup_enddate: document.getElementById("order_enddate").value,
+        cup_id: 0,
+        organizer: "",
+        message: document.getElementById("order_message").value,
+        cup_name: document.getElementById("order_cup_name").value,
+    }
+    fetch(conOrderMail, {
+        method: "POST",
+        body: JSON.stringify(orderMailDetails),
+        headers: { "Content-type": "application/json; charset=UTF-8" }
+    })
+        .then(response => response.json())
+        .then(json => console.log(json))
+        .catch(err => console.log(err));
 }
 
 //get ages from api
@@ -269,7 +313,7 @@ function newRegistration(cupId, regIp) {
         foundType: document.getElementById("order_found_cuponline").value,
         regIp: regIp,
     }
-    console.log("reg before:" + JSON.stringify(reg))
+
     fetch(urlCreateCupRegistration, {
         method: "POST",
         body: JSON.stringify(reg),

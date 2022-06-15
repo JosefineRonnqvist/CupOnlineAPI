@@ -2,6 +2,7 @@
 using CupOnlineAPI.Models;
 using Dapper;
 using Dapper.Contrib.Extensions;
+using NETCore.MailKit.Core;
 using System.Net.Mail;
 
 namespace CupOnlineAPI.Repositories
@@ -9,10 +10,12 @@ namespace CupOnlineAPI.Repositories
     public class OrderRepository
     {
         private readonly DapperContext _context;
+        public IEmailService _emailService { get; set; }
 
-        public OrderRepository(DapperContext context)
+        public OrderRepository(DapperContext context, IEmailService emailService)
         {
             _context = context;
+            _emailService = emailService;
         }
 
         /// <summary>
@@ -29,7 +32,6 @@ namespace CupOnlineAPI.Repositories
                 return cups.ToList();
             }
         }
-
 
         /// <summary>
         /// Get all registered sports
@@ -165,50 +167,44 @@ namespace CupOnlineAPI.Repositories
             }
         }
 
-        public void SendConfirmationMailSe(string cup_user_password, string cup_user_username, int cup_id,string cup_name, string toMail, string fromMail="support@cuponline.se")
+        public async Task SendConfirmationMailSe(ConfirmationMailDetails con)
         {
-            MailAddress to = new MailAddress(toMail);
-            MailAddress from = new MailAddress(fromMail);
-
-            MailMessage message = new MailMessage(from, to);
-            message.Subject = "CupOnline användaruppgifter -" + cup_name;
-            message.Body = $"Hej, <br><br>Tack för att ni väljer att använda CupOnline, här kommer era användaruppgifter.<br><br>" +
-                           $"Adress: <a href=\"https://www.CupOnline.se/admin_login.aspx?cupid= {cup_id}\">https://www.CupOnline.se/admin_login.aspx?cupid= {cup_id}</a><br><br>Användarnamn: {cup_user_username}<br>" +
-                           $"Lösenord: {cup_user_password}<br><br>Support<br>Använd i första hand&nbsp;formuläret som finns länkat från administrationssidan.<br>" +
-                           $"Mail: {fromMail}<br><br>Om ni vänder er till deltagare under U13 får ni nyttja CupOnline kostnadsfritt så länge ni behåller " +
+            var subject = "CupOnline användaruppgifter -" + con.cup_name;
+            var body = $"Hej, <br><br>Tack för att ni väljer att använda CupOnline, här kommer era användaruppgifter.<br><br>" +
+                           $"Adress: <a href=\"https://www.CupOnline.se/admin_login.aspx?cupid= {con.cup_id}\">https://www.CupOnline.se/admin_login.aspx?cupid= {con.cup_id}" +
+                           $"</a><br><br>Användarnamn: {con.cup_user_username}<br>" +
+                           $"Lösenord: {con.cup_user_password}<br><br>Support<br>Använd i första hand&nbsp;formuläret som finns länkat från administrationssidan.<br>" +
+                           $"Mail: {con.fromMail}<br><br>Om ni vänder er till deltagare under U13 får ni nyttja CupOnline kostnadsfritt så länge ni behåller " +
                            $"CoreIT som huvudsponsor (länk + logo).<br><br><strong>Betalningsrutiner<br></strong>Avgiftsbelagd cup betalas innan den kan göras publik, " +
                            $"men du kan börja jobba med innehåll innan dess.<br>Betalning&nbsp;görs via CupOnline efter att man har loggat in.<br>" +
                            $"Tillgängliga betalsätt är betalkort, internetbank eller faktura.<br><br>Mvh<br>CupOnline<br>www.cuponline.se<br><br>";
+            await _emailService.SendAsync(con.toMail, subject, body);
         }
 
-        public void SendConfirmationMailEn(string cup_user_password, string cup_user_username, int cup_id, string cup_name, string toMail, string fromMail = "support@cuponline.se")
+        public async Task SendConfirmationMailEn(ConfirmationMailDetails con)
         {
-            MailAddress to = new MailAddress(toMail);
-            MailAddress from = new MailAddress(fromMail);
-
-            MailMessage message = new MailMessage(from, to);
-            message.Subject = "CupOnline login information -" + cup_name;
-            message.Body = $"Hi, <br><br>Thank you for choosing CupOnline, here is your login information.<br><br>" +
-                           $"Address: <a href=\"https://www.CupOnline.se/admin_login.aspx?cupid= {cup_id}\">https://www.CupOnline.se/admin_login.aspx?cupid= {cup_id}</a><br><br>User name: {cup_user_username}<br>" +
-                           $"Password: {cup_user_password}<br><br>Support<br>Please use the form that is available&nbsp;on the administration page.<br>" +
-                           $"Mail: {fromMail}<br><br><strong>New payment procedures<br></strong>On tournaments that requires payment&nbsp;" +
+            var subject = "CupOnline login information -" + con.cup_name;
+            var body = $"Hi, <br><br>Thank you for choosing CupOnline, here is your login information.<br><br>" +
+                           $"Address: <a href=\"https://www.CupOnline.se/admin_login.aspx?cupid= {con.cup_id}\">https://www.CupOnline.se/admin_login.aspx?cupid= {con.cup_id}" +
+                           $"</a><br><br>User name: {con.cup_user_username}<br>" +
+                           $"Password: {con.cup_user_password}<br><br>Support<br>Please use the form that is available&nbsp;on the administration page.<br>" +
+                           $"Mail: {con.fromMail}<br><br><strong>New payment procedures<br></strong>On tournaments that requires payment&nbsp;" +
                            $"you have to pay before the cup can be made public. You can still start with the content ahead of paying and publishing." +
                            $"<br><br>Regards<br>CupOnline<br>www.cuponline.se<br><br>";
+            await _emailService.SendAsync(con.toMail, subject, body);
         }
 
-        public void SendOrderMail(string acceptSharing, string invoiceAddress,string cup_user_password, string cup_user_username, string cup_user_phone, string cup_user_email, string cup_user_name, string sport, string cup_players_age, string cup_play_place, string cup_startdate, string cup_enddate, int cup_id, string organizer, string message, string cup_name, string toMail="kontakt@cuponline", string fromMail="order@cuponline.se")
+        public async Task SendOrderMail(OrderMailDetails order)
         {
-            MailAddress to = new MailAddress(toMail);
-            MailAddress from = new MailAddress(fromMail);
-
-            MailMessage mailMessage = new MailMessage(from, to);
-            mailMessage.Subject = "CupOnline ny cup -" + cup_name;
-            mailMessage.Body = $"<p>Ny cup registrerad: <strong>{cup_name}</strong><br><br><strong>Meddelande</strong><br>{message}<br><br><strong>Arrangör</strong>" +
-                $"<br>{organizer}<br><br><strong>Cupinställningar</strong><br>Namn: {cup_name}<br>Sport: {sport}<br>Ålder: {cup_players_age}<br>Spelplats: {cup_play_place}<br>Datum: {cup_startdate} till {cup_enddate}" +
-                $"<br><br><strong>Kontakt</strong><br>Namn: {cup_user_name}<br>Telefon: {cup_user_phone}<br>E-post:&nbsp;{cup_user_email}<br><br><strong>Faktureringsadress</strong><br>{invoiceAddress}" +
-                $"<br><br><strong>CupOnline-partners får ta del av adressuppgifter<br><strong>{acceptSharing}<br><br><strong>" +
-                $"Inloggning</strong><br><br><a href=\"https://www.CupOnline.se/admin_login.aspx?cupid= {cup_id}\">https://www.CupOnline.se/admin_login.aspx?cupid= {cup_id}</a>" +
-                $"</p><p><a href=\"http://www.CupOnline.se/admin_login.asp?cupid= {cup_id}\"></a><br>Användarnamn: {cup_user_name}<br>Lösenord: {cup_user_password}";
+            var subject = "CupOnline ny cup -" + order.cup_name;
+            var body = $"<p>Ny cup registrerad: <strong>{order.cup_name}</strong><br><br><strong>Meddelande</strong><br>{order.message}<br><br><strong>Arrangör</strong>" +
+                $"<br>{order.organizer}<br><br><strong>Cupinställningar</strong><br>Namn: {order.cup_name}<br>Sport: {order.sport}<br>Ålder: {order.cup_players_age}<br>" +
+                $"Spelplats: {order.cup_play_place}<br>Datum: {order.cup_startdate} till {order.cup_enddate}<br><br><strong>Kontakt</strong><br>Namn: {order.cup_user_name}<br>" +
+                $"Telefon: {order.cup_user_phone}<br>E-post:&nbsp;{order.cup_user_email}<br><br><strong>Faktureringsadress</strong><br>{order.invoiceAddress}" +
+                $"<br><br><strong>CupOnline-partners får ta del av adressuppgifter<br><strong>{order.acceptSharing}<br><br><strong>" +
+                $"Inloggning</strong><br><br><a href=\"https://www.CupOnline.se/admin_login.aspx?cupid= {order.cup_id}\">https://www.CupOnline.se/admin_login.aspx?cupid= {order.cup_id}</a>" +
+                $"</p><p><a href=\"http://www.CupOnline.se/admin_login.asp?cupid= {order.cup_id}\"></a><br>Användarnamn: {order.cup_user_name}<br>Lösenord: {order.cup_user_password}";
+            await _emailService.SendAsync(order.toMail, subject, body);
         }
     }
 }
