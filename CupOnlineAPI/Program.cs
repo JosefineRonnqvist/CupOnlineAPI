@@ -1,4 +1,5 @@
 using CupOnlineAPI.Context;
+using CupOnlineAPI.Helpers;
 using CupOnlineAPI.Repositories;
 using NETCore.MailKit.Extensions;
 using NETCore.MailKit.Infrastructure.Internal;
@@ -14,6 +15,8 @@ builder.Services.AddSingleton<DapperContext>();
 builder.Services.AddScoped<CupRepository>();
 builder.Services.AddScoped<SearchParamRepository>();
 builder.Services.AddScoped<OrderRepository>();
+builder.Services.AddScoped<PasswordRepository>();
+//builder.Services.AddScoped<IClassSendMail, ClassSendMail>();
 builder.Services.AddControllers();
 builder.Services.AddCors(setup =>
 {
@@ -27,18 +30,19 @@ builder.Services.AddCors(setup =>
     });
 });
 // IEmailService implementation using MailKit
+//http://ryadel.com/en/asp-net-core-send-email-messages-smtp-netcore-mailkit/
 builder.Services.AddMailKit(optionBuilder =>
 {
     optionBuilder.UseMailKit(new MailKitOptions()
     {
         Server = builder.Configuration["ExternalProviders:MailKit:SMTP:Address"],
-        Port = Convert.ToInt32(builder.Configuration["ExternalProviders:MailKit:SMTP:Port"]),
-        Account = builder.Configuration["ExternalProviders:MailKit:SMTP:Account"],
-        Password = builder.Configuration["ExternalProviders:MailKit:SMTP:Password"],
+        //Port = Convert.ToInt32(builder.Configuration["ExternalProviders:MailKit:SMTP:Port"]),
+        //Account = builder.Configuration["ExternalProviders:MailKit:SMTP:Account"],
+        //Password = builder.Configuration["ExternalProviders:MailKit:SMTP:Password"],
         SenderEmail = builder.Configuration["ExternalProviders:MailKit:SMTP:SenderEmail"],
         SenderName = builder.Configuration["ExternalProviders:MailKit:SMTP:SenderName"],
         // Set it to TRUE to enable ssl or tls, FALSE otherwise
-        Security = true
+        Security = false
     });
 });
 

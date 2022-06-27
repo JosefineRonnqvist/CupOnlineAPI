@@ -110,7 +110,7 @@ namespace CupOnlineAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateCupAdmin(OrderUser admin)
+        public async Task<IActionResult> CreateCupAdmin(OrderCupAdmin admin)
         {
             try
             {
@@ -128,7 +128,7 @@ namespace CupOnlineAPI.Controllers
         {
             try
             {
-                await _orderRepo.SendConfirmationMailSe(confirmation);
+                _orderRepo.SendConfirmationMailSe(confirmation);
                 return Ok();
             }
             catch(Exception ex)

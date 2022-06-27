@@ -9,9 +9,11 @@ const urlCreateOrganizer = url + '/api/Order/CreateOrganizer'
 const urlCreateCup = url + '/api/Order/CreateCup'
 const urlCreateCupRegistration = url + '/api/Order/CreateCupRegistration'
 const urlCreateCupAdmin = url + '/api/Order/CreateCupAdmin'
-const urlConfirmationMailSe = url +'/api/Order/SendConfirmationMailSe'
+const urlConfirmationMailSe = url + '/api/Order/SendConfirmationMailSe'
 const urlConfirmationMailEn = url + '/api/Order/SendConfirmationMailEn'
 const urlOrderMail = url + '/api/Order/SendOrderMail'
+const urlCreatePassword = url + '/api/Password/CreatePassword'
+const urlHashPassword = url + '/api/Password/HashPassword?password='
 
 //gets options to form
 function GetOptions() {
@@ -27,60 +29,16 @@ const form = document.querySelector('#order_form');
 form.onsubmit = (e) => {
     e.preventDefault();
     getRegIp('https://api.ipify.org?format=json');
-    if (navigator.languages[0] == "sv") {
-        SendConfirmationMail(urlConfirmationMailSe);
-    }
-    else {
-        SendConfirmationMail(urlConfirmationMailEn);
-    }
-    SendOrderMail();
 }
 
-function SendConfirmationMail(conUrl) {
-    let confirmationMailDetails = {
-        cup_user_name: "",
-        cup_user_username: "",
-        cup_id:0,
-        cup_name: document.getElementById("order_cup_name").value,
-        toMail: document.getElementById("order_contact_mail").value,
-    }
-    fetch(conUrl, {
-        method: "POST",
-        body: JSON.stringify(confirmationMailDetails),
-        headers: { "Content-type": "application/json; charset=UTF-8" }
-    })
-        .then(response => response.json())
-        .then(json => console.log(json))
-        .catch(err => console.log(err));
-}
-
-function SendOrderMail() {
-    let orderMailDetails = {
-        acceptSharing: document.getElementById("order_approval").value,   ///format? string?
-        invoiceAddress: "",
-        cup_user_password: "",
-        cup_user_username: "",
-        cup_user_phone: document.getElementById("order_contact_number").value,
-        cup_user_email: document.getElementById("order_contact_mail").value,
-        cup_user_name: document.getElementById("order_contact_mail").value,
-        sport: document.getElementById("order_sport").value,
-        cup_players_age: document.getElementById("order_age_text").value,
-        cup_play_place: document.getElementById("order_play_place").value,
-        cup_startdate: document.getElementById("order_startdate").value,
-        cup_enddate: document.getElementById("order_enddate").value,
-        cup_id: 0,
-        organizer: "",
-        message: document.getElementById("order_message").value,
-        cup_name: document.getElementById("order_cup_name").value,
-    }
-    fetch(conOrderMail, {
-        method: "POST",
-        body: JSON.stringify(orderMailDetails),
-        headers: { "Content-type": "application/json; charset=UTF-8" }
-    })
-        .then(response => response.json())
-        .then(json => console.log(json))
-        .catch(err => console.log(err));
+//get ip from registrator
+function getRegIp(url) {
+    fetch(url)
+        .then(res => res.json())
+        .then(json => {
+            var regIp = json.ip;
+            newCup(regIp);
+        });
 }
 
 //get ages from api
@@ -203,7 +161,6 @@ function newOrganizer() {
     })
         .then(response => response.json())
         .then(json => {
-            console.log(json);
             return json.club_city_id;
         }
         )
@@ -224,7 +181,6 @@ function newCity(cityToAdd) {
         .then(response => response.json())
         .then(json => {
             setCity(json);
-            console.log(json);
         })
         .catch(err => console.log(err));
 }
@@ -238,14 +194,34 @@ function setCity(city) {
     $("#Cities").select2("close");
 }
 
+//creates a randomised password
+function CreatePassword() {
+     return fetch(urlCreatePassword)
+        .then(response => response.text())
+        .then(data => {
+            return data;
+        })
+        .catch(error => console.error("Unable to get password.", error));
+}
+
+//hash password 
+function HashPassword(password) {
+    return fetch(urlHashPassword+password)
+        .then(response => response.text())
+        .then(data => {
+            console.log(data);
+            return data;
+        })
+        .catch(error => console.error("Unable to get hashed password.", error));
+}
 
 //post new cup, get id and send it to new user and new registration
-function newCup(regIp) {
-    let organizer;
+async function newCup(regIp) {
     try { organizer = $('#Organizers').select2('data')[0].club_id; }
     catch (e) {
         organizer = newOrganizer();
     }
+    var password = await CreatePassword();
 
     let cup = {
         cup_club_id: organizer,
@@ -269,10 +245,114 @@ function newCup(regIp) {
         .then(json => {
             console.log(json);
             var cupId = json.cup_id;
-            newCupAdmin(cupId);
-            newRegistration(cupId, regIp);
+         
+            //send swedish or english mail
+            if (navigator.languages[0] == "sv") {
+                SendConfirmationMail(urlConfirmationMailSe, cupId, password);
+            }
+            else {
+                SendConfirmationMail(urlConfirmationMailEn, cupId, password);
+            }
         })
         .catch(err => console.log(err));
+
+    //send confirmation mail to customer
+    function SendConfirmationMail(conUrl, cupId, password) {
+        let confirmationMailDetails = {
+            cup_user_password: password,
+            cup_user_username: document.getElementById("order_contact_mail").value.toLowerCase(),
+            cup_id: cupId,
+            cup_name: document.getElementById("order_cup_name").value,
+            toMail: document.getElementById("order_contact_mail").value,
+        }
+        fetch(conUrl, {
+            method: "POST",
+            body: JSON.stringify(confirmationMailDetails),
+            headers: { "Content-type": "application/json; charset=UTF-8" }
+        })
+            .then(response => response.json())
+            .then(json => {
+                console.log(json);
+                var hashedPassword = HashPassword(password);
+                SendOrderMail(cupId, hashedPassword);
+            })
+            .catch(err => console.log(err));
+
+        //send mail to cuponline
+        function SendOrderMail(cupId, hashedPassword) {
+            let orderMailDetails = {
+                acceptSharing: document.getElementById("order_approval").value,   ///format? string?
+                invoiceAddress: "",
+                cup_user_password: hashedPassword,
+                cup_user_username: confirmationMailDetails.cup_user_username,
+                cup_user_phone: document.getElementById("order_contact_number").value,
+                cup_user_email: confirmationMailDetails.toMail,
+                cup_user_name: document.getElementById("order_contact_name").value,
+                sport: document.getElementById("order_sport").textContent,
+                cup_players_age: cup.cup_players_age,
+                cup_play_place: cup.cup_play_place,
+                cup_startdate: cup.cup_startdate,
+                cup_enddate: cup.cup_enddate,
+                cup_id: cupId,
+                organizer: cup.cup_club_id,
+                message: document.getElementById("order_message").value,
+                cup_name: confirmationMailDetails.cup_name,
+            }
+            fetch(urlOrderMail, {
+                method: "POST",
+                body: JSON.stringify(orderMailDetails),
+                headers: { "Content-type": "application/json; charset=UTF-8" }
+            })
+                .then(response => response.json())
+                .then(json => console.log(json))
+                .catch(err => console.log(err));
+
+            //post new cup admin
+            function newCupAdmin(cupId) {
+                let admin = {
+                    cup_user_username: orderMailDetails.cup_user_username,
+                    cup_user_password: orderMailDetails.cup_user_password,
+                    cup_user_cup_id: cupId,
+                    cup_user_rights: 0,
+                    cup_user_name: orderMailDetails.cup_user_name,
+                    cup_user_email: orderMailDetails.cup_user_email,
+                    cup_user_phone:orderMailDetails.cup_user_phone,
+                }
+
+                fetch(urlCreateCupAdmin, {
+                    method: "POST",
+                    body: JSON.stringify(admin),
+                    headers: { "Content-type": "application/json; charset=UTF-8" }
+                })
+                    .then(response => response.json())
+                    .then(json => console.log(json))
+                    .catch(err => console.log(err));
+            }
+            //post new registration
+            function newRegistration(cupId, regIp) {
+
+                const reg = {
+                    cup_id: cupId,
+                    message: orderMailDetails.message,
+                    invoiceAddress: orderMailDetails.invoiceAddress,
+                    orderStatus: document.getElementById("order_cup_type").value,
+                    foundType: document.getElementById("order_found_cuponline").value,
+                    regIp: regIp,
+                }
+
+                fetch(urlCreateCupRegistration, {
+                    method: "POST",
+                    body: JSON.stringify(reg),
+                    headers: { "Content-type": "application/json; charset=UTF-8" }
+                })
+                    .then(response => response.json())
+                    .then(json => console.log(json))
+                    .catch(err => console.log(err));
+            }
+            newRegistration(cupId, regIp);
+            newCupAdmin(cupId);
+        }
+    }
 }
 
 //take startdate and enddate and change it to readable format
@@ -300,60 +380,6 @@ function checkCupTypeUrl() {
         return "http://www.coreit.se";
     }
     else return "";
-}
-
-//post new registration
-function newRegistration(cupId, regIp) {
-
-    const reg = {
-        cup_id: cupId,
-        message: document.getElementById("order_message").value,
-        invoiceAddress: "",
-        orderStatus: document.getElementById("order_cup_type").value,
-        foundType: document.getElementById("order_found_cuponline").value,
-        regIp: regIp,
-    }
-
-    fetch(urlCreateCupRegistration, {
-        method: "POST",
-        body: JSON.stringify(reg),
-        headers: { "Content-type": "application/json; charset=UTF-8" }
-    })
-        .then(response => response.json())
-        .then(json => console.log(json))
-        .catch(err => console.log(err));     
-}
-
-//get ip from registrator
-function getRegIp(url) {
-    fetch(url)
-        .then(res => res.json())
-        .then(json => {
-            var regIp = json.ip;
-            newCup(regIp);
-        });
-}
-
-//post new cup admin
-function newCupAdmin(cupId) {
-    let admin = {
-        cup_user_username: "",
-        cup_user_password: "",
-        cup_user_cup_id: cupId,
-        cup_user_rights: 0,
-        cup_user_name: document.getElementById("order_contact_name").value,
-        cup_user_email: document.getElementById("order_contact_mail").value,
-        cup_user_phone: document.getElementById("order_contact_number").value,
-    }
-
-    fetch(urlCreateCupAdmin, {
-        method: "POST",
-        body: JSON.stringify(admin),
-        headers: { "Content-type": "application/json; charset=UTF-8" }
-    })
-        .then(response => response.json())
-        .then(json => console.log(json))
-        .catch(err => console.log(err));
 }
 
 //create the select with search for cities, if city not exists, create new if button is pressed

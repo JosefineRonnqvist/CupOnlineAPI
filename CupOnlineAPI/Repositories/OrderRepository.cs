@@ -1,15 +1,16 @@
 ﻿using CupOnlineAPI.Context;
+using CupOnlineAPI.Helpers;
 using CupOnlineAPI.Models;
 using Dapper;
 using Dapper.Contrib.Extensions;
 using NETCore.MailKit.Core;
-using System.Net.Mail;
 
 namespace CupOnlineAPI.Repositories
 {
     public class OrderRepository
     {
         private readonly DapperContext _context;
+        //public IClassSendMail _emailService { get; set; }
         public IEmailService _emailService { get; set; }
 
         public OrderRepository(DapperContext context, IEmailService emailService)
@@ -149,11 +150,11 @@ namespace CupOnlineAPI.Repositories
             }
         }
 
-        public async Task<int> CreateCupAdmin(OrderUser admin)
+        public async Task<int> CreateCupAdmin(OrderCupAdmin admin)
         {
             using (var connection = _context.CreateConnection())
             {
-                var newAdmin = new OrderUser
+                var newAdmin = new OrderCupAdmin
                 {
                     cup_user_username = admin.cup_user_username,
                     cup_user_password = admin.cup_user_password,
@@ -178,7 +179,8 @@ namespace CupOnlineAPI.Repositories
                            $"CoreIT som huvudsponsor (länk + logo).<br><br><strong>Betalningsrutiner<br></strong>Avgiftsbelagd cup betalas innan den kan göras publik, " +
                            $"men du kan börja jobba med innehåll innan dess.<br>Betalning&nbsp;görs via CupOnline efter att man har loggat in.<br>" +
                            $"Tillgängliga betalsätt är betalkort, internetbank eller faktura.<br><br>Mvh<br>CupOnline<br>www.cuponline.se<br><br>";
-            await _emailService.SendAsync(con.toMail, subject, body);
+            bool isHtml = true;
+            await _emailService.SendAsync(con.toMail, subject, body, isHtml);
         }
 
         public async Task SendConfirmationMailEn(ConfirmationMailDetails con)
@@ -191,7 +193,8 @@ namespace CupOnlineAPI.Repositories
                            $"Mail: {con.fromMail}<br><br><strong>New payment procedures<br></strong>On tournaments that requires payment&nbsp;" +
                            $"you have to pay before the cup can be made public. You can still start with the content ahead of paying and publishing." +
                            $"<br><br>Regards<br>CupOnline<br>www.cuponline.se<br><br>";
-            await _emailService.SendAsync(con.toMail, subject, body);
+            bool isHtml = true;
+            await _emailService.SendAsync(con.toMail, subject, body, isHtml);
         }
 
         public async Task SendOrderMail(OrderMailDetails order)
@@ -204,7 +207,8 @@ namespace CupOnlineAPI.Repositories
                 $"<br><br><strong>CupOnline-partners får ta del av adressuppgifter<br><strong>{order.acceptSharing}<br><br><strong>" +
                 $"Inloggning</strong><br><br><a href=\"https://www.CupOnline.se/admin_login.aspx?cupid= {order.cup_id}\">https://www.CupOnline.se/admin_login.aspx?cupid= {order.cup_id}</a>" +
                 $"</p><p><a href=\"http://www.CupOnline.se/admin_login.asp?cupid= {order.cup_id}\"></a><br>Användarnamn: {order.cup_user_name}<br>Lösenord: {order.cup_user_password}";
-            await _emailService.SendAsync(order.toMail, subject, body);
+            bool isHtml = true;
+            await _emailService.SendAsync(order.toMail, subject, body, isHtml); ;
         }
     }
 }

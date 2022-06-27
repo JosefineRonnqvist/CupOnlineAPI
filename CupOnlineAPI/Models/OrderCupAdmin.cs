@@ -1,13 +1,11 @@
 ﻿using KeyAttribute = Dapper.Contrib.Extensions.KeyAttribute;
 using System.ComponentModel.DataAnnotations;
 using Dapper.Contrib.Extensions;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNet.Identity;
 
 namespace CupOnlineAPI.Models
 {
     [Table("td_cup_users")]
-    public class OrderUser
+    public class OrderCupAdmin
     {
         [Key]
         public int cup_user_id { get; set; }
@@ -23,10 +21,5 @@ namespace CupOnlineAPI.Models
         [Required]
         [Phone]
         public string? cup_user_phone { get; set; }
-
-        void CreatePassword()
-        {
-            var hasher = new PasswordHasher();
-        }
     }
 }

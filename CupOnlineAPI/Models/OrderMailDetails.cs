@@ -18,7 +18,7 @@
         public string organizer { get; set; }
         public string message { get; set; }
         public string cup_name { get; set; }
-        public string toMail { get; set; } = "kontakt@cuponline.se";
+        public string toMail { get; set; } = "josefine.ronnqvist@coreit.se";
         public string fromMail { get; set; } = "order@cuponline.se";
     }
 }
