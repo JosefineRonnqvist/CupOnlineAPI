@@ -128,7 +128,7 @@ namespace CupOnlineAPI.Controllers
         {
             try
             {
-                _orderRepo.SendConfirmationMailSe(confirmation);
+                await _orderRepo.SendConfirmationMailSe(confirmation);
                 return Ok();
             }
             catch(Exception ex)

@@ -195,7 +195,7 @@ function setCity(city) {
 }
 
 //creates a randomised password
-function CreatePassword() {
+async function CreatePassword() {
      return fetch(urlCreatePassword)
         .then(response => response.text())
         .then(data => {
@@ -205,11 +205,10 @@ function CreatePassword() {
 }
 
 //hash password 
-function HashPassword(password) {
+async function HashPassword(password) {
     return fetch(urlHashPassword+password)
         .then(response => response.text())
         .then(data => {
-            console.log(data);
             return data;
         })
         .catch(error => console.error("Unable to get hashed password.", error));
@@ -217,6 +216,7 @@ function HashPassword(password) {
 
 //post new cup, get id and send it to new user and new registration
 async function newCup(regIp) {
+    console.log("newCup");
     try { organizer = $('#Organizers').select2('data')[0].club_id; }
     catch (e) {
         organizer = newOrganizer();
@@ -242,13 +242,13 @@ async function newCup(regIp) {
         headers: { "Content-type": "application/json; charset=UTF-8" }
     })
         .then(response => response.json())
-        .then(json => {
-            console.log(json);
-            var cupId = json.cup_id;
+        .then(data => {
+            console.log(data);
+            var cupId = data.cup_id;
          
             //send swedish or english mail
-            if (navigator.languages[0] == "sv") {
-                SendConfirmationMail(urlConfirmationMailSe, cupId, password);
+            if (navigator.languages[0] == "sv" || navigator.languages[0] =="sv-SE") {
+               SendConfirmationMail(urlConfirmationMailSe, cupId, password);
             }
             else {
                 SendConfirmationMail(urlConfirmationMailEn, cupId, password);
@@ -257,7 +257,9 @@ async function newCup(regIp) {
         .catch(err => console.log(err));
 
     //send confirmation mail to customer
-    function SendConfirmationMail(conUrl, cupId, password) {
+    async function SendConfirmationMail(conUrl, cupId, password) {
+        var hashedPassword = await HashPassword(password);
+
         let confirmationMailDetails = {
             cup_user_password: password,
             cup_user_username: document.getElementById("order_contact_mail").value.toLowerCase(),
@@ -265,15 +267,17 @@ async function newCup(regIp) {
             cup_name: document.getElementById("order_cup_name").value,
             toMail: document.getElementById("order_contact_mail").value,
         }
+
+        console.log(JSON.stringify(confirmationMailDetails));
+
         fetch(conUrl, {
             method: "POST",
             body: JSON.stringify(confirmationMailDetails),
             headers: { "Content-type": "application/json; charset=UTF-8" }
         })
-            .then(response => response.json())
-            .then(json => {
-                console.log(json);
-                var hashedPassword = HashPassword(password);
+            .then(response => response.text())
+            .then(data => {
+                console.log(data);            
                 SendOrderMail(cupId, hashedPassword);
             })
             .catch(err => console.log(err));
@@ -303,8 +307,8 @@ async function newCup(regIp) {
                 body: JSON.stringify(orderMailDetails),
                 headers: { "Content-type": "application/json; charset=UTF-8" }
             })
-                .then(response => response.json())
-                .then(json => console.log(json))
+                .then(response => response.text())
+                .then(data => console.log(data))
                 .catch(err => console.log(err));
 
             //post new cup admin
