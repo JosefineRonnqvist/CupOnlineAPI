@@ -1,5 +1,4 @@
 ﻿using CupOnlineAPI.Context;
-using CupOnlineAPI.Helpers;
 using CupOnlineAPI.Models;
 using Dapper;
 using Dapper.Contrib.Extensions;
@@ -10,13 +9,32 @@ namespace CupOnlineAPI.Repositories
     public class OrderRepository
     {
         private readonly DapperContext _context;
-        //public IClassSendMail _emailService { get; set; }
         public IEmailService _emailService { get; set; }
 
         public OrderRepository(DapperContext context, IEmailService emailService)
         {
             _context = context;
             _emailService = emailService;
+        }
+
+        /// <summary>
+        /// Get organizer by id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<Organizer> GetOrganizerById(int id)
+        {
+            var query = @"SELECT club_id, club_name FROM td_clubs
+                        WHERE club_id=@club_id";
+            using (var connection = _context.CreateConnection())
+            {
+
+                var organizer = await connection.QueryFirstAsync<Organizer>(query, new
+                {
+                    club_id=id
+                });
+                return organizer;
+            }
         }
 
         /// <summary>
@@ -206,7 +224,7 @@ namespace CupOnlineAPI.Repositories
                 $"Telefon: {order.cup_user_phone}<br>E-post:&nbsp;{order.cup_user_email}<br><br><strong>Faktureringsadress</strong><br>{order.invoiceAddress}" +
                 $"<br><br><strong>CupOnline-partners får ta del av adressuppgifter<br><strong>{order.acceptSharing}<br><br><strong>" +
                 $"Inloggning</strong><br><br><a href=\"https://www.CupOnline.se/admin_login.aspx?cupid= {order.cup_id}\">https://www.CupOnline.se/admin_login.aspx?cupid= {order.cup_id}</a>" +
-                $"</p><p><a href=\"http://www.CupOnline.se/admin_login.asp?cupid= {order.cup_id}\"></a><br>Användarnamn: {order.cup_user_name}<br>Lösenord: {order.cup_user_password}";
+                $"</p><p><a href=\"http://www.CupOnline.se/admin_login.asp?cupid= {order.cup_id}\"></a><br>Användarnamn: {order.cup_user_username}<br>Lösenord: {order.cup_user_password}";
             bool isHtml = true;
             await _emailService.SendAsync(order.toMail, subject, body, isHtml); ;
         }

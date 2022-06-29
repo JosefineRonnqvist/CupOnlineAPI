@@ -8,6 +8,7 @@ namespace CupOnlineAPI.Models
     public class OrderRegistration
     {
         [Key]
+        public int id { get; set; }
         public int? cup_id { get; set; }
         public string? message { get; set; } = "";
         public string? invoiceAddress { get; set; } = "";

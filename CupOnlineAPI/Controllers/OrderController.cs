@@ -16,6 +16,20 @@ namespace CupOnlineAPI.Controllers
             _orderRepo =organizer;
         }
 
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Organizer>> GetOrganizerById(int id)
+        {
+            try
+            {
+                var organizer =await _orderRepo.GetOrganizerById(id);
+                return Ok(organizer);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
         /// <summary>
         /// Get all organizers from cuponline ordered alphabetically
         /// </summary>

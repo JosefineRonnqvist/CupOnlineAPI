@@ -1,5 +1,4 @@
 using CupOnlineAPI.Context;
-using CupOnlineAPI.Helpers;
 using CupOnlineAPI.Repositories;
 using NETCore.MailKit.Extensions;
 using NETCore.MailKit.Infrastructure.Internal;
@@ -16,7 +15,6 @@ builder.Services.AddScoped<CupRepository>();
 builder.Services.AddScoped<SearchParamRepository>();
 builder.Services.AddScoped<OrderRepository>();
 builder.Services.AddScoped<PasswordRepository>();
-//builder.Services.AddScoped<IClassSendMail, ClassSendMail>();
 builder.Services.AddControllers();
 builder.Services.AddCors(setup =>
 {

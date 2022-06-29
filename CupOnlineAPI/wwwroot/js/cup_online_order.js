@@ -1,5 +1,6 @@
 ﻿const url = 'https://localhost:7172'
 const urlOrganizers = url + '/api/Order/GetAllOrganizers'
+const urlOrganizerById = url + '/api/Order/GetOrganizerById/'
 const urlOreganizerSearch = url + '/api/SearchParam/Organizers'
 const urlCitiesSearch = url + '/api/SearchParam/Cities'
 const urlSports = url + '/api/Order/GetAllSports'
@@ -144,6 +145,16 @@ function hidePanels() {
     $('.hideNew').hide();
 }
 
+function GetOrganizerById(id) {
+    let urlO = urlOrganizerById + id;
+   return fetch(urlO)
+        .then(response => response.json())
+        .then(data => {
+            return data.club_name;
+        })
+        .catch(error => console.error("Unable to get organizer.", error));
+}
+
 //post new organizer and return id
 function newOrganizer() {
 
@@ -160,10 +171,9 @@ function newOrganizer() {
         headers: { "Content-type": "application/json; charset=UTF-8" }
     })
         .then(response => response.json())
-        .then(json => {
-            return json.club_city_id;
-        }
-        )
+        .then(data => {
+            return data.club_city_id;
+        })
         .catch(err => console.log(err));
 }
 
@@ -258,8 +268,8 @@ async function newCup(regIp) {
 
     //send confirmation mail to customer
     async function SendConfirmationMail(conUrl, cupId, password) {
-        var hashedPassword = await HashPassword(password);
-
+        let hashedPassword = await HashPassword(password);
+        let organizerById = await GetOrganizerById(organizer);
         let confirmationMailDetails = {
             cup_user_password: password,
             cup_user_username: document.getElementById("order_contact_mail").value.toLowerCase(),
@@ -267,8 +277,6 @@ async function newCup(regIp) {
             cup_name: document.getElementById("order_cup_name").value,
             toMail: document.getElementById("order_contact_mail").value,
         }
-
-        console.log(JSON.stringify(confirmationMailDetails));
 
         fetch(conUrl, {
             method: "POST",
@@ -278,27 +286,28 @@ async function newCup(regIp) {
             .then(response => response.text())
             .then(data => {
                 console.log(data);            
-                SendOrderMail(cupId, hashedPassword);
+                SendOrderMail(cupId, hashedPassword, organizerById);
             })
             .catch(err => console.log(err));
 
         //send mail to cuponline
-        function SendOrderMail(cupId, hashedPassword) {
+        async function SendOrderMail(cupId, hashedPassword, organizerById) {
+           
             let orderMailDetails = {
-                acceptSharing: document.getElementById("order_approval").value,   ///format? string?
+                acceptSharing: document.getElementById("order_approval").value?"ja":"nej",  
                 invoiceAddress: "",
                 cup_user_password: hashedPassword,
                 cup_user_username: confirmationMailDetails.cup_user_username,
                 cup_user_phone: document.getElementById("order_contact_number").value,
                 cup_user_email: confirmationMailDetails.toMail,
                 cup_user_name: document.getElementById("order_contact_name").value,
-                sport: document.getElementById("order_sport").textContent,
+                sport: document.getElementById("order_sport").value,
                 cup_players_age: cup.cup_players_age,
                 cup_play_place: cup.cup_play_place,
                 cup_startdate: cup.cup_startdate,
                 cup_enddate: cup.cup_enddate,
                 cup_id: cupId,
-                organizer: cup.cup_club_id,
+                organizer: organizerById,
                 message: document.getElementById("order_message").value,
                 cup_name: confirmationMailDetails.cup_name,
             }
